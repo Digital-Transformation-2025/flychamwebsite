@@ -1,8 +1,10 @@
 import React from "react";
 import Lottie from "react-lottie";
 import LoadScreen from "../../../public/lottie/LoadScreen.json";
+import useIsMobile from "@/hooks/useIsMobile";
 
 const LottieComponent = () => {
+    const isMobile = useIsMobile()
     const options = {
         loop: true,
         autoplay: true,
@@ -26,7 +28,7 @@ const LottieComponent = () => {
             <Lottie
                 options={options}
                 height={400}
-                width={300}
+                width={isMobile ? 150 :300}
             />
         </div>
     );

@@ -4,9 +4,9 @@ import React from 'react';
 
 const ProgressBar = ({ steps, activeStep }) => {
   const isLg = !useIsMobile(1024);
-
+  const isMb = useIsMobile(1024)
   // Calculate percentage for blue progress
-  const completedPercentage = ((activeStep + 1) / steps.length) * 100;
+  const completedPercentage = ((activeStep + 1) / steps.length) * ((activeStep === 0 && isMb) ? 150 : 100);
   const getWidth = () => {
     switch (activeStep) {
       case 0:
@@ -34,7 +34,7 @@ const ProgressBar = ({ steps, activeStep }) => {
 
       {/* 🔵 Blue progress with arrow shape */}
       <div
-        className="absolute h-full bg-[var(--primary-1)] transition-all duration-300"
+        className="absolute h-full bg-[var(--primary-1)] transition-all duration-300 "
         style={{
           width: getWidth(),
           clipPath:
