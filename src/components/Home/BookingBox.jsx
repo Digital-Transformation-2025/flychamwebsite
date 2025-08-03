@@ -343,15 +343,15 @@ const BookingBox = ({ flights, pos }) => {
             return (
                 <>
                     {/* {!isMobile && */}
-                        <SearchInput
-                            search={type === 0 ? sourceSearch : destinationSearch}
-                            handleSearch={handleSearch}
-                            onClose={onClose}
-                            placeholder={type === 0 ? "Search for airport or city" : "To"}
-                            type={type === 0 ? "source" : "destination"}
-                            values={formik.values}
-                            airPorts={airPorts.items}
-                        />
+                    <SearchInput
+                        search={type === 0 ? sourceSearch : destinationSearch}
+                        handleSearch={handleSearch}
+                        onClose={onClose}
+                        placeholder={type === 0 ? "Search for airport or city" : "To"}
+                        type={type === 0 ? "source" : "destination"}
+                        values={formik.values}
+                        airPorts={airPorts.items}
+                    />
                     {/* } */}
                     <AirportList
                         type={isSource ? "source" : "destination"}

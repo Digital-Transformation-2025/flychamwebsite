@@ -313,8 +313,9 @@ const FlightResultsClient = () => {
                     </div>
 
                     <main className="w-[95%] md:w-[70%] mx-auto px-2">
-                        {steps[activeStep].content}
+                        {/* {steps[activeStep].content} */}
                         <Section>
+                            {/* {flights?.length === 0 && IndirectAirPort.length === 0 && <NoResults />} */}
                             {flights?.length === 0 && IndirectAirPort.length === 0 && <NoResults />}
                         </Section>
                     </main>

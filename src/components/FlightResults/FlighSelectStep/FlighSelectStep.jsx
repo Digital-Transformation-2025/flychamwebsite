@@ -30,7 +30,7 @@ const FlighSelectStep = ({
   return (
     <div>
       {/* Header and Direct Flights */}
-      {!selectedFlight && (
+      {!selectedFlight && hasFlights && (
         <>
           <FlightHeader count={flights.length} setFilterModalOpen={setFilterModalOpen} />
         </>
