@@ -29,6 +29,7 @@ const FlightResultsClient = () => {
 
     const dispatch = useDispatch()
     const { flights, selectedPassengers, searchParams, isLoadingFlights, selectedPlan, IndirectAirPort } = useSelector((state) => state.flights);
+    const NonEmptySearch = (flights?.length > 0 || IndirectAirPort.length > 0)
     const { adults, children, infants } = searchParams;
     const passengerNumber = adults + children + infants
 
@@ -284,12 +285,12 @@ const FlightResultsClient = () => {
                     <div className='hidden lg:block'>
                         <Header />
                         <main className="w-[70%] mx-auto px-2">
-                            {(flights?.length > 0 || IndirectAirPort.length > 0) &&
+                            {NonEmptySearch &&
 
                                 <Section><ProgressBar steps={steps} activeStep={activeStep} setActiveStep={setActiveStep} /></Section>
                             }
                             <Section><RouteInfo activeStep={activeStep} selectedFlight={selectedFlight} /></Section>
-                            {showNoice && (activeStep === 0) && !selectedFlight && (flights?.length > 0 || IndirectAirPort.length > 0) &&
+                            {showNoice && (activeStep === 0) && !selectedFlight && NonEmptySearch &&
                                 <Section>
 
                                     <POSNotice setShowNotice={setShowNotice} setShowPosModal={setShowPosModal} />
@@ -304,14 +305,14 @@ const FlightResultsClient = () => {
                     </div>
                     <div className="lg:hidden  w-full">
                         <HeaderBarMobile />
-                        {(flights?.length > 0 || IndirectAirPort.length > 0) &&
+                        {NonEmptySearch &&
                             <Section><ProgressBar steps={steps} activeStep={activeStep} setActiveStep={setActiveStep} /></Section>
                         }
                         {!selectedFlight &&
                             <Section ><DateNavigation handleClickDate={handleClickDate} /></Section>
 
                         }
-                        {showNoice && (activeStep === 0) && !selectedFlight && (flights?.length > 0 || IndirectAirPort.length > 0) &&
+                        {showNoice && (activeStep === 0) && !selectedFlight && NonEmptySearch &&
                             <POSNotice setShowNotice={setShowNotice} setShowPosModal={setShowPosModal} />
                         }
                     </div>
@@ -320,7 +321,7 @@ const FlightResultsClient = () => {
                         {steps[activeStep].content}
                         <Section>
                             {/* {flights?.length === 0 && IndirectAirPort.length === 0 && <NoResults />} */}
-                            {flights?.length === 0 || IndirectAirPort.length === 0 && <NoResults />}
+                            {!NonEmptySearch && <NoResults />}
                         </Section>
                     </main>
 
