@@ -26,7 +26,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Who We Are – Fly Cham',
+    title: 'Fly Cham - Choose Excellance',
     description:
       'Book flights across the world and discover the story behind Fly Cham, our identity, and our commitment to excellence in aviation.',
     images: ['https://flycham.com/logo.jpg'], // 🔁 Same as above
