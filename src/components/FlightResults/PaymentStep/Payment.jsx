@@ -11,7 +11,7 @@ const Payment = ({ activeStep, setActiveStep, selectedFlight, selectedType, hand
         <div className="flex flex-col xl:flex-row gap-6">
             {/* Left side: Form (75%) */}
             <div className="w-full xl:flex-[3]">
-                <h1 className='text-[14px] lg:text-[32px] text-600 font-semibold'>Payment method</h1>
+                <h1 className="text-2xl text-primary-1 font-semibold">Payment method</h1>
 
                 <StripBox />
                 <StepBtns setActiveStep={setActiveStep}
