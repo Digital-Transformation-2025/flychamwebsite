@@ -19,7 +19,7 @@ const RouteInfo = ({ activeStep, selectedFlight }) => {
             <div className="flex">
                 <div className="flex items-start justify-center gap-4 flex-wrap md:flex-nowrap">
                     {/* From */}
-                    <div className="text-center">
+                    <div className="text-start">
                         <h1 className="text-primary-1 text-[16px] lg:text-[32px]  font-bold leading-tight">
                             {origin.city}
                         </h1>
@@ -46,7 +46,7 @@ const RouteInfo = ({ activeStep, selectedFlight }) => {
                     </div>
 
                     {/* To */}
-                    <div className="text-center">
+                    <div className="text-start">
                         <h1 className="text-primary-1 text-[16px] lg:text-[32px]  font-bold leading-tight">
                             {destination.city}
                         </h1>

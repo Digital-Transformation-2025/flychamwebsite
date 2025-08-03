@@ -284,10 +284,12 @@ const FlightResultsClient = () => {
                     <div className='hidden lg:block'>
                         <Header />
                         <main className="w-[70%] mx-auto px-2">
-                            <Section><ProgressBar steps={steps} activeStep={activeStep} setActiveStep={setActiveStep} /></Section>
+                            {flights?.length > 0 && IndirectAirPort.length > 0 &&
 
+                                <Section><ProgressBar steps={steps} activeStep={activeStep} setActiveStep={setActiveStep} /></Section>
+                            }
                             <Section><RouteInfo activeStep={activeStep} selectedFlight={selectedFlight} /></Section>
-                            {showNoice && (activeStep === 0) && !selectedFlight &&
+                            {showNoice && (activeStep === 0) && !selectedFlight && (flights?.length > 0 || IndirectAirPort.length > 0) &&
                                 <Section>
 
                                     <POSNotice setShowNotice={setShowNotice} setShowPosModal={setShowPosModal} />
@@ -302,14 +304,16 @@ const FlightResultsClient = () => {
                     </div>
                     <div className="lg:hidden  w-full">
                         <HeaderBarMobile />
-                        <Section><ProgressBar steps={steps} activeStep={activeStep} setActiveStep={setActiveStep} /></Section>
+                        {flights?.length > 0 && IndirectAirPort.length > 0 &&
+                            <Section><ProgressBar steps={steps} activeStep={activeStep} setActiveStep={setActiveStep} /></Section>
+                        }
                         {!selectedFlight &&
                             <Section ><DateNavigation handleClickDate={handleClickDate} /></Section>
 
                         }
-                            {showNoice && (activeStep === 0) && !selectedFlight && (flights?.length > 0 || IndirectAirPort.length > 0) &&
-                                <POSNotice setShowNotice={setShowNotice} setShowPosModal={setShowPosModal} />
-                            }
+                        {showNoice && (activeStep === 0) && !selectedFlight && (flights?.length > 0 || IndirectAirPort.length > 0) &&
+                            <POSNotice setShowNotice={setShowNotice} setShowPosModal={setShowPosModal} />
+                        }
                     </div>
 
                     <main className="w-[95%] md:w-[70%] mx-auto px-2">
