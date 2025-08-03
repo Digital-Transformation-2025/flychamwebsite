@@ -18,6 +18,7 @@ import { contactSchema, passengerSchema } from '@/util/validatonSchemas';
 import * as Yup from 'yup';
 import ErrorMessage from '@/components/Ui/ErrorMessage';
 import useFlightDetails from '@/hooks/useFlightDetails';
+import PassengerNote from './PassengerNote';
 
 const PassengerDetails = ({ activeStep, setActiveStep, selectedFlight, selectedType, setIsAlertOpen, setAlertMessage }) => {
     const dispatch = useDispatch()
@@ -155,7 +156,12 @@ const PassengerDetails = ({ activeStep, setActiveStep, selectedFlight, selectedT
         <div className="flex flex-col xl:flex-row gap-6">
             {/* Left side: Form (75%) */}
             <div className="w-full xl:flex-[3]">
-            <h1 className='text-[14px] lg:text-[32px] text-600 font-semibold'>Passenger Details </h1>
+
+
+                <Section >
+                    <PassengerNote />
+                </Section>
+
                 {formik.values.passengers.map((passenger, idx) => (
                     <Section key={idx}>
                         <FormTitle type={passenger.type} idx={idx} />
