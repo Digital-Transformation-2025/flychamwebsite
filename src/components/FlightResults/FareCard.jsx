@@ -1,22 +1,25 @@
 'use client';
+import useIsMobile from '@/hooks/useIsMobile';
 import formatPrice from '@/util/formatePrice';
 import React from 'react';
 
 const FareCard = ({ type, price, special, isLg, currecny, isConfirmed }) => {
     const isEconomy = type === 'Economy';
+    const isMobile = !useIsMobile(1100)
+    const bg = isEconomy ? `${isMobile ? "bg-[rgba(var(--primary-1-rgb),0.2)]" : "bg-[rgba(var(--primary-1-rgb),0.1)]"}` : 'bg-primary-1';
+    const border = isMobile && (isEconomy ? ' border border-[rgba(var(--primary-1-rgb),0.5)]' : ' border border-[var(--primary-1)]')
 
-    const bg = isEconomy ? 'bg-[rgba(var(--primary-1-rgb),0.5)]' : 'bg-primary-1';
-    const border = isEconomy ? 'border-[rgba(var(--primary-1-rgb),0.5)]' : 'border-[var(--primary-1)]';
     const textMobile = isEconomy ? 'text-primary-1' : 'text-white';
-    const textDesktop = 'text-700';
+    const textDesktop = isEconomy ? 'text-primary-1 lg:!text-black' : 'text-white lg:text-black'
+
     const amount = isConfirmed ? price : formatPrice(price?.split?.('.')[0]) || '';
     const currency = currecny || '';
 
     return (
-        <div className={`border ${border} rounded-xl overflow-hidden w-full lg:w-[175px] h-fit lg:h-[141px] flex flex-col`}>
+        <div className={` ${border} rounded-xl overflow-hidden w-full lg:w-[175px] h-fit lg:h-[141px] flex flex-col`}>
 
             {/* Header */}
-            <div className={`${bg} ${textMobile} text-[12px] lg:text-sm font-normal lg:font-semibold text-start lg:text-center p-2 lg:p-1`}>
+            <div className={`${bg} ${textMobile} text-[12px] lg:text-sm font-semibold  text-start lg:text-center p-2 lg:p-1`}>
                 {type}
             </div>
 
@@ -25,15 +28,15 @@ const FareCard = ({ type, price, special, isLg, currecny, isConfirmed }) => {
                 {price ? (
                     <>
                         {/* Mobile */}
-                        <div className="block lg:hidden text-[12px]">
-                            <div className={textMobile}>{currency}</div>
+                        <div className=" block lg:hidden text-[12px]">
+                            <div className={`${textMobile} font-semibold`}>{currency}</div>
                             <div className={`${textMobile} text-[16px]`}>{amount}</div>
                         </div>
 
                         {/* Desktop */}
                         <div className="hidden lg:block text-[12px]">
-                            <div className={`${textDesktop}`}>{`From ${currency}`}</div>
-                            <div className={`${isEconomy ? 'text-primary-1' : 'text-white'} ${textDesktop} text-[26px]`}>{amount}</div>
+                            <div className={`${textDesktop} font-semibold`}>{`From ${currency}`}</div>
+                            <div className={` ${textDesktop} text-[26px]`}>{amount}</div>
                         </div>
                     </>
                 ) : (

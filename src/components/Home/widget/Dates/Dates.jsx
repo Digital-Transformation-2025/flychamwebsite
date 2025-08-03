@@ -17,17 +17,17 @@ const Dates = ({ formik, handleDateSelect, currentMonth, setCurrentMonth, minMon
     const isArabic = useIsArabic();
     const tripType = formik.values.tripType;
 
-const selected =
-  tripType === 'OneWay'
-    ? formik.values.dateStart
-      ? new Date(formik.values.dateStart)
-      : undefined
-    : formik.values.dateStart
-      ? {
-          from: new Date(formik.values.dateStart),
-          to: formik.values.dateEnd ? new Date(formik.values.dateEnd) : new Date(),
-        }
-      : undefined;
+    const selected =
+        tripType === 'OneWay'
+            ? formik.values.dateStart
+                ? new Date(formik.values.dateStart)
+                : undefined
+            : formik.values.dateStart
+                ? {
+                    from: new Date(formik.values.dateStart),
+                    to: formik.values.dateEnd ? new Date(formik.values.dateEnd) : new Date(),
+                }
+                : undefined;
 
 
 
@@ -56,7 +56,7 @@ const selected =
 
 
     return (
-        <div className="bg-white rounded-2xl p-6 w-full max-w-5xl mx-auto">
+        <div className="bg-white rounded-2xl p-6 w-full max-w-7xl mx-auto">
             <TripTypeSelector values={formik.values}
                 setFieldValue={formik.setFieldValue}
                 handleReset={handleReset}
@@ -99,13 +99,13 @@ const selected =
                         classNames={{
                             head_cell: 'uppercase text-xs font-bold text-gray-500 text-center',
                             caption_label: 'text-center text-lg font-semibold text-black',
-                            day: 'text-sm text-black transition duration-300 ease-in-out w-8 h-8',
+                            day: 'hover:!bg-[#D6C89F]  text-lg text-black transition duration-300 ease-in-out w-8 h-8',
                             today: '',
                             selected:
                                 tripType === 'OneWay'
-                                    ? 'rounded-full text-white bg-secondary'
+                                    ? ' text-white bg-secondary rounded-full'
                                     : 'bg-[#B6A889] text-black',
-                            range_middle: 'bg-[#e6dabc61] text-black',
+                            range_middle: 'bg-[#e6dabc61]  text-black',
                             range_start: isArabic
                                 ? 'rounded-r-xl text-white'
                                 : 'rounded-l-xl text-white',

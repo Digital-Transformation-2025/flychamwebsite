@@ -284,7 +284,7 @@ const FlightResultsClient = () => {
                     <div className='hidden lg:block'>
                         <Header />
                         <main className="w-[70%] mx-auto px-2">
-                            {flights?.length > 0 && IndirectAirPort.length > 0 &&
+                            {(flights?.length > 0 || IndirectAirPort.length > 0) &&
 
                                 <Section><ProgressBar steps={steps} activeStep={activeStep} setActiveStep={setActiveStep} /></Section>
                             }
@@ -304,7 +304,7 @@ const FlightResultsClient = () => {
                     </div>
                     <div className="lg:hidden  w-full">
                         <HeaderBarMobile />
-                        {flights?.length > 0 && IndirectAirPort.length > 0 &&
+                        {(flights?.length > 0 || IndirectAirPort.length > 0) &&
                             <Section><ProgressBar steps={steps} activeStep={activeStep} setActiveStep={setActiveStep} /></Section>
                         }
                         {!selectedFlight &&
@@ -320,7 +320,7 @@ const FlightResultsClient = () => {
                         {steps[activeStep].content}
                         <Section>
                             {/* {flights?.length === 0 && IndirectAirPort.length === 0 && <NoResults />} */}
-                            {flights?.length === 0 && IndirectAirPort.length === 0 && <NoResults />}
+                            {flights?.length === 0 || IndirectAirPort.length === 0 && <NoResults />}
                         </Section>
                     </main>
 

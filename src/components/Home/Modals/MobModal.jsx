@@ -31,6 +31,9 @@ const MobModal = ({ handleReset, isOpen, onClose,
         (tripType === "Return" && (!dateStart || !dateEnd)) ||
         (tripType === "oneWay" && !dateStart)
     );
+    const isRenderReset = (
+        (tripType === "Return" ? (dateStart && dateEnd) : dateStart)
+    )
 
     return (
         <Transition appear show={isOpen} as={Fragment}>
@@ -126,16 +129,21 @@ const MobModal = ({ handleReset, isOpen, onClose,
                                         disabled={!canWeFly}
                                         onClick={onClose}
                                         className="flex w-[344px] h-[56px] px-[10px] py-[10px] justify-center items-center gap-[10px] 
-                                                  flex-shrink-0 rounded-[8px] bg-secondary text-white font-semibold text-sm"
+                flex-shrink-0 rounded-[8px] bg-secondary text-white font-semibold text-sm"
                                     >
                                         Continue
                                     </button>
 
+                                    {/* ✅ Always render, but toggle visibility */}
                                     <span
                                         onClick={handleReset}
-                                        className="text-main">Reset</span>
+                                        className={`text-main ${isRenderReset ? 'visible' : 'invisible'}`}
+                                    >
+                                        Reset
+                                    </span>
                                 </div>
                             )}
+
 
                         </Dialog.Panel>
                     </Transition.Child>

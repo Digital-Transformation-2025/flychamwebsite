@@ -1,8 +1,10 @@
 'use client'
 import React from 'react';
 import { format, isSameDay } from 'date-fns';
+import useIsMobile from '@/hooks/useIsMobile';
 
 const SelectedDateDisplay = ({ selected, tripType, handleReset, hasClickCalendar }) => {
+    const isMobile = useIsMobile()
     const text = tripType === 'Return' && selected?.from ? (
         <div className="flex items-center justify-center gap-2">
             Departure: <strong>{format(selected.from, 'dd MMM yyyy')}</strong> — Return:
@@ -10,24 +12,28 @@ const SelectedDateDisplay = ({ selected, tripType, handleReset, hasClickCalendar
                 <>
 
                     <strong>{format(selected.to, 'dd MMM yyyy') || " "}</strong>
-                    <button
-                        onClick={handleReset}
-                        className="cursor-pointer underline text-main text-sm hover:text-[#002233]"
-                    >
-                        Reset Dates
-                    </button>
+                    {!isMobile &&
+                        <button
+                            onClick={handleReset}
+                            className="cursor-pointer underline text-main text-sm hover:text-[#002233]"
+                        >
+                            Reset Dates
+                        </button>
+                    }
                 </>
             )}
         </div>
     ) : tripType === 'OneWay' && selected ? (
         <div className="flex items-center justify-center gap-2">
             Departure: <strong>{format(selected, 'dd MMM yyyy') || " "}</strong>
-            <button
-                onClick={handleReset}
-                className="cursor-pointer underline text-main text-sm hover:text-[#002233]"
-            >
-                Reset Dates
-            </button>
+            {!isMobile &&
+                <button
+                    onClick={handleReset}
+                    className="cursor-pointer underline text-main text-sm hover:text-[#002233]"
+                >
+                    Reset Dates
+                </button>
+            }
         </div>
     ) : null;
 
