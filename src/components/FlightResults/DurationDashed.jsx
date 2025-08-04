@@ -39,15 +39,7 @@ const DurationDashed = ({
         style={{ width, height }}
         className="mx-1 bg-primary-1 rounded-full flex items-center justify-center"
       >
-        
-        <AirplaneIcon color='#fff' className={`${idx ===0 ? 'rotate-90' :'rotate-270'}`}/>
-        {/* <Image
-          src={tabIcon}
-          alt="Flight"
-          width={logoWidth}
-          height={logoWidth}
-          className="object-contain"
-        /> */}
+        <AirplaneIcon size={logoWidth} color='#fff' className={`${idx ===0 ? 'rotate-90' :'rotate-270'}`}/>
       </span>
 
       {/* Right Dashes */}

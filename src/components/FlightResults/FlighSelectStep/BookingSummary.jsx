@@ -1,39 +1,57 @@
-'use client'
-import { CaretLeft } from '@phosphor-icons/react';
+'use client';
+import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-const BookingSummary = ({ totalAmount = 900, onContinue, setSelectedFlight, selectedType }) => {
-    const { flights } = useSelector((s) => s.flights)
-    return (
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            {/* Back Button */}
-            <button
-                className=" cursor-pointer w-full md:w-auto px-6 py-3 bg-transparent text-primary-1 border border-[#054E72] 
-                text-sm font-semibold rounded-md shadow-sm inline-flex items-center justify-center gap-2"
-                onClick={() => setSelectedFlight(null)}
-            >
-                <CaretLeft />
-                Back
-            </button>
+const BookingSummary = ({ onContinue, setSelectedFlight, selectedType }) => {
+    const { flights } = useSelector((s) => s.flights);
 
-            {/* Booking Summary + Continue Button */}
-            <div className="w-full md:w-auto flex flex-col md:flex-row justify-end items-center gap-4  p-4 rounded-[8px]">
-                <div className="text-center md:text-right flex flex-col gap-1">
-                    <div className="text-[#5F5F5C] font-medium text-base md:text-[20px]">Booking total:</div>
-                    <div className="text-[#3E3E3B] font-semibold text-[24px] md:text-[32px]">
+    return (
+        <div className="flex flex-col md:flex-row-reverse justify-between items-stretch w-full gap-4">
+
+            {/* Right: Total + Continue */}
+            <div className="w-full md:w-auto flex flex-col md:flex-row items-start md:items-center justify-between md:justify-end gap-4">
+
+                {/* Booking Total */}
+                <div className="flex flex-col text-center md:text-start w-full md:w-auto gap-1 flex-1 md:flex-none">
+                    <div className="text-[#5F5F5C] font-medium text-sm sm:text-base md:text-lg lg:text-xl">
+                        Booking total:
+                    </div>
+                    <div className="text-[#3E3E3B] font-semibold text-lg sm:text-xl md:text-2xl lg:text-3xl">
                         {flights?.[0]?.common_info?.currency} {selectedType.price}
                     </div>
                 </div>
 
+                {/* Continue Button */}
                 <button
-                    className=" cursor-pointer  w-full md:w-auto px-6 py-3 bg-[#BAA981] text-white text-sm font-semibold 
-                    rounded-md shadow-sm inline-flex items-center justify-center gap-2"
                     onClick={onContinue}
+                    className="group  w-full md:w-auto px-6 py-3 bg-[var(--secondary-1)] hover:bg-[#C2B48B] text-white font-bold text-base sm:text-[16px] font-montserrat rounded-md flex items-center justify-center gap-2 transition-all duration-200"
                 >
-                    Continue to Passenger <span className="text-lg">›</span>
+                    Continue to Passenger
+                    <CaretRight
+                        size={20}
+                        weight="regular"
+                        className="transform transition-transform duration-200 group-hover:translate-x-1"
+                    />
                 </button>
             </div>
+
+            {/* Left: Back Button */}
+            <div className="w-full md:w-auto">
+                <button
+                    onClick={() => setSelectedFlight(null)}
+                    className="group w-full md:w-auto px-6 py-3 border border-[var(--primary-1)] text-[var(--primary-1)] hover:bg-[var(--primary-1)] hover:text-white font-semibold rounded-md inline-flex items-center justify-center gap-2 transition-all duration-200"
+                >
+                    
+                    <CaretLeft
+                        size={20}
+                        weight="regular"
+                        className="transform transition-transform duration-200 group-hover:-translate-x-1"
+                    />
+                    Back to flights
+                </button>
+            </div>
+
         </div>
     );
 };

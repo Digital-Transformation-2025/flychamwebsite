@@ -52,7 +52,9 @@
   --alert: #B00300;
   --green: #357B47;
 }
-
+body button {
+  cursor: pointer;
+}
 /* Primary */
 .bg-primary-1 {
   background-color: var(--primary-1);

@@ -20,10 +20,15 @@ const HeaderMobile = ({ handleStepBack }) => {
             </button>
 
 
-            {/* Title (like Typography with sx={{ ml: 2, flex: 1 }}) */}
-            <RouteInfo />
+            <div className="flex flex-col items-center justify-center gap-1">
 
-            {/* Close Button (like IconButton edge="end") */}
+                <RouteInfo />
+                <span
+                    onClick={() => router.back()}
+                    className="text-secondary-1 cursor-pointer text-sm  font-bold underline break-words">
+                    Modify search
+                </span>
+            </div>
             <button
                 onClick={() => router.back()}
                 className="text-[var(--Primary-1,#054E72)]"

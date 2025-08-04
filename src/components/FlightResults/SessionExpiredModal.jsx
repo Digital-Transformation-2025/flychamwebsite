@@ -12,7 +12,7 @@ const SessionExpiredModal = ({ isOpen, handleSearchAgain }) => {
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={() => {}}>
+      <Dialog as="div" className="relative z-50" onClose={() => { }}>
         {/* Backdrop */}
         <Transition.Child
           as={Fragment}
@@ -47,8 +47,7 @@ const SessionExpiredModal = ({ isOpen, handleSearchAgain }) => {
               </Dialog.Title>
 
               <p className="mt-4 text-[16px] text-600 font-medium">
-                Oops! Looks like your session timed out. Please return to the home page and continue search.
-              </p>
+                Oops! Looks like your session timed out. Please search again or return to the homepage                </p>
 
               <div className="mt-8 flex justify-center gap-4">
                 <button

@@ -11,29 +11,33 @@ import Divider from '@/components/FlightResults/FlighSelectStep/Divider'
 import PassengerDetails from '@/components/FlightResults/PassengerDetails/PassengerDetails'
 import Payment from '@/components/FlightResults/PaymentStep/Payment'
 import { useDispatch, useSelector } from 'react-redux'
-import { setPnr, setSearchParams, setSelectedF, setSelectedPlan } from '@/store/flightSlice'
-import { createPaymentService, getFlightsService } from '@/store/Services/flightServices'
+import { setPnr, setSearchParams, setSelectedF, setSelectedpassengers, setSelectedPlan } from '@/store/flightSlice'
+import { createListPassengerService, createPaymentService, getFlightsService } from '@/store/Services/flightServices'
 import NoResults from '@/components/FlightResults/NoResults'
-import Screen from '@/components/Ui/Screen'
 import SessionExpiredModal from '@/components/FlightResults/SessionExpiredModal'
-import { useRouter } from 'next/navigation'
 import POSNotice from '@/components/FlightResults/POSNotice'
 import PosSelectorModal from '@/components/FlightResults/FlighSelectStep/PosSelectorModal'
 import useSessionTimer from '@/hooks/useSessionTimer'
 import AlertModal from '@/components/FlightResults/AlertModal'
 import LottieComponent from '@/components/Ui/LottieComponent'
+import { useFormik } from 'formik'
+import { contactSchema, passengerSchema } from '@/util/validatonSchemas'
+import * as Yup from 'yup';
+import useFlightDetails from '@/hooks/useFlightDetails'
+import useScrollToTop from '@/hooks/useScrollToTop'
+import useFetchFlights from '@/hooks/useFetchFlights'
 
 const FlightResultsClient = () => {
 
-    const scrollRef = useRef(null)  // ✅ Create scrollable div ref
+    const scrollRef = useRef(null)
 
     const dispatch = useDispatch()
     const { flights, selectedPassengers, searchParams, isLoadingFlights, selectedPlan, IndirectAirPort } = useSelector((state) => state.flights);
     const NonEmptySearch = (flights?.length > 0 || IndirectAirPort.length > 0)
     const { adults, children, infants } = searchParams;
     const passengerNumber = adults + children + infants
+    const { info } = useFlightDetails(selectedPlan);
 
-    const router = useRouter()
     const [showNoice, setShowNotice] = useState(true);
     const [showPosModal, setShowPosModal] = useState(false);
     const [localLoading, setLocalLoading] = useState(true);
@@ -47,6 +51,9 @@ const FlightResultsClient = () => {
     const [selectedFlight, setSelectedFlight] = useState(null);
     const [selectedType, setSelectedType] = useState(null);
     const [activeStep, setActiveStep] = useState(0);
+    useScrollToTop(scrollRef, [activeStep, selectedFlight]);
+    useFetchFlights(setLocalLoading);
+
 
     const { restartTimer } = useSessionTimer({
         duration: passengerNumber >= 3 ? 60 * 10 : 60 * 7,
@@ -64,11 +71,7 @@ const FlightResultsClient = () => {
     };
 
 
-    const HeaderBarMobile = () => (
-        <div className=" px-3 flex items-center justify-between h-16 shadow-md bg-[#F1F1F1]">
-            <HeaderMobile handleStepBack={handleStepBack} />
-        </div>
-    );
+
 
     const handleSelectPlan = (event, flight, col) => {
         event.stopPropagation(); // Prevent bubbling
@@ -151,9 +154,128 @@ const FlightResultsClient = () => {
         dispatch(setSearchParams({ ...searchParams, date: formattedFullDate }));
         loadFlightsWithDelay({ date: formattedFullDate });
     };
+    let globalIndex = 0;
+    const passengers = [
+        { type: 'adult', count: adults, typeValue: 'ADT' },
+        { type: 'child', count: children, typeValue: 'CHD' },
+        { type: 'infant', count: infants, typeValue: 'INF' },
+    ].filter(p => p.count > 0);
+    const initialPassengers = passengers.flatMap(p =>
+        Array.from({ length: p.count }, () => ({
+            idx: globalIndex++,
+            type: p.type,
+            typeValue: p.typeValue,
+            firstName: '',
+            lastName: '',
+            dateOfBirth: '',
+            title: '',
+        }))
+    );
 
 
 
+
+    const formik = useFormik({
+        initialValues: {
+            passengers: initialPassengers,
+            contact: {
+                countryCode: '',
+                phoneNumber: '',
+                email: '', emailError: '',
+                passengerIndex: ''
+            },
+            save: false,
+            accept: false,
+            recive: false
+        },
+        validationSchema: Yup.object().shape({
+            passengers: Yup.array()
+                .of(passengerSchema)
+                .test('unique-names', 'Passenger names must be unique.', function (passengers = []) {
+                    const seen = new Set();
+                    for (const p of passengers) {
+                        const fullName = `${p.firstName?.trim().toLowerCase()} ${p.lastName?.trim().toLowerCase()}`;
+                        if (seen.has(fullName)) {
+                            return this.createError({
+                                message: `Duplicate name found: ${fullName}. Each passenger must have a unique name.`,
+                            });
+                        }
+                        seen.add(fullName);
+                    }
+                    return true;
+                }), contact: contactSchema,
+        }),
+        context: { activeField: '' },
+        // validateOnChange: true,
+        // validateOnBlur: true,
+        onSubmit: (values) => {
+            const contactDetails = values.passengers[values.contact.passengerIndex];
+
+            const capitalize = (str) =>
+                typeof str === 'string' && str.length > 0
+                    ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+                    : '';
+
+            const { title, dateOfBirth, firstName, lastName } = contactDetails;
+
+            const data = {
+                title,
+                firstName: capitalize(firstName),
+                lastName: capitalize(lastName),
+                phoneNumber: values.contact.phoneNumber,
+                countryCode: values.contact.countryCode,
+                email: values.contact.email,
+                passengers: values.passengers.map((p) => ({
+                    birthDate: p.dateOfBirth,
+                    passengerTypeCode: p.typeValue,
+                    givenName: capitalize(p.firstName),
+                    surname: capitalize(p.lastName),
+                    nameTitle: p.title,
+                })),
+                pricinginfo: info.pricing_info.map((item, idx) => ({
+                    PaxType: item.PaxType,
+                    ResBookDesigCode: item.ResBookDesigCode
+                }))
+            };
+
+            const hasEmptyFields =
+                !data.title ||
+                !data.firstName ||
+                !data.lastName ||
+                !data.phoneNumber ||
+                !data.countryCode ||
+                !data.email ||
+                data.passengers.some(
+                    (p) =>
+                        !p.birthDate ||
+                        !p.passengerTypeCode ||
+                        !p.givenName ||
+                        !p.surname ||
+                        !p.nameTitle
+                );
+
+            if (hasEmptyFields) {
+                console.warn('Missing required fields. Submission blocked.');
+                return;
+            }
+
+            dispatch(createListPassengerService(data)).then(action => {
+
+                if (createListPassengerService.fulfilled.match(action)) {
+                    dispatch(setSelectedpassengers(data));
+                    setActiveStep(2);
+                } else if (createListPassengerService.rejected.match(action)) {
+                    if (action.payload.status === 400) {
+                        const errorMessage = action.payload.title || "An error occurred";
+                        setIsAlertOpen(true)
+                        setAlertMessage(errorMessage)
+                    }
+                }
+            });
+
+        },
+
+    });
 
     const steps = [
         {
@@ -183,6 +305,7 @@ const FlightResultsClient = () => {
                 selectedType={selectedType}
                 setIsAlertOpen={setIsAlertOpen}
                 setAlertMessage={setAlertMessage}
+                formik={formik}
             />
 
         },
@@ -217,30 +340,6 @@ const FlightResultsClient = () => {
         return () => clearTimeout(timer);
     };
 
-
-    useEffect(() => {
-        const data = searchParams;
-        const { origin_id, destination_id, date } = searchParams;
-
-        if (!origin_id || !destination_id || !date) {
-            router.push("/");
-        } else {
-            dispatch(getFlightsService(data)).then((action) => {
-                if (getFlightsService.rejected.match(action)) {
-                    router.push("/");
-                }
-            });
-
-
-            const timer = setTimeout(() => {
-                setLocalLoading(false);
-            }, 3000);
-
-            return () => clearTimeout(timer);
-        }
-    }, []);
-
-
     const handleSelectPos = (id) => {
         const newParams = {
             ...searchParams,
@@ -250,15 +349,6 @@ const FlightResultsClient = () => {
         setShowPosModal(false)
     };
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (scrollRef.current) {
-                scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        }, 100);
-
-        return () => clearTimeout(timer);
-    }, [activeStep, selectedFlight]);
 
 
 
@@ -274,59 +364,76 @@ const FlightResultsClient = () => {
     };
 
 
+    //  Define reusable snippets 
+
+    const progressBarSection = NonEmptySearch && (
+        <Section>
+            <ProgressBar steps={steps} activeStep={activeStep} setActiveStep={setActiveStep} />
+        </Section>
+    );
+
+    const routeInfoSection = (
+        <Section>
+            <RouteInfo activeStep={activeStep} selectedFlight={selectedFlight} />
+        </Section>
+    );
+
+    const posNoticeSection = showNoice && activeStep === 0 && !selectedFlight && NonEmptySearch && (
+        <Section>
+            <POSNotice setShowNotice={setShowNotice} setShowPosModal={setShowPosModal} />
+        </Section>
+    );
+
+    const dateNavigationSection = !selectedFlight && (
+        <Section>
+            <DateNavigation handleClickDate={handleClickDate} />
+        </Section>
+    );
+
+    const noResultsSection = (
+        <Section>
+            {!NonEmptySearch && <NoResults />}
+        </Section>
+    );
+
+    const HeaderBarMobile = () => (
+        <div className=" px-3 flex items-center justify-between h-16 shadow-md bg-[#F1F1F1]">
+            <HeaderMobile handleStepBack={handleStepBack} />
+        </div>
+    );
+    const pageLoding = (isLoadingFlights || localLoading)
+
+
     return (
         <>
-
-            {/* {(isLoadingFlights || localLoading) ? <Screen /> : */}
-            {(isLoadingFlights || localLoading) ? <LottieComponent /> :
-
-
+            {pageLoding ? <LottieComponent /> :
                 <div ref={scrollRef} className="h-screen overflow-y-auto">
                     <div className='hidden lg:block'>
                         <Header />
                         <main className="w-[70%] mx-auto px-2">
-                            {NonEmptySearch &&
+                            {progressBarSection}
+                            {routeInfoSection}
+                            {posNoticeSection}
+                            {dateNavigationSection}
 
-                                <Section><ProgressBar steps={steps} activeStep={activeStep} setActiveStep={setActiveStep} /></Section>
-                            }
-                            <Section><RouteInfo activeStep={activeStep} selectedFlight={selectedFlight} /></Section>
-                            {showNoice && (activeStep === 0) && !selectedFlight && NonEmptySearch &&
-                                <Section>
-
-                                    <POSNotice setShowNotice={setShowNotice} setShowPosModal={setShowPosModal} />
-                                </Section>
-                            }
-                            {!selectedFlight &&
-                                <Section ><DateNavigation handleClickDate={handleClickDate} /></Section>
-
-                            }
                         </main>
                         <Divider />
                     </div>
                     <div className="lg:hidden  w-full">
                         <HeaderBarMobile />
-                        {NonEmptySearch &&
-                            <Section><ProgressBar steps={steps} activeStep={activeStep} setActiveStep={setActiveStep} /></Section>
-                        }
-                        {!selectedFlight &&
-                            <Section ><DateNavigation handleClickDate={handleClickDate} /></Section>
-
-                        }
-                        {showNoice && (activeStep === 0) && !selectedFlight && NonEmptySearch &&
-                            <POSNotice setShowNotice={setShowNotice} setShowPosModal={setShowPosModal} />
-                        }
+                        {progressBarSection}
+                        {dateNavigationSection}
+                        {posNoticeSection}
                     </div>
 
                     <main className="w-[95%] md:w-[70%] mx-auto px-2">
                         {steps[activeStep].content}
-                        <Section>
-                            {/* {flights?.length === 0 && IndirectAirPort.length === 0 && <NoResults />} */}
-                            {!NonEmptySearch && <NoResults />}
-                        </Section>
+                        {noResultsSection}
                     </main>
 
-                </div>}
-
+                </div>
+            }
+            {/*  Modals */}
             <SessionExpiredModal
                 isOpen={isSessionModalOpen}
                 onClose={() => setSessionModalOpen(false)}

@@ -78,6 +78,8 @@ const Dates = ({ formik, handleDateSelect, currentMonth, setCurrentMonth, minMon
 
 
                     <DayPicker
+                        today={new Date()}
+
                         month={currentMonth}
                         numberOfMonths={isMobile ? 1 : 2}
                         fromMonth={tripType === 'Return' ? minMonth : undefined}
@@ -99,8 +101,9 @@ const Dates = ({ formik, handleDateSelect, currentMonth, setCurrentMonth, minMon
                         classNames={{
                             head_cell: 'uppercase text-xs font-bold text-gray-500 text-center',
                             caption_label: 'text-center text-lg font-semibold text-black',
-                            day: 'hover:!bg-[#D6C89F]  text-lg text-black transition duration-300 ease-in-out w-8 h-8',
-                            today: '',
+                            day: 'hover:!bg-[#D6C89F]  text-md text-black transition duration-300 ease-in-out w-8 h-8',
+                            today: 'border border-[#BAA981] rounded-full  w-10 h-10 flex items-center justify-center',
+
                             selected:
                                 tripType === 'OneWay'
                                     ? ' text-white bg-secondary rounded-full'

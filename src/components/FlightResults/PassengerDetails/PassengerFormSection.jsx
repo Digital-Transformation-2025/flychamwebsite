@@ -24,7 +24,7 @@ const PassengerFormSection = ({ index, values, onChange, setFieldValue, errors, 
     return (
         <>
             {/* Title dropdown */}
-            <div className="my-4 w-full md:w-40 flex flex-col gap-1">
+            <div className="my-4 w-full max-w-3xs  sm:w-40  flex flex-col gap-1">
                 <CustomDropdown
                     selected={values.title}
                     onChange={(val) => setFieldValue(`${basePath}.title`, val)}

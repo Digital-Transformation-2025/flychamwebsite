@@ -53,10 +53,10 @@ const PosSelectorModal = ({ isOpen, setIsOpen, handleSelectPos }) => {
                             {/* Header */}
                             <div className="flex justify-between items-start mb-4">
                                 <div>
-                                    <Dialog.Title className="text-lg font-semibold text-[#054E72]">
+                                    <Dialog.Title className="text-lg font-semibold text-primary-1">
                                         Select your point of sale
                                     </Dialog.Title>
-                                    <p className="text-sm text-gray-400">
+                                    <p className="text-sm text-600">
                                         Choose your region to change local pricing
                                     </p>
                                 </div>

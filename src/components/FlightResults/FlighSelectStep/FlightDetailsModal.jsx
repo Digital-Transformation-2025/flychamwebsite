@@ -4,6 +4,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { X } from '@phosphor-icons/react';
 import useFormattedFlightTimes from '@/hooks/useFormattedFlightTimes';
 import FlightSegmentDetails from './FlightSegmentDetails';
+import Divider from './Divider';
 
 
 const FlightDetailsModal = ({ flight, isOpen, onClose }) => {
@@ -21,11 +22,14 @@ const FlightDetailsModal = ({ flight, isOpen, onClose }) => {
                             <Dialog.Panel className="w-[610px] rounded-2xl bg-white p-6 shadow-xl">
                                 {/* Header */}
                                 <div className="flex justify-between items-center mb-4">
+                                    
                                     <Dialog.Title className="text-[18px] font-semibold text-[#111827]">
                                         Flight details
                                     </Dialog.Title>
+
                                     <button onClick={onClose}><X size={20} /></button>
                                 </div>
+                                        <Divider />
 
                                 {flight?.common_info?.segments?.map((s, index) => (
                                     <FlightSegmentDetails

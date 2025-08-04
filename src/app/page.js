@@ -2,14 +2,14 @@ import { fetchFromAPI } from '@/lib/api';
 import HomeClient from './HomeClient';
 
 export const metadata = {
-  title: 'Fly Cham - Choose Excellance',
+  title: 'Fly Cham - Choose Excellence',
   description:
     'Book flights across the world and discover the story behind Fly Cham, our identity, and our commitment to excellence in aviation.',
   icons: {
     icon: '/tabicon.svg',
   },
   openGraph: {
-    title: 'Fly Cham - Choose Excellance',
+    title: 'Fly Cham - Choose Excellence',
     description:
       'Book flights across the world and discover the story behind Fly Cham, our identity, and our commitment to excellence in aviation.',
     url: 'https://flycham.com',
@@ -26,7 +26,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Fly Cham - Choose Excellance',
+    title: 'Fly Cham - Choose Excellence',
     description:
       'Book flights across the world and discover the story behind Fly Cham, our identity, and our commitment to excellence in aviation.',
     images: ['https://flycham.com/logo.jpg'], // 🔁 Same as above

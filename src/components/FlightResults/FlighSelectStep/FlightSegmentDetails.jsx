@@ -41,26 +41,26 @@ const FlightSegmentDetails = ({
 
     return (
         <>
-            <div className="flex items-center gap-2 text-sm font-medium text-main mb-1">
+            <div className="flex items-center gap-2 text-sm font-medium text-main mb-1 ">
                 <span>{origin.city}</span>
                 <span className="text-gray-400">
-                    <ArrowRight size={32} />
+                    <ArrowRight size={22} />
                 </span>
                 <span>{destination.city}</span>
             </div>
 
-            <p className="text-[#3E3E3B] text-sm">{departureDate}</p>
+            <p className="text-[#3E3E3B] text-sm ">{departureDate}</p>
             <p className="text-[#3E3E3B] text-sm mb-4">
                 {`Total duration ${duration}`}
-                {stops && <span className="text-[#B00] font-medium ml-1">1 stop</span>}
+                {stops && <span className="text-[#B00] font-medium ">1 stop</span>}
             </p>
 
-            <div className="flex items-start gap-3">
+            <div className="flex items-start gap-3 my-8  ">
                 {/* Times */}
-                <div className="flex flex-col justify-between text-sm text-[#111827] font-medium w-[65px] min-h-[248px] text-right">
-                    <span className="text-right">{formatTime(departureTime)}</span>
+                <div className="flex flex-col justify-between text-sm text-[#111827] font-medium w-[65px] min-h-[248px] text-start">
+                    <span className="text-start text-600 ">{formatTime(departureTime)}</span>
                     <span className="text-xs text-main">{duration}</span>
-                    <span className="text-right">{formatTime(arrivalTime)}</span>
+                    <span className="text-start text-600">{formatTime(arrivalTime)}</span>
                 </div>
 
                 {/* Timeline */}
@@ -69,14 +69,16 @@ const FlightSegmentDetails = ({
                 </div>
 
                 {/* Segment content */}
-                <div className="flex flex-col gap-[12px] flex-1 text-sm">
+                <div className="flex flex-col gap-[12px] flex-1 text-sm !min-h-[248px] justify-between">
                     <p className="font-medium mb-1 text-[#282826]">{departureAirport}</p>
-                    <p className="text-[#6B7280] mb-2 flex items-center gap-1">
-                        <Image src={tabicon} alt="flight icon" width={16} height={16} />
-                        {flightNumber}
-                    </p>
+                    <div className='flex flex-col gap-2'>
+                        <p className="text-[#6B7280]  flex items-center gap-1">
+                            <Image src={tabicon} alt="flight icon" width={16} height={16} />
+                            {flightNumber}
+                        </p>
 
-                    <Amenities amenities={['Entertainment', 'Optional Meal', 'Magazine']} />
+                        <Amenities amenities={['Entertainment', 'Optional Meal', 'Magazine']} />
+                    </div>
                     <p className="mt-1">{arrivalAirport}</p>
                 </div>
             </div>

@@ -29,9 +29,9 @@ const FlightTimeInfo = ({
             <div className="pt-4">
                 <DurationDashed
                     length={isSummary ? 4 : dashedLength}
-                    width={35}
-                    height={35}
-                    logoWidth={20}
+                    width={40}
+                    height={40}
+                    logoWidth={24}
                     startSize={10}
                     idx={idx}
                 />

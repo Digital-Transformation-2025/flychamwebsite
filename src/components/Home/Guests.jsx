@@ -56,7 +56,7 @@ const Guests = ({ formik, values, isMobile }) => {
                                         value={option}
                                         checked={formik.values.cabinClass === option}
                                         onChange={() => formik.setFieldValue("cabinClass", option)}
-                                        className="accent-[#003A59]"
+                                        className="accent-primary-1"
                                     />
                                     {option}
                                 </label>
@@ -66,69 +66,77 @@ const Guests = ({ formik, values, isMobile }) => {
 
                 </div>
 
-                {GUEST_OPTIONS.map(({ label, sub, key }) => (
-                    <div
-                        key={key}
-                        className="flex items-center justify-between bg-[#F5F5F5] px-6 py-3 rounded-xl mb-3"
-                    >
-                        <div>
-                            <p className="text-[14px] font-semibold text-gray-800">
-                                {label}
-                            </p>
-                            <p className="text-[12px] text-gray-500">{sub}</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <button
-                                onClick={() => handleGuestChange(key, -1)}
-                                disabled={
-                                    key === "adults"
-                                        ? formik.values[key] <= 1
-                                        : formik.values[key] === 0
-                                }
-                                className="w-8 h-8 bg-[#D9D9D9] flex items-center justify-center rounded-[4px] disabled:opacity-50 cursor-pointer"
-                            >
-                                <Minus size={12} weight="bold" className="text-[#444]" />
-                            </button>
+{GUEST_OPTIONS.map(({ label, sub, key }) => {
+    const totalGuests = formik.values.adults + formik.values.children + formik.values.infants;
 
-                            <input
-                                type="number"
-                                value={formik.values[key]}
-                                onChange={(e) => {
-                                    const parsed = parseInt(e.target.value) || 0;
-                                    const value =
-                                        key === "adults" ? Math.max(1, parsed) : Math.max(0, parsed);
-                                    formik.setFieldValue(key, value);
-                                }}
-                                className="w-10 h-8 text-center border border-gray-400 rounded-md text-sm font-medium focus:outline-none custom-number-input"
-                                style={{
-                                    appearance: "textfield",
-                                    WebkitAppearance: "none",
-                                    MozAppearance: "textfield",
-                                    textAlign: "center",
-                                }}
-                            />
+    const minusEnabled = key === "adults" ? formik.values[key] > 1 : formik.values[key] > 0;
+    const plusDisabled = 
+        totalGuests >= 9 || // ✅ NEW RULE: max total guests 9
+        (key === "adults" && formik.values.adults >= 9) ||
+        (key === "children" && formik.values.children >= 9) ||
+        (key === "infants" && formik.values.infants >= formik.values.adults);
 
-                            <button
-                                onClick={() => handleGuestChange(key, 1)}
-                                disabled={
-                                    (key === "adults" && formik.values.adults >= 9) ||
-                                    (key === "children" && formik.values.children >= 9) ||
-                                    (key === "infants" && formik.values.infants >= formik.values.adults)
-                                }
-                                className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition ${(key === "adults" && formik.values.adults >= 9) ||
-                                    (key === "children" && formik.values.children >= 9) ||
-                                    (key === "infants" && formik.values.infants >= formik.values.adults)
-                                    ? "bg-gray-300 cursor-not-allowed"
-                                    : "bg-[#003A59] cursor-pointer"
-                                    }`}
-                            >
-                                <Plus size={12} weight="bold" className="text-white" />
-                            </button>
+    return (
+        <div
+            key={key}
+            className="flex items-center justify-between bg-[#F5F5F5] px-6 py-3 rounded-xl mb-3"
+        >
+            <div>
+                <p className="text-[14px] font-semibold text-gray-800">{label}</p>
+                <p className="text-[12px] text-gray-500">{sub}</p>
+            </div>
+            <div className="flex items-center gap-2">
+                {/* ➖ Minus Button */}
+                <button
+                    onClick={() => handleGuestChange(key, -1)}
+                    disabled={!minusEnabled}
+                    className={`w-8 h-8 flex items-center justify-center rounded-[4px] transition 
+                        ${minusEnabled ? "bg-primary-1 cursor-pointer" : "bg-[#D9D9D9] opacity-50 cursor-not-allowed"}`}
+                >
+                    <Minus
+                        size={12}
+                        weight="bold"
+                        className={ "text-white"}
+                    />
+                </button>
+
+                <input
+                    type="number"
+                    value={formik.values[key]}
+                    onChange={(e) => {
+                        const parsed = parseInt(e.target.value) || 0;
+                        const value =
+                            key === "adults" ? Math.max(1, parsed) : Math.max(0, parsed);
+                        formik.setFieldValue(key, value);
+                    }}
+                    className="w-10 h-8 text-center border border-gray-400 rounded-md text-sm font-medium focus:outline-none custom-number-input"
+                    style={{
+                        appearance: "textfield",
+                        WebkitAppearance: "none",
+                        MozAppearance: "textfield",
+                        textAlign: "center",
+                    }}
+                />
+
+                {/* ➕ Plus Button */}
+                <button
+                    onClick={() => handleGuestChange(key, 1)}
+                    disabled={plusDisabled}
+                    className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition 
+                        ${plusDisabled ? "bg-gray-300 cursor-not-allowed" : "bg-primary-1 cursor-pointer"}`}
+                >
+                    <Plus
+                        size={12}
+                        weight="bold"
+                        className={ "text-white"}
+                    />
+                </button>
+            </div>
+        </div>
+    );
+})}
 
 
-                        </div>
-                    </div>
-                ))}
                 {adults === infants
                     &&
                     <p className="text-alert text-sm">{`You can book for max ${adults} Infant`}</p>
@@ -154,14 +162,14 @@ const Guests = ({ formik, values, isMobile }) => {
                                 name="cabinClass"
                                 checked={formik.values.cabinClass === option}
                                 onChange={() => formik.setFieldValue("cabinClass", option)}
-                                className="form-radio accent-[#003A59]"
+                                className="form-radio accent-primary-1"
                             />
                         </label>
                     ))}
 
                     <div className="mt-7 relative w-full group">
                         {/* Icon on the left */}
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-2 text-[#003A59] pointer-events-none transition-opacity duration-200 group-focus-within:opacity-0">
+                        <span className="absolute inset-y-0 left-0 flex items-center pl-2 text-primary-1 pointer-events-none transition-opacity duration-200 group-focus-within:opacity-0">
                             <PlusCircle size={16} weight="bold" />
                         </span>
 
@@ -169,8 +177,8 @@ const Guests = ({ formik, values, isMobile }) => {
                         <label
                             htmlFor="promoCodeInput"
                             className={`absolute left-7 top-1/2 transform -translate-y-1/2 text-sm text-gray-500 transition-all 
-      group-focus-within:top-0 group-focus-within:text-xs group-focus-within:text-[#003A59]
-      ${formik.values.promoCode ? 'top-0 text-xs text-[#003A59]' : ''}`}
+      group-focus-within:top-0 group-focus-within:text-xs group-focus-within:text-primary-1
+      ${formik.values.promoCode ? 'top-0 text-xs text-primary-1' : ''}`}
                         >
                             Promo Code
                         </label>
@@ -181,7 +189,7 @@ const Guests = ({ formik, values, isMobile }) => {
                             type="text"
                             value={formik.values.promoCode}
                             onChange={(e) => formik.setFieldValue("promoCode", e.target.value)}
-                            className="w-full pl-7 pr-2 pt-5 pb-1 border-b-2 border-gray-300 focus:border-[#003A59] outline-none text-sm text-gray-800 placeholder-transparent"
+                            className="w-full pl-7 pr-2 pt-5 pb-1 border-b-2 border-gray-300 focus:border-primary-1 outline-none text-sm text-gray-800 placeholder-transparent"
                             placeholder="Promo Code"
                         />
                     </div>

@@ -100,21 +100,24 @@ export default function ClientLayoutWrapper({ children }) {
       subLinks: []
     }
   ];
+  const excludedPaths = [
+    '/search-results',
+    '/Search-results-confirm',
+    '/passenger-details',
+    '/booking-confirm',
+    '/about',
+    '/Mission',
+  ];
 
 
 
   return (
-
     <ReduxProvider>
-
-      <ZohoSalesIQ />
-      {/* ✅ GTM Script */}
+      {pathname !== '/search-results' &&
+        <ZohoSalesIQ />
+      }
       <GTMScript />
-
-      {/* ✅ GA4 Script */}
       <GA4Script />
-
-      {/* ✅ GTM Noscript */}
       <noscript>
         <iframe
           src="https://www.googletagmanager.com/ns.html?id=GTM-TKHJ4V8W"
@@ -124,52 +127,30 @@ export default function ClientLayoutWrapper({ children }) {
         ></iframe>
       </noscript>
 
-      {/* ✅ Layout */}
-      {/* <I18nextProvider i18n={i18n}> */}
-      <div >
-        <div className=" flex h-screen overflow-hidden">
+      <div>
+        <div className="flex h-screen overflow-hidden">
           {/* Sidebar */}
-          <aside className="hidden xl:block   h-screen shadow-xl z-50">
-            {/* {(pathname !== '/about' || pathname !== '/Mission') && */}
-            {pathname !== '/search-results' && pathname !== '/Search-results-confirm' && pathname !== '/passenger-details' && pathname !== '/booking-confirm' &&
-              // pathname !== '/Media-center' &&
-              (
-                <aside className="hidden xl:block h-screen shadow-xl z-50">
-                  <SideBar navItems={navItems} isOpen={isOpen} setIsOpen={setIsOpen} />
-                </aside>
-              )}
-            {/* } */}
+          <aside className="hidden xl:block h-screen shadow-xl z-50">
+            {!excludedPaths.includes(pathname) && (
+              <SideBar navItems={navItems} isOpen={isOpen} setIsOpen={setIsOpen} />
+            )}
           </aside>
 
           {/* Main Content */}
-          <main className="flex-1 w-[100%] h-screen overflow-y-auto bg-white  ">
-
+          <main className="flex-1 w-full h-screen overflow-y-auto bg-white">
             {children}
-            {(pathname !== '/about' && pathname !== '/Mission' && pathname !== '/search-results'
-              && pathname !== '/Search-results-confirm'
-              && pathname !== '/passenger-details'
-              && pathname !== '/booking-confirm'
-            ) && <Footer />}
-
+            {!excludedPaths.includes(pathname) && <Footer />}
           </main>
         </div>
 
-
-
-        {/* <div className="hidden xl:block">
-                    <LanguageSwitcher />
-                </div> */}
-
-
-
+        {/* Bottom Nav for Mobile */}
+        {!excludedPaths.includes(pathname) && (
+          <div className="block xl:hidden">
+            <BottomMobileMenu navItems={navItems} />
+          </div>
+        )}
       </div>
-      {pathname !== '/search-results' && pathname !== '/Search-results-confirm' && pathname !== '/passenger-details' && pathname !== '/booking-confirm' && (
-        <div className="block xl:hidden">
-          <BottomMobileMenu navItems={navItems} />
-        </div>
-      )}
-      {/* </I18nextProvider> */}
-
     </ReduxProvider>
   );
+
 }

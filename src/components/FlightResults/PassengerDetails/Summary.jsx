@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-import { ArrowLeft, ArrowRight, CheckCircle } from '@phosphor-icons/react';
+import { ArrowLeft, ArrowRight, ArrowsLeftRight, CheckCircle } from '@phosphor-icons/react';
 import tabIcon from '@/assets/images/tabicon.png';
 import Image from 'next/image';
 import DurationDashed from '../DurationDashed';
@@ -72,12 +72,15 @@ const Summary = ({ selectedFlight, selectedType }) => {
                     <span className="text-primary-1">{origin.city}</span>
                     <div className="flex flex-col item-center">
 
-                        <div className="flex justify-center items-center">
+                 
+                        {flighttype === "OneWay" &&
+                            <div className="flex justify-center items-center">
                             <ArrowRight size={16} className="text-[#5F5F5C]" />
-                        </div>
+                            </div>
+                        }
                         {flighttype === "Return" &&
                             <div className="flex justify-center items-center">
-                                <ArrowLeft size={16} className="text-[#5F5F5C]" />
+                                <ArrowsLeftRight  size={16} className="text-[#5F5F5C]" />
                             </div>
                         }
                     </div>

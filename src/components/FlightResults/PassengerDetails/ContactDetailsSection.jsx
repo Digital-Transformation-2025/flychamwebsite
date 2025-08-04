@@ -30,7 +30,7 @@ const isTouched = (field) => touched?.[field];
                 <span>Contact details</span>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-4 mb-4 md:pr-8">
+            <div className="flex flex-col md:flex-row gap-4 mb-4 md:pr-8 ">
                 <div className="w-full">
                     <CustomDropdown
                         selected={values.passengerIndex !== null ? String(values.passengerIndex) : 'Select an adult'}

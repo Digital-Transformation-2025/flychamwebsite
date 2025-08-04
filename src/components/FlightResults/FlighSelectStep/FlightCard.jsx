@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import useIsMobile from '@/hooks/useIsMobile';
 import { CaretDown, CaretUp, CheckCircle } from '@phosphor-icons/react';
 import FlightDetails from '../FlightDetails';
@@ -17,6 +17,7 @@ const FlightCard = ({
     onDetailsClick, isConfirmed, handleSelectPlan, selectedType
 }) => {
 
+    const cardRef = useRef(null);
 
     const { duration, stops, ecoFare, busFare, segments, } = useFormattedFlightTimes(flight);
     const isXl = useIsMobile(1280);
@@ -26,7 +27,18 @@ const FlightCard = ({
 
     return (
         <article
-            onClick={() => setExpanded(prev => !prev)}
+            ref={cardRef}
+
+            onClick={() => setExpanded(prev => {
+                if (!prev) {
+                    setTimeout(() => {
+                        if (cardRef.current) {
+                            cardRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                        }
+                    }, 400);
+                }
+                return !prev;
+            })}
             className={`
                 relative  
     w-full p-4 lg:py-8 lg:px-8 flex flex-col items-center lg:items-stretch 
@@ -49,7 +61,7 @@ const FlightCard = ({
                 <div className='flex flex-col items-start gap-4 '>
                     {segments?.length === 1 &&
                         <div className="text-600 text-sm pt-2 self-center">
-                            {stops > 0 ? stops : 'Non-stop,'}
+                            {stops > 0 ? stops : 'Non-stop , '}
                             {duration}
                         </div>
                     }
@@ -85,8 +97,8 @@ const FlightCard = ({
                         Flight details
                     </button>
                 </div>
-                <div className="w-full flex justify-between items-center  flex-wrap gap-4 my-2 md:my-0">
-                    <div className="w-full flex flex-row gap-4 items-center md:items-start self-center justify-center xl:justify-end">
+                <div className={`${isConfirmed ? "px-3 py-3" : "p-0"} w-full flex justify-between items-center  flex-wrap gap-4 my-2 md:my-0`}>
+                    <div className="w-full flex flex-row gap-10 items-center md:items-start self-center justify-center xl:justify-end">
                         {isConfirmed ?
                             <FareCard isConfirmed={isConfirmed} type={selectedType.type} currecny={flight?.common_info?.currency} price={selectedType.price} special={selectedType.special} isLg={isLg} />
                             :

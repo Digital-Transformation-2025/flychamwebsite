@@ -59,8 +59,8 @@ const FeatureRow = ({ index, item, isLg, infoIcon, isInfo }) => {
 
                     ) : (
                         <span className="flex items-center gap-2">
-                            <CheckCircle />
-                            {/* {InfoIcon && <InfoIcon size={20} className={`text-[#000]`} />} */}
+                            <InfoIcon size={20} className={`text-[#000]`} />
+                            {label + ": "}
                             {value || "-"}
                         </span>
                     )}
@@ -119,9 +119,9 @@ const InfoRows = ({ isHeader, isEconomy, isLg, isInfo, handleSelectPlan, col, fl
             {(isHeader) && (
                 <button
                     onClick={(e) => handleSelectPlan(e, flight, col)}
-                    className={`cursor-pointer w-full py-2 text-sm font-semibold rounded-[6px] ${isEconomy
-                        ? 'text-primary-1 border border-[var(--primary-1)] bg-white'
-                        : 'text-white bg-[var(--primary-1)]'
+                    className={`cursor-pointer mt-5 w-full py-3 text-sm font-semibold rounded-[6px] ${isEconomy
+                        ? 'text-primary-1 border border-[var(--primary-1)] bg-white hover:!text-white hover:border-white hover:bg-[#054E72]'
+                        : 'text-white bg-[var(--primary-1)]  hover:bg-[#013e5c] hover:border-primary'
                         }`}
                 >
                     Select
@@ -161,7 +161,7 @@ const Header = ({ tag, price, title, isEconomy, isHeader, isLg, currency }) => {
             </div>
 
             {tag && (
-                <span className="absolute right-0 top-0 bg-secondary-1 text-white text-[10px] p-2 font-semibold rounded-bl-[12px] rounded-tr-[8px]">
+                <span className="absolute right-0 top-0 bg-secondary-1 text-white text-[12px] p-2 font-semibold rounded-bl-[12px] rounded-tr-[8px]">
                     {tag}
                 </span>
             )}
@@ -190,7 +190,7 @@ const FareColumn = ({
             <Header currency={c} tag={tag} col={col} price={price} title={title} isEconomy={isEconomy} isHeader={isHeader} isLg={isLg} />
 
             {(isHeader && isLg) ? (
-                <div className="text-alert text-xs font-medium text-end mb-2">
+                <div className="text-alert px-2  text-xs font-medium text-end mb-2">
                     {seatsLeft}
                 </div>
             ) : <div className="text-alert h-[16px] text-xs font-medium text-end mb-2">
@@ -276,7 +276,7 @@ const FlightDetails = ({ handleSelectPlan, flight }) => {
                     <FareColumn {...columns[0]} col={columns[0]} isLg={isLg} handleSelectPlan={handleSelectPlan} flight={flight} />
                 }
                 <div className="flex flex-col md:flex-row gap-4 flex-1">
-                    <div className="flex flex-col lg:flex-row flex-1 justify-end gap-4">
+                    <div className="flex flex-col lg:flex-row flex-1 justify-end gap-15">
 
                         {columns
                             .slice(1)

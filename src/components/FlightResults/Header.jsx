@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import {
   ArrowLeft,
   ArrowRight,
+  ArrowsLeftRight,
   CalendarBlank,
   MagnifyingGlass,
   UserCircle,
@@ -43,7 +44,7 @@ const Header = () => {
   return (
     <header className="flex w-full h-[69px] justify-center items-center gap-6 shrink-0 bg-100 max-md:h-auto max-md:py-3">
       <div className="flex flex-col md:flex-row items-start md:items-center gap-6 w-full max-w-[1400px] justify-between">
-        
+
         {/* Logo */}
         <Link href="/" passHref className="flex items-center">
           <div className="cursor-pointer flex w-[180px] items-center p-2">
@@ -61,9 +62,11 @@ const Header = () => {
             </div>
 
             <div className="flex flex-col items-center">
-              <ArrowRight size={isLg ? 18 : 20} className="text-primary-1" />
+              {flighttype === "OneWay" && (
+                <ArrowRight size={isLg ? 18 : 20} className="text-primary-1" />
+              )}
               {flighttype === "Return" && (
-                <ArrowLeft size={isLg ? 18 : 20} className="text-primary-1" />
+                <ArrowsLeftRight size={isLg ? 18 : 20} className="text-primary-1" />
               )}
             </div>
 
@@ -74,7 +77,7 @@ const Header = () => {
 
           {/* Dates */}
           <div className="flex flex-col xl:flex-row items-center gap-1.5 xl:p-2.5">
-            <CalendarBlank size={25}  className="hidden xl:block text-primary-1" />
+            <CalendarBlank size={25} className="hidden xl:block text-primary-1" />
             <span className={labelClass}>{formatDateReadble(date)}</span>
           </div>
 
@@ -82,7 +85,7 @@ const Header = () => {
             <>
               <span>-</span>
               <div className="flex flex-col xl:flex-row items-center gap-1.5 xl:p-2.5">
-                <CalendarBlank size={25}  className="hidden xl:block text-primary-1" />
+                <CalendarBlank size={25} className="hidden xl:block text-primary-1" />
                 <span className={labelClass}>{formatDateReadble(dateReturn)}</span>
               </div>
             </>
@@ -92,7 +95,7 @@ const Header = () => {
 
           {/* Passengers */}
           <div className="flex flex-col xl:flex-row items-center gap-2.5 xl:p-2.5">
-            <Users size={25}  className="hidden xl:block text-primary-1" />
+            <Users size={25} className="hidden xl:block text-primary-1" />
             <span className={labelClass}>{`Passengers: ${passNum}`}</span>
           </div>
         </div>
