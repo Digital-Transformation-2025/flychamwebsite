@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 const PricingAccordion = ({ pricingInfo }) => {
     const [expandedType, setExpandedType] = useState(null);
     const [heights, setHeights] = useState({});
+    console.log('pricingInfo', pricingInfo);
 
     const contentRefs = useRef({});
 
@@ -58,7 +59,8 @@ const PricingAccordion = ({ pricingInfo }) => {
                             <div className="space-y-1 mt-2 pl-1 pt-1">
                                 <div className="flex justify-between">
                                     <span className="text-600">Fare</span>
-                                    <span className="text-600">{item.BaseFare[0]}</span>
+                                    <span className="text-600">{item.BaseFareEquiv
+                                    [0]}</span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span className="text-600">Taxes</span>
