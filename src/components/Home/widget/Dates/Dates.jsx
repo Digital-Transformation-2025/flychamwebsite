@@ -107,14 +107,14 @@ const Dates = ({ formik, handleDateSelect, currentMonth, setCurrentMonth, minMon
                             selected:
                                 tripType === 'OneWay'
                                     ? ' text-white bg-secondary rounded-full '
-                                    : 'bg-[#B6A889] text-white',
-                            range_middle: 'bg-[#e6dabc61]  !text-black !rounded-sm',
+                                    : `${Boolean(formik.values.dateEnd &&formik.values.dateStart ) ? 'rounded-full' : 'rounded-r-xl'} bg-secondary text-white`,
+                            range_middle: '!bg-[#e6dabc61]  !text-black !rounded-sm',
                             range_start: isArabic
-                                ? 'rounded-l-xl text-white'
-                                : 'rounded-r-xl text-white',
+                                ? `${Boolean(formik.values.dateEnd &&formik.values.dateStart ) ? 'rounded-full' : 'rounded-l-xl'}  text-white`
+                                : `${Boolean(formik.values.dateEnd&&formik.values.dateStart) ? 'rounded-r-xl' : 'rounded-full'}  text-white`,
                             range_end: isArabic
-                                ? 'rounded-r-xl text-white'
-                                : 'rounded-l-xl text-white',
+                                ? `${Boolean(formik.values.dateEnd &&formik.values.dateStart) ? 'rounded-full' : 'rounded-r-xl'}  text-white`
+                                : `${Boolean(formik.values.dateEnd &&formik.values.dateStart) ? 'rounded-l-xl' : 'rounded-full'}  text-white`,
                         }}
                         components={{
                             DayContent: (props) => (
