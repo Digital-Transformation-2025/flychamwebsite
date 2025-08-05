@@ -108,7 +108,7 @@ const Dates = ({ formik, handleDateSelect, currentMonth, setCurrentMonth, minMon
                                 tripType === 'OneWay'
                                     ? ' text-white bg-secondary rounded-full '
                                     : `${Boolean(formik.values.dateEnd &&formik.values.dateStart ) ? 'rounded-full' : 'rounded-r-xl'} bg-secondary text-white`,
-                            range_middle: '!bg-[#e6dabc61]  !text-black !rounded-sm',
+                            range_middle: '!bg-[#e6dabc61]  !text-black !rounded-none',
                             range_start: isArabic
                                 ? `${Boolean(formik.values.dateEnd &&formik.values.dateStart ) ? 'rounded-full' : 'rounded-l-xl'}  text-white`
                                 : `${Boolean(formik.values.dateEnd&&formik.values.dateStart) ? 'rounded-r-xl' : 'rounded-full'}  text-white`,
