@@ -66,75 +66,75 @@ const Guests = ({ formik, values, isMobile }) => {
 
                 </div>
 
-{GUEST_OPTIONS.map(({ label, sub, key }) => {
-    const totalGuests = formik.values.adults + formik.values.children + formik.values.infants;
+                {GUEST_OPTIONS.map(({ label, sub, key }) => {
+                    const totalGuests = formik.values.adults + formik.values.children + formik.values.infants;
 
-    const minusEnabled = key === "adults" ? formik.values[key] > 1 : formik.values[key] > 0;
-    const plusDisabled = 
-        totalGuests >= 9 || // ✅ NEW RULE: max total guests 9
-        (key === "adults" && formik.values.adults >= 9) ||
-        (key === "children" && formik.values.children >= 9) ||
-        (key === "infants" && formik.values.infants >= formik.values.adults);
+                    const minusEnabled = key === "adults" ? formik.values[key] > 1 : formik.values[key] > 0;
+                    const plusDisabled =
+                        totalGuests >= 9 || // ✅ NEW RULE: max total guests 9
+                        (key === "adults" && formik.values.adults >= 9) ||
+                        (key === "children" && formik.values.children >= 9) ||
+                        (key === "infants" && formik.values.infants >= formik.values.adults);
 
-    return (
-        <div
-            key={key}
-            className="flex items-center justify-between bg-[#F5F5F5] px-6 py-3 rounded-xl mb-3"
-        >
-            <div>
-                <p className="text-[14px] font-semibold text-gray-800">{label}</p>
-                <p className="text-[12px] text-gray-500">{sub}</p>
-            </div>
-            <div className="flex items-center gap-2">
-                {/* ➖ Minus Button */}
-                <button
-                    onClick={() => handleGuestChange(key, -1)}
-                    disabled={!minusEnabled}
-                    className={`w-8 h-8 flex items-center justify-center rounded-[4px] transition 
+                    return (
+                        <div
+                            key={key}
+                            className="flex items-center justify-between bg-[#F5F5F5] px-6 py-3 rounded-xl mb-3"
+                        >
+                            <div>
+                                <p className="text-[14px] font-semibold text-gray-800">{label}</p>
+                                <p className="text-[12px] text-gray-500">{sub}</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                {/* ➖ Minus Button */}
+                                <button
+                                    onClick={() => handleGuestChange(key, -1)}
+                                    disabled={!minusEnabled}
+                                    className={`w-8 h-8 flex items-center justify-center rounded-[4px] transition 
                         ${minusEnabled ? "bg-primary-1 cursor-pointer" : "bg-[#D9D9D9] opacity-50 cursor-not-allowed"}`}
-                >
-                    <Minus
-                        size={12}
-                        weight="bold"
-                        className={ "text-white"}
-                    />
-                </button>
+                                >
+                                    <Minus
+                                        size={12}
+                                        weight="bold"
+                                        className={"text-white"}
+                                    />
+                                </button>
 
-                <input
-                    type="number"
-                    value={formik.values[key]}
-                    onChange={(e) => {
-                        const parsed = parseInt(e.target.value) || 0;
-                        const value =
-                            key === "adults" ? Math.max(1, parsed) : Math.max(0, parsed);
-                        formik.setFieldValue(key, value);
-                    }}
-                    className="w-10 h-8 text-center border border-gray-400 rounded-md text-sm font-medium focus:outline-none custom-number-input"
-                    style={{
-                        appearance: "textfield",
-                        WebkitAppearance: "none",
-                        MozAppearance: "textfield",
-                        textAlign: "center",
-                    }}
-                />
+                                <input
+                                    type="number"
+                                    value={formik.values[key]}
+                                    onChange={(e) => {
+                                        const parsed = parseInt(e.target.value) || 0;
+                                        const value =
+                                            key === "adults" ? Math.max(1, parsed) : Math.max(0, parsed);
+                                        formik.setFieldValue(key, value);
+                                    }}
+                                    className="w-10 h-8 text-center border border-gray-400 rounded-md text-sm font-medium focus:outline-none custom-number-input"
+                                    style={{
+                                        appearance: "textfield",
+                                        WebkitAppearance: "none",
+                                        MozAppearance: "textfield",
+                                        textAlign: "center",
+                                    }}
+                                />
 
-                {/* ➕ Plus Button */}
-                <button
-                    onClick={() => handleGuestChange(key, 1)}
-                    disabled={plusDisabled}
-                    className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition 
+                                {/* ➕ Plus Button */}
+                                <button
+                                    onClick={() => handleGuestChange(key, 1)}
+                                    disabled={plusDisabled}
+                                    className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition 
                         ${plusDisabled ? "bg-gray-300 cursor-not-allowed" : "bg-primary-1 cursor-pointer"}`}
-                >
-                    <Plus
-                        size={12}
-                        weight="bold"
-                        className={ "text-white"}
-                    />
-                </button>
-            </div>
-        </div>
-    );
-})}
+                                >
+                                    <Plus
+                                        size={12}
+                                        weight="bold"
+                                        className={"text-white"}
+                                    />
+                                </button>
+                            </div>
+                        </div>
+                    );
+                })}
 
 
                 {adults === infants
@@ -153,16 +153,27 @@ const Guests = ({ formik, values, isMobile }) => {
                         <label
                             key={option}
                             className="flex items-center justify-between bg-[#F5F5F5] px-6 py-[14px] rounded-xl mb-3 cursor-pointer"
+
                         >
                             <span className="text-[14px] text-800 font-medium">
                                 {option}
                             </span>
+
+                            <span
+                                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition
+        ${formik.values.cabinClass === option ? 'border-[var(--primary-1)]' : 'border-gray-400'}`}
+                            >
+                                {formik.values.cabinClass === option && (
+                                    <span className="w-2.5 h-2.5 rounded-full bg-[var(--primary-1)]"></span>
+                                )}
+                            </span>
+
                             <input
                                 type="radio"
                                 name="cabinClass"
                                 checked={formik.values.cabinClass === option}
                                 onChange={() => formik.setFieldValue("cabinClass", option)}
-                                className="form-radio accent-primary-1"
+                                className="hidden"
                             />
                         </label>
                     ))}

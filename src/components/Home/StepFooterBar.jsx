@@ -42,7 +42,7 @@ const StepFooterBar = ({ activeTab, isNextDisabled, getTripDuration, handleReset
                             ? "bg-gray-400 text-white cursor-not-allowed"
                             : "bg-[#B59C6D] text-white hover:opacity-90"
                             }`}
-                        tpe={activeTab === 3 ? "submit" : "button"}
+                        type={activeTab === 3 ? "submit" : "button"}
                     >
                         {activeTab === 3 ? "Search flights" : "Next"}
                     </button>

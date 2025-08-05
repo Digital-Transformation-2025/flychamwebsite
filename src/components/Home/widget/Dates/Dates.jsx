@@ -25,7 +25,7 @@ const Dates = ({ formik, handleDateSelect, currentMonth, setCurrentMonth, minMon
             : formik.values.dateStart
                 ? {
                     from: new Date(formik.values.dateStart),
-                    to: formik.values.dateEnd ? new Date(formik.values.dateEnd) : new Date(),
+                    to: formik.values.dateEnd ? new Date(formik.values.dateEnd) : undefined,
                 }
                 : undefined;
 
@@ -56,7 +56,7 @@ const Dates = ({ formik, handleDateSelect, currentMonth, setCurrentMonth, minMon
 
 
     return (
-        <div className="bg-white rounded-2xl p-6 w-full max-w-7xl mx-auto">
+        <div className="bg-white rounded-2xl p-3 w-full max-w-7xl mx-auto">
             <TripTypeSelector values={formik.values}
                 setFieldValue={formik.setFieldValue}
                 handleReset={handleReset}
@@ -97,24 +97,24 @@ const Dates = ({ formik, handleDateSelect, currentMonth, setCurrentMonth, minMon
                         mode={tripType === 'OneWay' ? 'single' : 'range'}
                         selected={selected}
                         onSelect={handleDateSelect}
-                        className="flex justify-center"
+                        className="w-full flex justify-center"
                         classNames={{
-                            head_cell: 'uppercase text-xs font-bold text-gray-500 text-center',
-                            caption_label: 'text-center text-lg font-semibold text-black',
-                            day: 'hover:!bg-[#D6C89F]  text-md text-black transition duration-300 ease-in-out w-8 h-8',
-                            today: 'border border-[#BAA981] rounded-full  w-10 h-10 flex items-center justify-center',
+                            head_cell: 'uppercase text-xs font-bold text-gray-500 text-center ',
+                            caption_label: 'text-center text-lg font-semibold text-black ',
+                            day: 'hover:!bg-secondary hover:text-white  rounded-full w-12 h-12 text-md text-black transition duration-300 ease-in-out  ',
+                            today: 'border border-[#BAA981] rounded-full  w-12 h-12 flex items-center justify-center',
 
                             selected:
                                 tripType === 'OneWay'
-                                    ? ' text-white bg-secondary rounded-full'
-                                    : 'bg-[#B6A889] text-black',
-                            range_middle: 'bg-[#e6dabc61]  text-black',
+                                    ? ' text-white bg-secondary rounded-full '
+                                    : 'bg-[#B6A889] text-white',
+                            range_middle: 'bg-[#e6dabc61]  !text-black !rounded-sm',
                             range_start: isArabic
-                                ? 'rounded-r-xl text-white'
-                                : 'rounded-l-xl text-white',
-                            range_end: isArabic
                                 ? 'rounded-l-xl text-white'
                                 : 'rounded-r-xl text-white',
+                            range_end: isArabic
+                                ? 'rounded-r-xl text-white'
+                                : 'rounded-l-xl text-white',
                         }}
                         components={{
                             DayContent: (props) => (

@@ -1,10 +1,13 @@
 'use client'
 import React from 'react';
-const CustomCheckbox = ({ checked, onChange, label }) => (
-    <label className="flex items-center gap-3 cursor-pointer select-none">
+
+const CustomCheckbox = ({ checked, onChange, label, error }) => (
+    <label className="inline-flex items-start gap-3 cursor-pointer select-none">
+        {/* Checkbox box */}
         <div
-            className={`flex justify-center items-center w-5 h-5 p-[2px] rounded-[4px] 
-        ${checked ? 'bg-primary-1' : 'bg-white border border-[#B0B0AE]'}`}
+            className={`flex justify-center items-center min-w-[20px] min-h-[20px] p-[2px] rounded-[4px] 
+                ${checked ? 'bg-primary-1' : 'bg-white'} 
+                ${error ? 'border border-alert' : !checked ? 'border border-[#B0B0AE]' : ''}`}
         >
             {checked && (
                 <svg
@@ -21,15 +24,18 @@ const CustomCheckbox = ({ checked, onChange, label }) => (
                 </svg>
             )}
         </div>
+
+        {/* Hidden checkbox input */}
         <input
             type="checkbox"
             checked={checked}
             onChange={onChange}
             className="hidden"
         />
-        <span className="text-[#1A1A1A] text-sm">{label}</span>
+
+        {/* Label text */}
+        <span className="text-[#1A1A1A] text-sm leading-snug">{label}</span>
     </label>
 );
-
 
 export default CustomCheckbox;

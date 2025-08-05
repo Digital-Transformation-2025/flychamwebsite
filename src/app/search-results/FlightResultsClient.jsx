@@ -26,8 +26,11 @@ import * as Yup from 'yup';
 import useFlightDetails from '@/hooks/useFlightDetails'
 import useScrollToTop from '@/hooks/useScrollToTop'
 import useFetchFlights from '@/hooks/useFetchFlights'
+import useFlightSearchForm from '@/hooks/bookingBox/useFlightSearchForm'
+import ModifySearchModal from '@/components/FlightResults/ModifySearchModal'
 
-const FlightResultsClient = () => {
+const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
+    const searchFormik = useFlightSearchForm();
 
     const scrollRef = useRef(null)
 
@@ -42,6 +45,7 @@ const FlightResultsClient = () => {
     const [showPosModal, setShowPosModal] = useState(false);
     const [localLoading, setLocalLoading] = useState(true);
     const [isSessionModalOpen, setSessionModalOpen] = useState(false);
+    const [isModifySearchOpen, setIsModifySearchOpen] = useState(false);
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState(false);
 
@@ -204,6 +208,8 @@ const FlightResultsClient = () => {
                     }
                     return true;
                 }), contact: contactSchema,
+            accept: Yup.boolean()
+                .oneOf([true], 'You must accept the terms.'),
         }),
         context: { activeField: '' },
         // validateOnChange: true,
@@ -363,6 +369,10 @@ const FlightResultsClient = () => {
         });
     };
 
+    const handleOpenModifySearch = () => {
+        setIsModifySearchOpen(true)
+    }
+
 
     //  Define reusable snippets 
 
@@ -409,7 +419,7 @@ const FlightResultsClient = () => {
             {pageLoding ? <LottieComponent /> :
                 <div ref={scrollRef} className="h-screen overflow-y-auto">
                     <div className='hidden lg:block'>
-                        <Header />
+                        <Header handleOpenModifySearch={handleOpenModifySearch} />
                         <main className="w-[70%] mx-auto px-2">
                             {progressBarSection}
                             {routeInfoSection}
@@ -443,6 +453,13 @@ const FlightResultsClient = () => {
                 isOpen={isAlertOpen}
                 onClose={() => setIsAlertOpen(false)}
                 message={alertMessage}
+
+            />
+            <ModifySearchModal
+                isOpen={isModifySearchOpen}
+                onClose={() => setIsModifySearchOpen(false)}
+                airPorts={airPorts}
+                pos={pos}
 
             />
             <PosSelectorModal handleSelectPos={handleSelectPos} isOpen={showPosModal} setIsOpen={setShowPosModal} />

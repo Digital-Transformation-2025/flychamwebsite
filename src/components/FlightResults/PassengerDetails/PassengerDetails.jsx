@@ -73,6 +73,7 @@ const PassengerDetails = ({ activeStep, setActiveStep, selectedFlight, selectedT
                         accept={formik.values.accept}
                         recive={formik.values.recive}
                         setFieldValue={formik.setFieldValue}
+                        errors={formik.errors}
                     />
                 </Section>
                 <Section>

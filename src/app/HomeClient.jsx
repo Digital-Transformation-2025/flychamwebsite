@@ -51,7 +51,7 @@ const HomeClient = ({ flights, pos }) => {
 
           {/* <FlightSearch isHome /> */}
 
-          <BookingBox pos={pos} flights={flights}          />
+          <BookingBox pos={pos} flights={flights} />
         </div>
         <div className='w-[90%] mx-auto px-2'>
 

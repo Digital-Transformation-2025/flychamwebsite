@@ -47,7 +47,7 @@ const POSNotice = ({ setShowNotice, setShowPosModal }) => {
     <div className='flex items-start flex-col sm:flex-row'>
       <p className='text-700'>
 
-        Please note: Your booking will follow ${region}'s local terms..
+        Please note: Your booking will follow {region}'s local terms..
       </p>
       <div>
         <button

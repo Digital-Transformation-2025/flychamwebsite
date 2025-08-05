@@ -26,8 +26,11 @@ import AirportList from "./AirportList";
 import Guests from "./Guests";
 import Dates from "./widget/Dates/Dates";
 import SearchInput from "./SearchInput";
+import ModalTitle from "./widget/ModalTitle";
+import ModalFooter from "./widget/ModalFooter";
+import InfoBoxes from "./widget/InfoBoxes";
 
-const BookingBox = ({ flights, pos }) => {
+const BookingBox = ({ flights, pos, isResultsPage }) => {
     const isMobile = useIsMobile()
     const dispatch = useDispatch()
     const router = useRouter()
@@ -115,7 +118,8 @@ const BookingBox = ({ flights, pos }) => {
             type: 0,
             tripType: 'OneWay',
             nearby: false,
-            hasClickCalendar: false
+            hasClickCalendar: false,
+            miles: false
         },
         onSubmit: (values) => {
             const {
@@ -263,6 +267,7 @@ const BookingBox = ({ flights, pos }) => {
         setMinMonth(new Date())
     };
     const handleDateSelect = (value) => {
+        console.log('value', value);
         const tripType = formik.values.tripType;
 
         if (tripType === 'OneWay') {
@@ -273,27 +278,34 @@ const BookingBox = ({ flights, pos }) => {
                     : null;
                 const selected = new Date(value).toDateString();
 
-                // If date is the same as the existing dateStart, skip update
-                if (existing === selected) return;
+                if (existing === selected) return; // skip if same day
 
                 formik.setFieldValue('dateStart', value);
                 formik.setFieldValue('dateEnd', '');
-
             }
-        } else {
-            const { hasClickCalendar, dateStart, dateEnd } = formik.values
-
+        }
+        else {
+            const { hasClickCalendar, dateStart } = formik.values;
 
             if (!hasClickCalendar) {
-                formik.setFieldValue('dateStart', value.from);
-                formik.setFieldValue('hasClickCalendar', true);
+                // First click → set start date
+                formik.setFieldValue('dateStart', value instanceof Date ? value : value.from || value);
                 formik.setFieldValue('dateEnd', '');
-
+                formik.setFieldValue('hasClickCalendar', true);
             }
+            else {
+                // Second click → set end date (allow same day)
+                if (value instanceof Date) {
+                    formik.setFieldValue('dateEnd', value);
+                } else if (value?.to) {
+                    formik.setFieldValue('dateEnd', value.to);
+                } else {
+                    // If same day as start
+                    formik.setFieldValue('dateEnd', dateStart);
+                }
 
-            if (hasClickCalendar && dateStart) {
-                formik.setFieldValue('dateEnd', value.to);
-
+                // Reset for next time
+                formik.setFieldValue('hasClickCalendar', false);
             }
         }
     };
@@ -342,7 +354,6 @@ const BookingBox = ({ flights, pos }) => {
             const isSource = type === 0;
             return (
                 <>
-                    {/* {!isMobile && */}
                     <SearchInput
                         search={type === 0 ? sourceSearch : destinationSearch}
                         handleSearch={handleSearch}
@@ -352,7 +363,6 @@ const BookingBox = ({ flights, pos }) => {
                         values={formik.values}
                         airPorts={airPorts.items}
                     />
-                    {/* } */}
                     <AirportList
                         type={isSource ? "source" : "destination"}
                         values={formik.values}
@@ -416,6 +426,7 @@ const BookingBox = ({ flights, pos }) => {
 
             />
             <FromToSelector
+                // setShowModal={setDesktopShowModal}
                 setShowModal={setDesktopShowModal}
                 setShowMobileModal={setShowMobileModal}
                 cities={cities}
@@ -424,11 +435,15 @@ const BookingBox = ({ flights, pos }) => {
                 handleSwitch={handleSwitch}
 
             />
+
             <FlightInfoInputs formik={formik} setShowMobileModal={setShowMobileModal}
             />
             <SearchFlightsButton handleSubmit={formik.handleSubmit} values={formik.values} />
             <MilesToggle
                 isMobile={isMobile}
+                miles={formik.values.miles}
+                setFieldValue={formik.setFieldValue}
+
             />
 
 
@@ -437,13 +452,19 @@ const BookingBox = ({ flights, pos }) => {
     );
     const DesktopView = () => (
         <div id="search-widget" className="bg-white rounded-2xl shadow-md p-6 w-full max-w-5xl mx-auto mt-[-130px] relative z-20 ">
-            <TabNavigation
-                tabs={tabs}
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-                isMobile={false}
-                formik={formik}
-            />
+            {!isResultsPage &&
+                <TabNavigation
+                    tabs={tabs}
+                    activeTab={activeTab}
+                    setActiveTab={setActiveTab}
+                    isMobile={false}
+                    formik={formik}
+                />
+            }
+            {isResultsPage && (
+                <ModalTitle />
+            )}
+
             <div className="flex items-center justify-between mb-6">
                 <TripTypeSelector values={formik.values}
                     setFieldValue={formik.setFieldValue}
@@ -459,6 +480,15 @@ const BookingBox = ({ flights, pos }) => {
                 handleSwitch={handleSwitch}
 
             />
+            {isResultsPage && <InfoBoxes />
+
+            }
+            {isResultsPage && (
+                <ModalFooter
+                    setFieldValue={formik.setFieldValue}
+                    values={formik.values}
+                />
+            )}
             <AirportModal
                 key={showMobileModal ? 'open' : 'closed'}
 

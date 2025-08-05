@@ -10,7 +10,7 @@ export default function CustomDropdown({
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const dropdownRef = useRef(null);
-
+  const inputRef = useRef(null);
   const toggleDropdown = () => setIsOpen((prev) => !prev);
 
   const handleSelect = (value) => {
@@ -35,6 +35,13 @@ export default function CustomDropdown({
     (opt.value || "").toLowerCase().includes(query.toLowerCase())
   );
 
+  useEffect(() => {
+    if (isOpen && type === "countries") {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
+    }
+  }, [isOpen, type]);
   return (
     <div className="relative w-full bg-100" ref={dropdownRef}>
       <button
@@ -66,6 +73,7 @@ export default function CustomDropdown({
         <div className="absolute w-full mt-1 bg-100 rounded z-100  max-h-72 overflow-auto">
           {type === "countries" &&
             <input
+              ref={inputRef} // ⬅️ attach ref here
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -73,6 +81,7 @@ export default function CustomDropdown({
               placeholder="Search country or code"
             />
           }
+
           <ul>
             {filteredOptions.map((opt) => (
               <li

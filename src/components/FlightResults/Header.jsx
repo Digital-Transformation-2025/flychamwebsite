@@ -20,7 +20,7 @@ import formatDateReadble from '@/util/formatDateReadble';
 import useFlightRouteDetails from '@/hooks/useFlightRouteDetails';
 import useIsMobile from '@/hooks/useIsMobile';
 
-const Header = () => {
+const Header = ({ handleOpenModifySearch }) => {
   const { searchParams, airPorts } = useSelector((state) => state.flights);
   const { date, adults, children, infants, origin_id, destination_id } = searchParams;
   const airPortsItems = airPorts?.items || [];
@@ -102,11 +102,13 @@ const Header = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-4">
-          <button className="flex h-[51px] items-center gap-1 bg-secondary-1 px-2.5 py-[5px] rounded-lg hover:bg-[#A89770] transition-colors text-[#FDFDFC] font-bold max-sm:w-full max-sm:justify-center">
+          <button
+            // onClick={handleOpenModifySearch}
+            className="flex h-[51px] items-center gap-1 bg-secondary-1 px-2.5 py-[5px] rounded-lg hover:bg-[#A89770] transition-colors text-[#FDFDFC] font-bold max-sm:w-full max-sm:justify-center">
             <MagnifyingGlass size={25} color="#FFF" />
             <span>Modify search</span>
           </button>
-          <UserCircle size={25} className="text-500 cursor-pointer text-primary-1" />
+          {/* <UserCircle size={25} className="text-500 cursor-pointer text-primary-1" /> */}
         </div>
       </div>
     </header>

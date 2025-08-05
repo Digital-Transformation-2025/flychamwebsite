@@ -10,7 +10,7 @@ const MonthNavigation = ({ currentMonth, minMonth, handleMonthChange }) => {
   const isPrevDisabled = prevMonth < minAllowedMonth;
 
   return (
-    <div className="flex justify-between items-center mb-4 px-6">
+    <div className="flex justify-between items-center  ">
       <button
         onClick={() => handleMonthChange(prevMonth)}
         disabled={isPrevDisabled}

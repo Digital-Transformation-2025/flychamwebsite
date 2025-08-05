@@ -14,11 +14,12 @@ import Screen from '@/components/Ui/Screen';
 import useFormattedFlightTimes from '@/hooks/useFormattedFlightTimes';
 import useIsMobile from '@/hooks/useIsMobile';
 import formatTime from '@/util/formatFlightTime';
+import LottieComponent from '@/components/Ui/LottieComponent';
 
 const BookingConfirm = () => {
     const dispatch = useDispatch();
     const { selectedFlight,
-         sessionInfo,
+        sessionInfo,
         selectedPlan, pnr } = useSelector((s) => s.flights);
     // 🔹 Dummy sessionInfo for testing UI without API
     // const sessionInfo = {
@@ -105,7 +106,7 @@ const BookingConfirm = () => {
         }
     }, [dispatch, sessionId]);
 
-    if (loading) return <Screen />;
+    if (loading) return <LottieComponent />;
     if (error || !sessionInfo || !sessionInfo.contact) {
         return <p className="text-center text-alert font-semibold mt-10">Something went wrong. Please try again later.</p>;
     }
@@ -122,7 +123,7 @@ const BookingConfirm = () => {
         },
         {
             label: "Contact",
-            value: sessionInfo?.contact?.phoneNumber ?? '-'
+            value: ("+"+ sessionInfo?.contact?.countryCode + "-" + sessionInfo?.contact?.areaCode + "-" + sessionInfo?.contact?.mobileNumber) ?? '-'
         },
         {
             label: "Email",
@@ -142,31 +143,17 @@ const BookingConfirm = () => {
         router.push("/")
     }
     const getTaxesAndFees = (taxes = [], fees = []) => {
-        console.log('taxes', taxes);
-        console.log('fees', fees);
-
-        // Sum all tax amounts
         const totalTaxes = taxes.reduce((sum, t) => sum + (t.amount || 0), 0);
-        // Sum all fee amounts
         const totalFees = fees.reduce((sum, f) => sum + (f.amount || 0), 0);
-        console.log('totalTaxes', totalTaxes);
-        console.log('totalFees', totalFees);
-
-        // Get currency (fall back to taxes first, then fees)
         const currency = taxes[0]?.currency || fees[0]?.currency || '';
-
-        // Calculate final total
         const total = totalTaxes + totalFees;
-        console.log('total', total);
-
-        // Return formatted string
         return `${total.toFixed(2)} ${currency}`;
     };
 
     const handkeDownloadTicket = () => {
         dispatch(downloadTickeyService({
             SessionId: sessionId,
-            PNR: pnr
+            PNR: sessionInfo?.pnr
         })).then((action) => {
             if (downloadTickeyService.fulfilled.match(action)) {
                 const { fileUrl } = action.payload;
@@ -203,8 +190,8 @@ const BookingConfirm = () => {
 
                 {/* ✅ Responsive Main Content */}
                 <div className="flex flex-col md:flex-row">
-                    {/* Left Section */}
-                    <div className="flex-1 flex flex-col justify-between bg-50 relative p-4">
+                    {/* Left Section - 40% */}
+                    <div className="md:basis-[30%] flex flex-col justify-between bg-50 relative p-4">
                         {sessionInfo?.segments?.map((s, idx) => {
                             const departureTime = s?.departureDateTime?.split("T")[1] ?? "-";
                             const arrivalTime = s?.arrivalDateTime?.split("T")[1] ?? "-";
@@ -234,59 +221,58 @@ const BookingConfirm = () => {
                             );
                         })}
 
-                        {/* ✅ Info Box stays stacked on mobile */}
+                        {/* Info Box */}
                         <div className="flex flex-col sm:flex-row justify-between bg-[#A6CFE04D] rounded-lg px-2 py-3 mt-6 text-sm text-500 gap-3 sm:gap-0">
                             <div className="flex items-start gap-2">
                                 <EnvelopeSimple size={24} />
-                                <span className='text-[12px] text-500'>
+                                <span className="text-[12px] text-500">
                                     We’ve sent your booking confirmation to your email
                                 </span>
                             </div>
                             <div className="hidden sm:block border-l border-gray-300 h-5 self-center mx-4" />
                             <div className="flex items-start gap-2">
                                 <Clock size={24} />
-                                <span className='text-[12px] text-500'>
+                                <span className="text-[12px] text-500">
                                     Please arrive at the airport at least 3 hours before departure
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    {/* ✅ Right Section (Summary Info) */}
-                    <div className="w-full md:w-1/3 bg-white p-6 flex flex-col justify-between">
+                    {/* Right Section - 60% */}
+                    <div className="md:basis-[70%] bg-white p-6 flex flex-col justify-between">
                         <div className="grid grid-cols-1 gap-y-4 text-sm">
-                            {info.reduce((acc, curr, index) => {
-                                if (index % 2 === 0) {
-                                    acc.push([curr]);
-                                } else {
-                                    acc[acc.length - 1].push(curr);
-                                }
-                                return acc;
-                            }, []).map((pair, idx) => (
-                                <div key={idx} className="grid grid-cols-2 gap-x-6">
-                                    {pair.map(({ label, value }, i) => (
-                                        <div key={i}>
-                                            <div className="text-gray-500">{label}</div>
-
-                                            {/* ✅ wrap long text */}
-                                            <div className="font-medium break-words">{value}</div>
-
-                                        </div>
-                                    ))}
-                                </div>
-                            ))}
+                            {info
+                                .reduce((acc, curr, index) => {
+                                    if (index % 2 === 0) {
+                                        acc.push([curr]);
+                                    } else {
+                                        acc[acc.length - 1].push(curr);
+                                    }
+                                    return acc;
+                                }, [])
+                                .map((pair, idx) => (
+                                    <div key={idx} className="grid grid-cols-2 gap-x-6">
+                                        {pair.map(({ label, value }, i) => (
+                                            <div key={i}>
+                                                <div className={`text-gray-500`}>{label}</div>
+                                                <div className={`${(label === "Booking reference" || label === "Flight number") ? 'text-primary-1 font-medium ' : 'text-black font-medium break-words'}`}>{value}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ))}
                         </div>
                     </div>
-
                 </div>
+
             </div>
 
             {/* ✅ Payment Summary stays full width */}
             <div className="w-full border shadow-md border-[#FDFDFC] rounded-[20px] py-6 px-4 mb-6">
                 <h3 className="text-sm font-semibold mb-4">Payment Summary</h3>
                 <div className="flex justify-between text-sm mb-2 text-600">
-                    <span>Base fare</span>
-                    <span>{sessionInfo?.baseFareAmount ?? '-'}</span>
+                    <span> Base fare</span>
+                    <span>{(sessionInfo?.baseFareAmount + " " + sessionInfo?.paymentCurrency) ?? '-'}</span>
                 </div>
                 <div className="flex justify-between text-sm mb-2 text-600">
                     <span>Taxes & fees</span>
