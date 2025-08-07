@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { useEffect } from 'react';
 
@@ -16,10 +16,9 @@ export default function ZohoSalesIQ() {
     document.body.appendChild(script);
 
     return () => {
-      // Cleanup on component unmount
       document.getElementById('zsiqscript')?.remove();
     };
   }, []);
 
-  return null; // This component doesn't render anything visible
+  return null;
 }

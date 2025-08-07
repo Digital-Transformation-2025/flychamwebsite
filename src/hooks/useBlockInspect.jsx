@@ -1,34 +1,46 @@
 import { useEffect } from "react";
 
 export default function useBlockInspect() {
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      // F12
-      if (e.keyCode === 123) {
-        e.preventDefault();
-      }
+    useEffect(() => {
+        const threshold = 160;
+        let lastCheck = Date.now();
 
-      // Ctrl+Shift+I or Ctrl+Shift+J
-      if (e.ctrlKey && e.shiftKey && ['I', 'J'].includes(e.key)) {
-        e.preventDefault();
-      }
+        const checkDevTools = () => {
+            const widthThreshold = window.outerWidth - window.innerWidth > 160;
+            const heightThreshold = window.outerHeight - window.innerHeight > 160;
 
-      // Ctrl+U (View Page Source)
-      if (e.ctrlKey && e.key === 'u') {
-        e.preventDefault();
-      }
-    };
+            if (widthThreshold || heightThreshold) {
+                window.history.back(); // Detected — go back
+            }
+        };
 
-    const handleContextMenu = (e) => {
-      e.preventDefault(); // 🔒 Block right-click
-    };
+        const interval = setInterval(() => {
+            if (Date.now() - lastCheck > 1000) {
+                checkDevTools();
+                lastCheck = Date.now();
+            }
+        }, 1500);
 
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("contextmenu", handleContextMenu);
+        // Block F12, Ctrl+Shift+I/U
+        const handleKeyDown = (e) => {
+            if (
+                e.keyCode === 123 || // F12
+                (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key)) ||
+                (e.ctrlKey && e.key === 'u')
+            ) {
+                e.preventDefault();
+            }
+        };
 
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("contextmenu", handleContextMenu);
-    };
-  }, []);
+        const handleContextMenu = (e) => e.preventDefault();
+
+        document.addEventListener("keydown", handleKeyDown);
+        document.addEventListener("contextmenu", handleContextMenu);
+
+        return () => {
+            clearInterval(interval);
+            document.removeEventListener("keydown", handleKeyDown);
+            document.removeEventListener("contextmenu", handleContextMenu);
+        };
+    }, []);
 }

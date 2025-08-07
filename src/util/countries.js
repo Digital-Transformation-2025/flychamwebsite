@@ -1,6 +1,10 @@
 const countries =
     [
         {
+            "label": "963 (Syrian Arab Republic)",
+            "value": "963"
+        },
+        {
             "label": "1 (Canada)",
             "value": "1"
         },
@@ -704,10 +708,7 @@ const countries =
             "label": "962 (Jordan)",
             "value": "962"
         },
-        {
-            "label": "963 (Syrian Arab Republic)",
-            "value": "963"
-        },
+
         {
             "label": "964 (Iraq)",
             "value": "964"
