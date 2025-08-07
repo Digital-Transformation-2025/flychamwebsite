@@ -9,10 +9,11 @@ const GUEST_OPTIONS = [
 
 const CLASS_OPTIONS = ["Economy", "Business"];
 
-const Guests = ({ formik, values, isMobile }) => {
+const Guests = ({ formik, values, isMobile, isResultsPage }) => {
     const { type, adults, infants
     } = values
     const handleGuestChange = (key, delta) => {
+
         const currentValue = formik.values[key];
 
         if (key === "adults") {
@@ -88,8 +89,10 @@ const Guests = ({ formik, values, isMobile }) => {
                             <div className="flex items-center gap-2">
                                 {/* ➖ Minus Button */}
                                 <button
-                                    onClick={() => handleGuestChange(key, -1)}
-                                    disabled={!minusEnabled}
+                                    onClick={(e) => {
+                                        e.stopPropagation(); // ✅ prevent closing dropdown
+                                        handleGuestChange(key, -1);
+                                    }} disabled={!minusEnabled}
                                     className={`w-8 h-8 flex items-center justify-center rounded-[4px] transition 
                         ${minusEnabled ? "bg-primary-1 cursor-pointer" : "bg-[#D9D9D9] opacity-50 cursor-not-allowed"}`}
                                 >
@@ -120,8 +123,10 @@ const Guests = ({ formik, values, isMobile }) => {
 
                                 {/* ➕ Plus Button */}
                                 <button
-                                    onClick={() => handleGuestChange(key, 1)}
-                                    disabled={plusDisabled}
+                                    onClick={(e) => {
+                                        e.stopPropagation(); // ✅ prevent closing dropdown
+                                        handleGuestChange(key, 1);
+                                    }} disabled={plusDisabled}
                                     className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition 
                         ${plusDisabled ? "bg-gray-300 cursor-not-allowed" : "bg-primary-1 cursor-pointer"}`}
                                 >
@@ -145,7 +150,7 @@ const Guests = ({ formik, values, isMobile }) => {
             </div>
 
             {/* Class & Promo Section */}
-            {!isMobile &&
+            {!isMobile && !isResultsPage &&
 
                 <div className="flex-1">
                     <h3 className="text-[16px] mb-4">Class</h3>

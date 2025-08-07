@@ -8,7 +8,7 @@ import StepBtns from '../PassengerDetails/StepBtns';
 const Payment = ({ activeStep, setActiveStep, selectedFlight, selectedType, handlePayment }) => {
 
     return (
-        <div className="flex flex-col xl:flex-row gap-6">
+        <div className="flex flex-col xl:flex-row gap-6 min-h-[65vh]">
             {/* Left side: Form (75%) */}
             <div className="w-full xl:flex-[3]">
                 <h1 className="text-2xl text-primary-1 font-semibold">Payment method</h1>
@@ -22,7 +22,7 @@ const Payment = ({ activeStep, setActiveStep, selectedFlight, selectedType, hand
             </div>
 
             {/* Right side: Summary (25%) */}
-            <div className="w-full xl:flex-[1]">
+            <div className="w-full xl:flex-[1] hidden lg:block">
                 <Summary
 
                     selectedFlight={selectedFlight}

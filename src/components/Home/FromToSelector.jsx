@@ -1,42 +1,89 @@
 'use client';
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { AirplaneTakeoff, AirplaneLanding } from '@phosphor-icons/react';
 import SwapIcon from './SwapIcon';
 
-const FromToSelector = ({ cities, values, setShowModal, setShowMobileModal, isMobile, handleSwitch }) => {
-  const handleOpenWidget = () => (isMobile ? setShowMobileModal(true) : setShowModal(true));
+const CityBox = ({ icon, label, city, airport, onClick, AirPortsComponent }) => (
+  <div
+    onClick={onClick}
+    className="w-full flex-1 flex items-center space-x-4 bg-[#F5F5F4] hover:bg-[#E7E7E5] transition-colors duration-200 rounded-xl px-6 py-5 cursor-pointer"
+  >
+    <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
+      {icon}
+    </div>
+    <div>
+      <p className="text-sm text-gray-500">{label}</p>
+      <p className="text-lg font-semibold text-[#1E1E1E]">{city}</p>
+      <p className="text-xs text-gray-500">{airport}</p>
+    </div>
+  </div>
+);
 
-  const { source, destination } = values;
+const FromToSelector = ({ setShowModal, setShowMobileModal, cities, values, isMobile, handleSwitch, isResultsPage, AirPortsSourceComponent, AirPortsDestenationComponent, openAirPortsDropdown, setOpenAirPortsDropdown }) => {
+  const fromRef = useRef(null);
+  const toRef = useRef(null);
 
-  const getCityInfo = (id) => {
-    const city = cities?.find((c) => c.id === id);
-    const translation = city?.airPortTranslations?.[0];
+
+
+  const getCityInfo = (id, fallbackCity, fallbackAirport) => {
+    const city = cities?.find((c) => c.id === id)?.airPortTranslations?.[0] || {};
     return {
-      city: translation?.city || '',
-      airport: translation?.airPortName || ''
+      city: city.city || fallbackCity,
+      airport: city.airPortName || fallbackAirport
     };
   };
 
-  const sourceInfo = source ? getCityInfo(source) : { city: 'Departure city', airport: 'Select your origin' };
-  const destinationInfo = destination
-    ? getCityInfo(destination)
-    : { city: 'Arrival city', airport: 'Select your destination' };
+  const sourceInfo = getCityInfo(values.source, 'Departure city', 'Select your origin');
+  const destinationInfo = getCityInfo(values.destination, 'Arrival city', 'Select your destination');
+
+
+  const handleClickCard = (type) => {
+    if (isResultsPage) {
+      setOpenAirPortsDropdown((prev) => (prev === type ? null : type));
+
+    } else if (!isResultsPage && isMobile) {
+      setShowMobileModal(true)
+    } else if (!isResultsPage && !isMobile) {
+      setShowModal(true)
+    }
+  }
+
+
+
+
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        (fromRef.current && fromRef.current.contains(e.target)) ||
+        (toRef.current && toRef.current.contains(e.target))
+      ) {
+        return;
+      }
+      setOpenAirPortsDropdown(null);
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <div className={`relative flex ${isMobile ? 'flex-col my-3 gap-3' : 'flex-row gap-7'} items-center`}>
       {/* FROM */}
-      <div
-        onClick={handleOpenWidget}
-        className="w-full flex-1 flex items-center space-x-4 bg-[#F5F5F4] hover:bg-[#E7E7E5] transition-colors duration-200 rounded-xl px-6 py-5 cursor-pointer"
-      >
-        <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
-          <AirplaneTakeoff weight="fill" size={16} color="white" />
-        </div>
-        <div>
-          <p className="text-sm text-gray-500">From</p>
-          <p className="text-lg font-semibold text-[#1E1E1E]">{sourceInfo.city}</p>
-          <p className="text-xs text-gray-500">{sourceInfo.airport}</p>
-        </div>
+      <div ref={fromRef} className="relative w-full">
+        <CityBox
+          icon={<AirplaneTakeoff weight="fill" size={16} color="white" />}
+          label="From"
+          city={sourceInfo.city}
+          airport={sourceInfo.airport}
+          onClick={() => handleClickCard('from')}
+        />
+        {openAirPortsDropdown === 'from' && isResultsPage && (
+          <div className="absolute left-0 mt-1 bg-white shadow-md border rounded-lg p-4 w-full z-10">
+            {/* Dropdown content for "From" */}
+            {AirPortsSourceComponent}
+          </div>
+        )}
       </div>
 
       {/* SWAP */}
@@ -51,18 +98,21 @@ const FromToSelector = ({ cities, values, setShowModal, setShowMobileModal, isMo
       </div>
 
       {/* TO */}
-      <div
-        onClick={handleOpenWidget}
-        className="w-full flex-1 flex items-center space-x-4 bg-[#F5F5F4] hover:bg-[#E7E7E5] transition-colors duration-200 rounded-xl px-6 py-5 cursor-pointer"
-      >
-        <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
-          <AirplaneLanding weight="fill" size={16} color="white" />
-        </div>
-        <div>
-          <p className="text-sm text-gray-500">To</p>
-          <p className="text-lg font-semibold text-[#1E1E1E]">{destinationInfo.city}</p>
-          <p className="text-xs text-gray-500">{destinationInfo.airport}</p>
-        </div>
+      <div ref={toRef} className="relative w-full">
+        <CityBox
+          icon={<AirplaneLanding weight="fill" size={16} color="white" />}
+          label="To"
+          city={destinationInfo.city}
+          airport={destinationInfo.airport}
+          onClick={() => handleClickCard('to')}
+        />
+
+        {openAirPortsDropdown === 'to' && isResultsPage && (
+          <div className="absolute left-0 mt-1 bg-white shadow-md border rounded-lg p-4 w-full z-10">
+            {/* Dropdown content for "To" */}
+            {AirPortsDestenationComponent}
+          </div>
+        )}
       </div>
     </div>
   );

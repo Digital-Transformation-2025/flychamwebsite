@@ -45,20 +45,24 @@ const StripeBox = () => {
     }
 
     return (
-        <div className="border border-[var(--primary-1)] max-w-xl rounded-xl p-4 flex flex-row gap-2  items-start justify-start my-3">
-            <div className='flex justify-start gap-3 items-start md:items-start w-full'>
+        <div className=''>
 
-                <div className='hidden md:block'>
 
-                    <Dot />
+            <div className="border border-[var(--primary-1)] max-w-xl rounded-xl p-4 flex flex-row gap-2  items-start justify-start my-3">
+                <div className='flex justify-start gap-3 items-start md:items-start w-full'>
+
+                    <div className='hidden md:block'>
+
+                        <Dot />
+
+                    </div>
+                    <PayOnline />
 
                 </div>
-                <PayOnline />
 
-            </div>
-
-            <div className='hidden sm:block'>
-                <PaymentIcons />
+                <div className='hidden sm:block'>
+                    <PaymentIcons />
+                </div>
             </div>
         </div>
     );

@@ -8,9 +8,9 @@ const MilesToggle = ({ isMobile, setFieldValue, miles }) => {
         <input
           type="checkbox"
           className="sr-only peer"
-          checked={miles}
-          onChange={() => setFieldValue("miles", !miles)}
-          // disabled
+          // checked={miles}
+          // onChange={() => setFieldValue("miles", !miles)}
+          disabled
         />
         {/* Track */}
         <div className="w-full h-full bg-gray-300 rounded-full peer-checked:bg-main transition-colors duration-300" />

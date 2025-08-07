@@ -1,11 +1,12 @@
 'use client'
-import React from 'react';
+import React, { useState } from 'react';
 import FlightCard from './FlightCard';
 import BookingSummary from './BookingSummary';
 
-const FlightList = ({ flights, onDetailsClick, handleSelectPlan, selectedFlight, setActiveStep, selectedType, setSelectedFlight }) => {
+const FlightList = ({ flights, onDetailsClick, handleSelectPlan, selectedFlight, setActiveStep, selectedType, setSelectedFlight,activeTab,setActiveTab }) => {
     const displayedCards = selectedFlight ? [selectedFlight] : flights
     const isConfirmed = Boolean(selectedFlight)
+
     return (
         <div className="grid gap-6 my-5 justify-center sm:justify-stretch">
 
@@ -20,6 +21,8 @@ const FlightList = ({ flights, onDetailsClick, handleSelectPlan, selectedFlight,
                     handleSelectPlan={handleSelectPlan}
                     isConfirmed={isConfirmed}
                     selectedType={selectedType}
+                    activeTab={activeTab}
+                    setActiveTab={setActiveTab}
                 />
             ))}
             {isConfirmed && <BookingSummary selectedType={selectedType} totalAmount={900} onContinue={() => setActiveStep(1)} setSelectedFlight={setSelectedFlight} />}

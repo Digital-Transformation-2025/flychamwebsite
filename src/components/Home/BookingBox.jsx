@@ -29,7 +29,7 @@ import SearchInput from "./SearchInput";
 import ModalTitle from "./widget/ModalTitle";
 import ModalFooter from "./widget/ModalFooter";
 import InfoBoxes from "./widget/InfoBoxes";
-
+const tabs = ["book", "manage", "flight status"];
 const BookingBox = ({ flights, pos, isResultsPage }) => {
     const isMobile = useIsMobile()
     const dispatch = useDispatch()
@@ -44,11 +44,7 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
 
     const [cities, setCities] = useState([])
 
-    useEffect(() => {
-        if (airPorts?.items?.length > 0) {
-            setCities(airPorts.items)
-        }
-    }, [airPorts])
+
 
     const getCitiesArray = (type, iataSourceCode, search = "") => {
         const normalizedSearch = search.toLowerCase();
@@ -166,11 +162,6 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
 
     });
 
-    console.log('formik', formik.values);
-
-
-    const tabs = ["book", "manage", "flight status"];
-
     const getCityString = (val, type) => {
         const city = airPorts?.items?.find(c => c.id === val);
 
@@ -208,9 +199,6 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
         { icon: <CalendarBlank size={20} />, title: "Travel when", value: "Check Date", id: 3 },
     ];
     const activeFlightTab = formik.values.type;
-
-
-
 
     const sliderSettings = {
         dots: false,
@@ -310,14 +298,6 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
         }
     };
 
-
-
-
-
-
-
-
-
     const onClose = () => {
         if (isMobile) {
             setShowMobileModal(false)
@@ -343,9 +323,14 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
         updateSearch('destination', setDestinationSearch);
     }, [formik.values.source, formik.values.destination, airPorts.items]);
 
+    useEffect(() => {
+        if (airPorts?.items?.length > 0) {
+            setCities(airPorts.items)
+        }
+    }, [airPorts])
 
 
-
+    const { type } = formik.values;
 
     const renderStepComponent = () => {
         const { type } = formik.values;
@@ -408,6 +393,8 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
         });
     };
 
+    const [openDropdown, setOpenDropdown] = useState(null);
+    const [openAirPortsDropdown, setOpenAirPortsDropdown] = useState(null);
 
 
     const MobileView = () => (
@@ -478,9 +465,77 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
                 cities={cities}
                 values={formik.values}
                 handleSwitch={handleSwitch}
+                isResultsPage={isResultsPage}
+                openAirPortsDropdown={openAirPortsDropdown}
+                setOpenAirPortsDropdown={setOpenAirPortsDropdown}
+                AirPortsSourceComponent={
+                    <>
+                        <SearchInput
+                            search={sourceSearch}
+                            handleSearch={handleSearch}
+                            onClose={onClose}
+                            placeholder={"Search for airport or city"}
+                            type={"source"}
+                            values={formik.values}
+                            airPorts={airPorts.items}
+                        />
+                        <AirportList
+                            type={"source"}
+                            values={formik.values}
+                            setFieldValue={formik.setFieldValue}
+
+                            getCitiesArray={getCitiesArray}
+                            isMobile={isMobile}
+                            sliderRef={sliderRef}
+                            search={sourceSearch}
+                            setSearch={setSourceSearch}
+                            setOpenAirPortsDropdown={setOpenAirPortsDropdown}
+                        />
+                    </>
+                }
+                AirPortsDestenationComponent={
+                    <>
+                        <SearchInput
+                            search={destinationSearch}
+                            handleSearch={handleSearch}
+                            onClose={onClose}
+                            placeholder={"To"}
+                            type={"destination"}
+                            values={formik.values}
+                            airPorts={airPorts.items}
+                        />
+                        <AirportList
+                            type={"destination"}
+                            values={formik.values}
+                            setFieldValue={formik.setFieldValue}
+
+                            getCitiesArray={getCitiesArray}
+                            isMobile={isMobile}
+                            sliderRef={sliderRef}
+                            search={destinationSearch}
+                            setSearch={setDestinationSearch}
+                        />
+                    </>
+                }
 
             />
-            {isResultsPage && <InfoBoxes />
+            {isResultsPage && <InfoBoxes
+                openDropdown={openDropdown}
+                setOpenDropdown={setOpenDropdown}
+                guestsComponent={<Guests formik={formik} values={formik.values} isMobile={isMobile} isResultsPage={isResultsPage} />}
+                CalendarComponent={<Dates
+                    formik={formik}
+                    minMonth={minMonth}
+                    setMinMonth={setMinMonth}
+                    setCurrentMonth={setCurrentMonth}
+                    currentMonth={currentMonth}
+                    handleDateSelect={handleDateSelect}
+                    handleReset={handleReset}
+                    isResultsPage={isResultsPage}
+                />}
+
+
+            />
 
             }
             {isResultsPage && (

@@ -25,10 +25,11 @@ const LottieComponent = () => {
                 overflow: 'hidden'      // Ensures that anything overflowing the container is hidden
             }}
         >
+            
             <Lottie
                 options={options}
                 height={400}
-                width={isMobile ? 150 :200}
+                width={isMobile ? 150 :800}
             />
         </div>
     );

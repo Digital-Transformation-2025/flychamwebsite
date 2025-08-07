@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import CustomCheckbox from '../Ui/CustomCheckbox';
 
-const AirportList = ({ search, setSearch, type, values, setFieldValue, isMobile, sliderRef, getCitiesArray }) => {
+const AirportList = ({ search, setSearch, type, values, setFieldValue, isMobile, sliderRef, getCitiesArray, setOpenAirPortsDropdown }) => {
   const { airPorts } = useSelector(state => state.flights);
 
   const iataSourceCode = airPorts.items.find((item) => item.id === values.source)?.iataCode;
@@ -33,6 +33,7 @@ const AirportList = ({ search, setSearch, type, values, setFieldValue, isMobile,
       default:
         break;
     }
+    setOpenAirPortsDropdown(false)
   };
 
 

@@ -26,11 +26,11 @@ import * as Yup from 'yup';
 import useFlightDetails from '@/hooks/useFlightDetails'
 import useScrollToTop from '@/hooks/useScrollToTop'
 import useFetchFlights from '@/hooks/useFetchFlights'
-import useFlightSearchForm from '@/hooks/bookingBox/useFlightSearchForm'
 import ModifySearchModal from '@/components/FlightResults/ModifySearchModal'
+import SummaryMobileBox from '@/components/FlightResults/PassengerDetails/SummaryMobileBox'
+import Summary from '@/components/FlightResults/PassengerDetails/Summary'
 
 const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
-    const searchFormik = useFlightSearchForm();
 
     const scrollRef = useRef(null)
 
@@ -55,8 +55,11 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
     const [selectedFlight, setSelectedFlight] = useState(null);
     const [selectedType, setSelectedType] = useState(null);
     const [activeStep, setActiveStep] = useState(0);
+    const [activeTab, setActiveTab] = useState(0);
+    const [isPageLoaded, setIsPageLoaded] = useState(true);
+
     useScrollToTop(scrollRef, [activeStep, selectedFlight]);
-    useFetchFlights(setLocalLoading);
+    useFetchFlights(setLocalLoading, setIsPageLoaded);
 
 
     const { restartTimer } = useSessionTimer({
@@ -156,7 +159,7 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
 
 
         dispatch(setSearchParams({ ...searchParams, date: formattedFullDate }));
-        loadFlightsWithDelay({ date: formattedFullDate });
+        // loadFlightsWithDelay({ date: formattedFullDate });
     };
     let globalIndex = 0;
     const passengers = [
@@ -186,7 +189,9 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                 countryCode: '',
                 phoneNumber: '',
                 email: '', emailError: '',
-                passengerIndex: ''
+                passengerIndex: '',
+                CountryCodeMobileNumber: '',
+                MobileNumber: '',
             },
             save: false,
             accept: false,
@@ -228,8 +233,13 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                 title,
                 firstName: capitalize(firstName),
                 lastName: capitalize(lastName),
+                // main phone
                 phoneNumber: values.contact.phoneNumber,
                 countryCode: values.contact.countryCode,
+                // alt phone number
+                MobileNumber: values.contact.MobileNumber,
+                CountryCodeMobileNumber: values.contact.CountryCodeMobileNumber,
+
                 email: values.contact.email,
                 passengers: values.passengers.map((p) => ({
                     birthDate: p.dateOfBirth,
@@ -241,8 +251,15 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                 pricinginfo: info.pricing_info.map((item, idx) => ({
                     PaxType: item.PaxType,
                     ResBookDesigCode: item.ResBookDesigCode
-                }))
+                })),
+                ...(values.contact.CountryCodeMobileNumber && {
+                    CountryCodeMobileNumber: values.contact.CountryCodeMobileNumber,
+                }),
+                ...(values.contact.MobileNumber && {
+                    MobileNumber: values.contact.MobileNumber,
+                }),
             };
+            console.log('values', values);
 
             const hasEmptyFields =
                 !data.title ||
@@ -259,6 +276,8 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                         !p.surname ||
                         !p.nameTitle
                 );
+            console.log('data', data);
+            console.log('hasEmptyFields', hasEmptyFields);
 
             if (hasEmptyFields) {
                 console.warn('Missing required fields. Submission blocked.');
@@ -283,6 +302,8 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
 
     });
 
+
+
     const steps = [
         {
             label: 'Select flight',
@@ -301,6 +322,8 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                 selectedType={selectedType}
                 setSelectedFlight={setSelectedFlight}
                 handleClickDate={handleClickDate}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
             />
         },
         {
@@ -326,25 +349,25 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
         },
     ];
 
-    const loadFlightsWithDelay = (override = {}) => {
-        setLocalLoading(true);
+    // const loadFlightsWithDelay = (override = {}) => {
+    //     setLocalLoading(true);
 
-        const updatedDate = override.date || searchParams.date;
+    //     const updatedDate = override.date || searchParams.date;
 
-        const data = {
-            ...searchParams,
-            ...override,
-            date: updatedDate,
-        };
+    //     const data = {
+    //         ...searchParams,
+    //         ...override,
+    //         date: updatedDate,
+    //     };
 
-        dispatch(getFlightsService(data));
+    //     dispatch(getFlightsService(data));
 
-        const timer = setTimeout(() => {
-            setLocalLoading(false);
-        }, 3000);
+    //     const timer = setTimeout(() => {
+    //         setLocalLoading(false);
+    //     }, 3000);
 
-        return () => clearTimeout(timer);
-    };
+    //     return () => clearTimeout(timer);
+    // };
 
     const handleSelectPos = (id) => {
         const newParams = {
@@ -363,8 +386,10 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
 
         dispatch(getFlightsService(data)).then((action) => {
             if (getFlightsService.fulfilled.match(action)) {
+                setSelectedFlight(null)
                 setSessionModalOpen(false);
                 restartTimer();
+                setActiveStep(0)
             }
         });
     };
@@ -411,13 +436,11 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
             <HeaderMobile handleStepBack={handleStepBack} />
         </div>
     );
-    const pageLoding = (isLoadingFlights || localLoading)
-
-
+    const pageLoding = (isLoadingFlights || localLoading) && isPageLoaded
     return (
         <>
             {pageLoding ? <LottieComponent /> :
-                <div ref={scrollRef} className="h-screen overflow-y-auto">
+                <div ref={scrollRef} className="h-screen overflow-y-auto ">
                     <div className='hidden lg:block'>
                         <Header handleOpenModifySearch={handleOpenModifySearch} />
                         <main className="w-[70%] mx-auto px-2">
@@ -429,7 +452,7 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                         </main>
                         <Divider />
                     </div>
-                    <div className="lg:hidden  w-full">
+                    <div className="lg:hidden  w-full ">
                         <HeaderBarMobile />
                         {progressBarSection}
                         {dateNavigationSection}
@@ -439,8 +462,12 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                     <main className="w-[95%] md:w-[70%] mx-auto px-2">
                         {steps[activeStep].content}
                         {noResultsSection}
-                    </main>
 
+                    </main>
+                    {(activeStep === 1 || activeStep === 2) &&
+                        <SummaryMobileBox
+                            selectedType={selectedType} selectedFlight={selectedFlight} />
+                    }
                 </div>
             }
             {/*  Modals */}

@@ -6,6 +6,7 @@ import {
     EyeSlash, ProhibitInset, SuitcaseIcon, SuitcaseSimple, XCircle
 } from '@phosphor-icons/react';
 import formatPrice from '@/util/formatePrice';
+import { useMemo } from 'react';
 
 const getIcon = (key) => {
     switch (key) {
@@ -210,7 +211,7 @@ const FareColumn = ({
     );
 };
 
-const FlightDetails = ({ handleSelectPlan, flight }) => {
+const FlightDetails = ({ handleSelectPlan, flight, activeTab }) => {
     const isLg = !useIsMobile(1024)
     const Economy = flight.Economy
     const Business = flight.Business
@@ -236,10 +237,23 @@ const FlightDetails = ({ handleSelectPlan, flight }) => {
         special: false,
     };
 
+
+    // inside FlightDetails component
+    const seatsLeftEconomy = useMemo(
+        () => `${Math.floor(Math.random() * 10) + 1} seats left`,
+        [] // only calculate once per mount
+    );
+    const seatsLeftBusiness = useMemo(
+        () => `${Math.floor(Math.random() * 10) + 1} seats left`,
+        []
+    );
+    
     const columns = [
         {
             type: 'Info',
-            FareRuleReference: Economy?.pricing_info?.[0]?.FareRuleReference?.[0],
+            FareRuleReference:
+                Economy?.pricing_info?.[0]?.FareRuleReference?.[activeTab] ||
+                Business?.pricing_info?.[0]?.FareRuleReference?.[activeTab],
             currency: commonInfo?.currency,
         },
         {
@@ -247,10 +261,11 @@ const FlightDetails = ({ handleSelectPlan, flight }) => {
             id: 1,
             title: 'Economy Class',
             Economy,
-            FareRuleReference: Economy?.pricing_info?.[0]?.FareRuleReference?.[0],
+            FareRuleReference:
+                Economy?.pricing_info?.[0]?.FareRuleReference?.[activeTab],
             price: formatPrice(Economy?.total_fare),
             currency: commonInfo?.currency,
-            seatsLeft: `${Math.floor(Math.random() * 10) + 1} seats left`,
+            seatsLeft: seatsLeftEconomy,
             type: 'Economy',
             PassengerInfo: buildPassengerInfo(Economy?.pricing_info),
         },
@@ -259,17 +274,19 @@ const FlightDetails = ({ handleSelectPlan, flight }) => {
             id: 2,
             title: 'Business Class',
             Business,
-            FareRuleReference: Business?.pricing_info?.[0]?.FareRuleReference?.[0],
+            FareRuleReference:
+                Business?.pricing_info?.[0]?.FareRuleReference?.[activeTab],
             price: formatPrice(Business?.total_fare),
             currency: commonInfo?.currency,
-            seatsLeft: `${Math.floor(Math.random() * 10) + 1} seats left`,
+            seatsLeft: seatsLeftBusiness,
             type: 'Business',
             tag: 'Recommended',
             PassengerInfo: buildPassengerInfo(Business?.pricing_info),
         },
     ];
+
     return (
-        <div className="w-full  p-6 rounded-xl flex flex-col md:flex-row gap-6 justify-between items-end">
+        <div className="w-full  py-6 rounded-xl flex flex-col md:flex-row gap-6 justify-between items-end">
 
             <div className="flex flex-col lg:flex-row w-full   gap-4 flex-1">
                 {isLg &&

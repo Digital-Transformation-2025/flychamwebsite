@@ -1,13 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { getFlightsService } from "@/store/Services/flightServices";
 
-const useFetchFlights = (setLocalLoading) => {
+const useFetchFlights = (setLocalLoading, setIsPageLoaded) => {
     const dispatch = useDispatch();
     const router = useRouter();
+    const isFirstLoad = useRef(true); // ✅ Track first load only
 
-    // ✅ pull searchParams (and anything else needed) straight from Redux
     const { searchParams } = useSelector((state) => state.flights);
 
     useEffect(() => {
@@ -15,20 +15,29 @@ const useFetchFlights = (setLocalLoading) => {
 
         if (!origin_id || !destination_id || !date) {
             router.push("/");
-        } else {
-            dispatch(getFlightsService(searchParams)).then((action) => {
-                if (getFlightsService.rejected.match(action)) {
-                    router.push("/");
-                }
-            });
-
-            const timer = setTimeout(() => {
-                setLocalLoading(false);
-            }, 3000);
-
-            return () => clearTimeout(timer);
+            return;
         }
-    }, [dispatch, router, searchParams]); // ✅ hook reruns if searchParams change
+
+        // ✅ Show loader only on first load
+        if (isFirstLoad.current) {
+            setIsPageLoaded(true);      // Enable loader
+            setLocalLoading(true);
+        }
+
+        dispatch(getFlightsService(searchParams)).then((action) => {
+            if (getFlightsService.rejected.match(action)) {
+                router.push("/");
+            }
+        });
+
+        const timer = setTimeout(() => {
+            setLocalLoading(false);
+            setIsPageLoaded(false);     // Disable loader after first fetch
+            isFirstLoad.current = false; // ✅ Ensure it won't trigger again
+        }, 3000);
+
+        return () => clearTimeout(timer);
+    }, [dispatch, router, searchParams, setLocalLoading, setIsPageLoaded]);
 };
 
 export default useFetchFlights;

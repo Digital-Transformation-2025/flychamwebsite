@@ -33,9 +33,11 @@ import {
   User
 } from '@phosphor-icons/react';
 import { ReduxProvider } from "@/store";
+import useBlockInspect from "@/hooks/useBlockInspect";
 
 export default function ClientLayoutWrapper({ children }) {
   const [isOpen, setIsOpen] = useState(true)
+  // useBlockInspect()
 
   const pathname = usePathname()
   const isMobile = useIsMobile()

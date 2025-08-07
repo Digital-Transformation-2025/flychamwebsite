@@ -8,24 +8,30 @@ import FareCard from '../FareCard';
 import FlightCodes from '../FlightCodes';
 import FlightTimeInfo from '../FlightTimeInfo';
 import useFormattedFlightTimes from '@/hooks/useFormattedFlightTimes';
+import DetailsTab from './DetailsTab';
+import SkeletonFlightCard from './SkeletonFlightCard';
+import { useSelector } from 'react-redux';
 
 
 // Main Card
 const FlightCard = ({
     flight,
     isExpanded = false,
-    onDetailsClick, isConfirmed, handleSelectPlan, selectedType
+    onDetailsClick, isConfirmed, handleSelectPlan, selectedType, activeTab, setActiveTab
 }) => {
 
     const cardRef = useRef(null);
-
-    const { duration, stops, ecoFare, busFare, segments, } = useFormattedFlightTimes(flight);
+    const { isLoadingFlights } = useSelector((s) => s.flights)
+    const { duration, stops, ecoFare, busFare, segments, flightType } = useFormattedFlightTimes(flight);
     const isXl = useIsMobile(1280);
     const isLg = useIsMobile(1078);
     const isMd = useIsMobile(768);
     const [expanded, setExpanded] = useState(isExpanded);
-
+    if (isLoadingFlights) {
+        return <SkeletonFlightCard />;
+    }
     return (
+
         <article
             ref={cardRef}
 
@@ -40,15 +46,15 @@ const FlightCard = ({
                 return !prev;
             })}
             className={`
-                relative  
-    w-full p-4 lg:py-8 lg:px-8 flex flex-col items-center lg:items-stretch 
-    rounded-[12px]
-    ${isConfirmed
+                        relative  
+            w-full p-4 lg:py-8 lg:px-8 flex flex-col items-center lg:items-stretch 
+            rounded-[12px]
+            ${isConfirmed
                     ? 'border border-[#34C759] bg-[#F5F5F4] shadow-[0px_2px_10px_rgba(0,0,0,0.1)]'
                     : 'bg-100'
                 }
-    ${!isConfirmed ? 'cursor-pointer' : ''}
-  `}
+            ${!isConfirmed ? 'cursor-pointer' : ''}
+          `}
         >
             {isConfirmed && (
                 <div className="absolute top-0 right-0 flex items-center justify-center gap-1 rounded-bl-[12px] rounded-tr-[12px] bg-green px-3 py-1 text-white text-xs font-semibold shadow-sm">
@@ -146,14 +152,22 @@ const FlightCard = ({
             </div>
 
             <div className="w-full h-px bg-[#E5E5E3] my-4 lg:my-6" />
-            <div className="flex items-center gap-4 my-1">
+            <div className="flex flex-col lg:flex-row items-center justify-between my-2">
+                <div className='flex items-center justify-between gap-4 mb-4 lg:mb-0'>
 
-                {flight?.common_info?.segments?.map((s) => {
-                    return (
-
-                        <FlightCodes flight_number={s.FlightNumber} />
-                    )
-                })}
+                    {flight?.common_info?.segments?.map((s) => {
+                        return (
+                            <FlightCodes flight_number={s.FlightNumber} />
+                        )
+                    })}
+                </div>
+                {expanded &&flightType ==="Return"&&
+                    <DetailsTab
+                        activeTab={activeTab}
+                        setActiveTab={setActiveTab}
+                        flight={flight}
+                    />
+                }
             </div>
 
 
@@ -169,7 +183,7 @@ const FlightCard = ({
                             transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
                             className="overflow-hidden w-full "
                         >
-                            <FlightDetails handleSelectPlan={handleSelectPlan} flight={flight} />
+                            <FlightDetails handleSelectPlan={handleSelectPlan} flight={flight} activeTab={activeTab} />
                         </motion.div>
                     )}
                 </AnimatePresence>
@@ -179,6 +193,8 @@ const FlightCard = ({
 
 
         </article>
+
+
     );
 };
 

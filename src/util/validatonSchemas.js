@@ -192,6 +192,54 @@ export const contactSchema = Yup.object().shape({
         }),
 
 
+    MobileNumber: Yup.string()
+        .test('country-code-required-before-phone', 'Please select a country code first.', function (value) {
+            const { CountryCodeMobileNumber } = this.parent;
+            if (value && !CountryCodeMobileNumber) {
+                return this.createError({ message: 'Please select a country code first.' });
+            }
+            return true;
+        })
+        .test('alt-min-length', 'Alternative number must be at least 7 digits.', function (value) {
+            if (!value) return true;
+            const numericOnly = value.replace(/\D/g, '');
+            return numericOnly.length >= 7;
+        })
+        .test('alt-different-from-primary', 'Alternative number must be different from the primary.', function (value) {
+            const { countryCode, phoneNumber, CountryCodeMobileNumber } = this.parent;
+            if (!value || !CountryCodeMobileNumber) return true;
+
+            const primary = `${countryCode}${phoneNumber}`.replace(/\D/g, '');
+            const alternative = `${CountryCodeMobileNumber}${value}`.replace(/\D/g, '');
+            return primary !== alternative;
+        })
+        .test('alt-validate-via-api', 'This alternative number is invalid.', async function (value) {
+            const { CountryCodeMobileNumber } = this.parent;
+            if (!value || !CountryCodeMobileNumber) return true;
+
+            const numericOnly = value.replace(/\D/g, '');
+            if (numericOnly.length < 7) return true;
+
+            const fullAltNumber = CountryCodeMobileNumber + numericOnly;
+
+            if (lastValidatedPhone === fullAltNumber && lastPhoneValidationResult !== null) {
+                return lastPhoneValidationResult;
+            }
+
+            try {
+                const result = await store.dispatch(validatePhoneNumberService(fullAltNumber));
+                const isValid = result.payload === true;
+                lastValidatedPhone = fullAltNumber;
+                lastPhoneValidationResult = isValid;
+                return isValid;
+            } catch {
+                return this.createError({
+                    message: 'Unable to validate alternative number. Try again later.',
+                });
+            }
+        }),
+
+
     countryCode: Yup.string().required('Country code is required'),
     passengerIndex: Yup.number().nullable().required('Please select a contact passenger'),
 });

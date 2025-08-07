@@ -72,15 +72,15 @@ const Summary = ({ selectedFlight, selectedType }) => {
                     <span className="text-primary-1">{origin.city}</span>
                     <div className="flex flex-col item-center">
 
-                 
+
                         {flighttype === "OneWay" &&
                             <div className="flex justify-center items-center">
-                            <ArrowRight size={16} className="text-[#5F5F5C]" />
+                                <ArrowRight size={16} className="text-[#5F5F5C]" />
                             </div>
                         }
                         {flighttype === "Return" &&
                             <div className="flex justify-center items-center">
-                                <ArrowsLeftRight  size={16} className="text-[#5F5F5C]" />
+                                <ArrowsLeftRight size={16} className="text-[#5F5F5C]" />
                             </div>
                         }
                     </div>
@@ -108,7 +108,7 @@ const Summary = ({ selectedFlight, selectedType }) => {
             <div className="flex justify-between font-semibold mt-3  text-lg"><span className="text-700"> Total</span>
                 <span className="text-700 text-lg">{`${selectedType?.
                     commonInfo
-                    ?.currency} ${info.total_fare}`}
+                    ?.currency} ${info?.total_fare}`}
                 </span></div>
 
 

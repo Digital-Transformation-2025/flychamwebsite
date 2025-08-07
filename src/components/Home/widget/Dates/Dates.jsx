@@ -10,7 +10,7 @@ import MonthNavigation from './MonthNavigation';
 import SelectedDateDisplay from './SelectedDateDisplay';
 import CustomDayContent from './CustomDayContent';
 
-const Dates = ({ formik, handleDateSelect, currentMonth, setCurrentMonth, minMonth, setMinMonth, handleReset }) => {
+const Dates = ({ formik, handleDateSelect, currentMonth, setCurrentMonth, minMonth, setMinMonth, handleReset, isResultsPage }) => {
     const [shouldAnimateMonth, setShouldAnimateMonth] = useState(false);
 
     const isMobile = useIsMobile('768');
@@ -57,13 +57,17 @@ const Dates = ({ formik, handleDateSelect, currentMonth, setCurrentMonth, minMon
 
     return (
         <div className="bg-white rounded-2xl p-3 w-full max-w-7xl mx-auto">
-            <TripTypeSelector values={formik.values}
-                setFieldValue={formik.setFieldValue}
-                handleReset={handleReset}
-            />
-            <div className="hidden md:block w-full my-3 h-[1px] bg-gray-200"></div>
+            {!isResultsPage &&
+                <>
+                    <TripTypeSelector values={formik.values}
+                        setFieldValue={formik.setFieldValue}
+                        handleReset={handleReset}
+                    />
+                    <div className="hidden md:block w-full my-3 h-[1px] bg-gray-200"></div>
+                    <SelectedDateDisplay selected={selected} tripType={tripType} handleReset={handleReset} />
+                </>
+            }
 
-            <SelectedDateDisplay selected={selected} tripType={tripType} handleReset={handleReset} />
 
             <div
                 className={`relative transition-all duration-300 ease-in-out ${shouldAnimateMonth ? 'animate-fadeInLeft' : ''
@@ -101,20 +105,20 @@ const Dates = ({ formik, handleDateSelect, currentMonth, setCurrentMonth, minMon
                         classNames={{
                             head_cell: 'uppercase text-xs font-bold text-gray-500 text-center ',
                             caption_label: 'text-center text-lg font-semibold text-black ',
-                            day: 'hover:!bg-secondary hover:text-white  rounded-full w-12 h-12 text-md text-black transition duration-300 ease-in-out  ',
-                            today: 'border border-[#BAA981] rounded-full  w-12 h-12 flex items-center justify-center',
+                            day: 'hover:!bg-secondary hover:text-white  rounded-full w-10 h-10 text-md text-black transition duration-300 ease-in-out  ',
+                            today: 'border border-[#BAA981] rounded-full  w-10 h-10 flex items-center justify-center',
 
                             selected:
                                 tripType === 'OneWay'
                                     ? ' text-white bg-secondary rounded-full '
-                                    : `${Boolean(formik.values.dateEnd &&formik.values.dateStart ) ? 'rounded-full' : 'rounded-r-xl'} bg-secondary text-white`,
+                                    : `${Boolean(formik.values.dateEnd && formik.values.dateStart) ? 'rounded-full' : 'rounded-r-xl'} bg-secondary text-white`,
                             range_middle: '!bg-[#e6dabc61]  !text-black !rounded-none',
                             range_start: isArabic
-                                ? `${Boolean(formik.values.dateEnd &&formik.values.dateStart ) ? 'rounded-full' : 'rounded-l-xl'}  text-white`
-                                : `${Boolean(formik.values.dateEnd&&formik.values.dateStart) ? 'rounded-r-xl' : 'rounded-full'}  text-white`,
+                                ? `${Boolean(formik.values.dateEnd && formik.values.dateStart) ? 'rounded-full' : 'rounded-l-xl'}  text-white`
+                                : `${Boolean(formik.values.dateEnd && formik.values.dateStart) ? 'rounded-r-xl' : 'rounded-full'}  text-white`,
                             range_end: isArabic
-                                ? `${Boolean(formik.values.dateEnd &&formik.values.dateStart) ? 'rounded-full' : 'rounded-r-xl'}  text-white`
-                                : `${Boolean(formik.values.dateEnd &&formik.values.dateStart) ? 'rounded-l-xl' : 'rounded-full'}  text-white`,
+                                ? `${Boolean(formik.values.dateEnd && formik.values.dateStart) ? 'rounded-full' : 'rounded-r-xl'}  text-white`
+                                : `${Boolean(formik.values.dateEnd && formik.values.dateStart) ? 'rounded-l-xl' : 'rounded-full'}  text-white`,
                         }}
                         components={{
                             DayContent: (props) => (
@@ -123,10 +127,13 @@ const Dates = ({ formik, handleDateSelect, currentMonth, setCurrentMonth, minMon
                         }}
                     />
                 </div>
-                <div className="hidden md:block absolute left-1/2 top-5 bottom-5 w-[1px] bg-gray-200"></div>
+                {!isResultsPage &&
+                    <div className="hidden md:block absolute left-1/2 top-5 bottom-5 w-[1px] bg-gray-200"></div>
+                }
             </div>
-
-            <div className="hidden md:block w-full my-3 h-[1px] bg-gray-200"></div>
+            {!isResultsPage &&
+                <div className="hidden md:block w-full my-3 h-[1px] bg-gray-200"></div>
+            }
         </div>
     );
 };

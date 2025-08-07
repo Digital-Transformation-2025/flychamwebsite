@@ -6,7 +6,7 @@ import SortFilterModal from './SortFilterModal'
 import FlightDetailsModal from './FlightDetailsModal'
 import FlightsListCounter from './FlightsListCounter'
 import Divider from './Divider'
-import { useSelector } from 'react-redux'
+import useFlightRouteDetails from '@/hooks/useFlightRouteDetails'
 
 const FlighSelectStep = ({
   flights = [],
@@ -22,17 +22,18 @@ const FlighSelectStep = ({
   setSelectedFlight,
   handleDetailsClick,
   handleSelectPlan,
+  activeTab,setActiveTab
 }) => {
+  const { destination, origin } = useFlightRouteDetails()
+
   const hasFlights = flights.length > 0
   const hasIndirectFlights = IndirectAirPort.length > 0
-  const { searchParams } = useSelector((s) => s.flights);
-  const { neirby } = searchParams
   return (
     <div>
       {/* Header and Direct Flights */}
-      {!selectedFlight && hasFlights && (
+      {!selectedFlight && (hasFlights || hasIndirectFlights) && (
         <>
-          <FlightHeader count={flights.length} setFilterModalOpen={setFilterModalOpen} />
+          <FlightHeader setFilterModalOpen={setFilterModalOpen} />
         </>
       )}
 
@@ -47,26 +48,44 @@ const FlighSelectStep = ({
             setActiveStep={setActiveStep}
             selectedType={selectedType}
             setSelectedFlight={setSelectedFlight}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
           />
           <Divider />
         </>
       )}
 
       {/* Direct Flights List */}
-      {hasFlights && !selectedFlight && (
+      {!selectedFlight && (
         <>
-          <FlightsListCounter type="Direct Airport" count={flights.length} />
+          {(hasFlights || hasIndirectFlights) &&
+            <FlightsListCounter type="Direct Airport" count={flights.length} />
+          }
+          {hasFlights ?
 
-          <FlightList
-            flights={flights}
-            onDetailsClick={handleDetailsClick}
-            handleSelectPlan={handleSelectPlan}
-            selectedFlight={selectedFlight}
-            setActiveStep={setActiveStep}
-            selectedType={selectedType}
-            setSelectedFlight={setSelectedFlight}
-          />
-          <Divider />
+
+            <FlightList
+              flights={flights}
+              onDetailsClick={handleDetailsClick}
+              handleSelectPlan={handleSelectPlan}
+              selectedFlight={selectedFlight}
+              setActiveStep={setActiveStep}
+              selectedType={selectedType}
+              setSelectedFlight={setSelectedFlight}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+            />
+            :
+            hasIndirectFlights &&
+            <>
+
+              <p className='text-xs md:text-sm text-600 my-2'>
+                {`At this time, there are no flights available from ${origin.originAirPortName} to ${destination.destenationAirPortName}. Kindly explore the alternative routes provided below.`}
+              </p>
+
+              <Divider />
+            </>
+          }
         </>
       )}
 
@@ -84,6 +103,8 @@ const FlighSelectStep = ({
             setActiveStep={setActiveStep}
             selectedType={selectedType}
             setSelectedFlight={setSelectedFlight}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
           />
         </>
       )}

@@ -17,6 +17,7 @@ const useFormattedFlightTimes = (flight) => {
     const common_info = flight?.common_info
     const segments = common_info?.segments;
     const currency = common_info?.currency;
+    const flightType = common_info?.flight;
 
 
 
@@ -49,7 +50,7 @@ const useFormattedFlightTimes = (flight) => {
         // hours,minutes,
         originCode, destinationCode, duration, stops, flightNumber, ecoID, ecoFare,
         busID, busFare, segments, departureAirport, arrivalAirport, segments,
-        currency: currency
+        currency: currency,flightType
     };
 };
 
