@@ -37,7 +37,7 @@ import useBlockInspect from "@/hooks/useBlockInspect";
 
 export default function ClientLayoutWrapper({ children }) {
   const [isOpen, setIsOpen] = useState(true)
-  // useBlockInspect()
+  useBlockInspect()
 
   const pathname = usePathname()
   const isMobile = useIsMobile()
