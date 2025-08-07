@@ -29,6 +29,7 @@ import useFetchFlights from '@/hooks/useFetchFlights'
 import ModifySearchModal from '@/components/FlightResults/ModifySearchModal'
 import SummaryMobileBox from '@/components/FlightResults/PassengerDetails/SummaryMobileBox'
 import Summary from '@/components/FlightResults/PassengerDetails/Summary'
+import SkeletonFlightCard from '@/components/FlightResults/FlighSelectStep/SkeletonFlightCard'
 
 const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
 
@@ -237,8 +238,12 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                 phoneNumber: values.contact.phoneNumber,
                 countryCode: values.contact.countryCode,
                 // alt phone number
-                MobileNumber: values.contact.MobileNumber,
-                CountryCodeMobileNumber: values.contact.CountryCodeMobileNumber,
+                ...(values.contact.CountryCodeMobileNumber && {
+                    CountryCodeMobileNumber: values.contact.CountryCodeMobileNumber,
+                }),
+                ...(values.contact.MobileNumber && {
+                    MobileNumber: values.contact.MobileNumber,
+                }),
 
                 email: values.contact.email,
                 passengers: values.passengers.map((p) => ({
@@ -252,12 +257,7 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                     PaxType: item.PaxType,
                     ResBookDesigCode: item.ResBookDesigCode
                 })),
-                ...(values.contact.CountryCodeMobileNumber && {
-                    CountryCodeMobileNumber: values.contact.CountryCodeMobileNumber,
-                }),
-                ...(values.contact.MobileNumber && {
-                    MobileNumber: values.contact.MobileNumber,
-                }),
+
             };
             console.log('values', values);
 
@@ -427,7 +427,7 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
 
     const noResultsSection = (
         <Section>
-            {!NonEmptySearch && <NoResults />}
+            {!NonEmptySearch && !isLoadingFlights && <NoResults />}
         </Section>
     );
 
@@ -439,6 +439,7 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
     const pageLoding = (isLoadingFlights || localLoading) && isPageLoaded
     return (
         <>
+
             {pageLoding ? <LottieComponent /> :
                 <div ref={scrollRef} className="h-screen overflow-y-auto ">
                     <div className='hidden lg:block'>
@@ -451,6 +452,7 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
 
                         </main>
                         <Divider />
+
                     </div>
                     <div className="lg:hidden  w-full ">
                         <HeaderBarMobile />
@@ -460,8 +462,8 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                     </div>
 
                     <main className="w-[95%] md:w-[70%] mx-auto px-2">
-                        {steps[activeStep].content}
                         {noResultsSection}
+                        {(isLoadingFlights && !isPageLoaded) ? <SkeletonFlightCard /> : steps[activeStep].content}
 
                     </main>
                     {(activeStep === 1 || activeStep === 2) &&

@@ -10,24 +10,14 @@ import MonthNavigation from './MonthNavigation';
 import SelectedDateDisplay from './SelectedDateDisplay';
 import CustomDayContent from './CustomDayContent';
 
-const Dates = ({ formik, handleDateSelect, currentMonth, setCurrentMonth, minMonth, setMinMonth, handleReset, isResultsPage }) => {
+const Dates = ({ formik,selected, handleDateSelect, currentMonth, setCurrentMonth, minMonth, setMinMonth, handleReset, isResultsPage }) => {
     const [shouldAnimateMonth, setShouldAnimateMonth] = useState(false);
 
     const isMobile = useIsMobile('768');
     const isArabic = useIsArabic();
     const tripType = formik.values.tripType;
 
-    const selected =
-        tripType === 'OneWay'
-            ? formik.values.dateStart
-                ? new Date(formik.values.dateStart)
-                : undefined
-            : formik.values.dateStart
-                ? {
-                    from: new Date(formik.values.dateStart),
-                    to: formik.values.dateEnd ? new Date(formik.values.dateEnd) : undefined,
-                }
-                : undefined;
+
 
 
 

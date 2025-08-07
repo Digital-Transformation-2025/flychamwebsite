@@ -1,7 +1,11 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
+import SelectedDateDisplay from './Dates/SelectedDateDisplay';
+import SelectedDateDisplayModifyBox from './Dates/SelectedDateDisplayModifyBox';
 
-const InfoBoxes = ({ guestsComponent, CalendarComponent, openDropdown, setOpenDropdown }) => {
+const InfoBoxes = ({ values, selected, tripType, handleReset, guestsComponent, CalendarComponent, openDropdown, setOpenDropdown }) => {
+    const { adults, children, infants } = values
+    const total = adults + children + infants
     const departureRef = useRef(null);
     const passengersRef = useRef(null);
 
@@ -32,14 +36,23 @@ const InfoBoxes = ({ guestsComponent, CalendarComponent, openDropdown, setOpenDr
             <div ref={departureRef} className=" w-full">
                 <div
                     onClick={() => toggleDropdown('departure')}
-                    className="bg-[#F5F5F4] hover:bg-[#E7E7E5] transition-colors duration-200 rounded-xl px-6 py-5 cursor-pointer"
+                    className="flex justify-center items-center gap-3  bg-[#F5F5F4] hover:bg-[#E7E7E5] transition-colors duration-200 rounded-xl px-6 py-5 cursor-pointer"
                 >
-                    <div className="text-gray-500 text-sm">Departure</div>
-                    <div className="font-semibold">10 JUL 2025</div>
+                    <SelectedDateDisplayModifyBox selected={selected} tripType={tripType} handleReset={handleReset} />
+
+                    {/* <div className="flex flex-col">
+                        <div className="text-gray-500 text-sm">Departure</div>
+                        <div className="font-semibold">10 JUL 2025</div>
+                    </div>
+                    <div className="flex flex-col">
+
+                        <div className="text-gray-500 text-sm">Return</div>
+                        <div className="font-semibold">10 JUL 2025</div>
+                    </div> */}
                 </div>
 
                 {openDropdown === 'departure' && (
-                    <div className="absolute left-0 mt-1 bg-white shadow-md border rounded-lg w-full z-10">
+                    <div className="absolute left-0 mt-1 bg-white shadow-md  rounded-lg w-full z-10">
                         {CalendarComponent}
                     </div>
                 )}
@@ -53,13 +66,13 @@ const InfoBoxes = ({ guestsComponent, CalendarComponent, openDropdown, setOpenDr
                 >
                     <div>
                         <div className="text-gray-500 text-sm">Passengers</div>
-                        <div className="font-semibold">1 Passenger</div>
+                        <div className="font-semibold">{`${total} ${total > 1 ? 'Passengers' : 'Passenger'} `} </div>
                     </div>
                     <span className="text-gray-500">⌄</span>
                 </div>
 
                 {openDropdown === 'passengers' && (
-                    <div className="absolute left-0 mt-1 bg-white shadow-md border rounded-lg p-4 w-full z-10">
+                    <div className="absolute left-0 mt-1 bg-white shadow-md  rounded-lg p-4 w-full z-10">
                         {guestsComponent}
                     </div>
                 )}

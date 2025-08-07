@@ -21,7 +21,7 @@ import useCities from "@/hooks/useCities";
 import { useDispatch, useSelector } from "react-redux";
 import { getFlightsService } from "@/store/Services/flightServices";
 import { useRouter } from "next/navigation";
-import { setAirports, setPos, setSearchParams } from "@/store/flightSlice";
+import { setAirports, setFormikData, setPos, setSearchParams } from "@/store/flightSlice";
 import AirportList from "./AirportList";
 import Guests from "./Guests";
 import Dates from "./widget/Dates/Dates";
@@ -40,7 +40,7 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
     }, [])
 
 
-    const { airPorts } = useSelector(state => state.flights)
+    const { airPorts, formikData } = useSelector(state => state.flights)
 
     const [cities, setCities] = useState([])
 
@@ -84,7 +84,6 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
     const [showDesktopModal, setDesktopShowModal] = useState(false);
     const [showMobileModal, setShowMobileModal] = useState(false);
     const [minMonth, setMinMonth] = useState(new Date());
-    const [selected, setSelected] = useState('Return');
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [sourceSearch, setSourceSearch] = useState("");
     const [destinationSearch, setDestinationSearch] = useState("");
@@ -99,25 +98,31 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
 
         return `${year}-${month}-${day}T00:00:00`;
     };
+    const defaultValues = {
+        source: '',
+        destination: '',
+        adults: 1,
+        children: 0,
+        infants: 0,
+        promoCode: '',
+        cabinClass: 'Economy',
+        dateStart: '',
+        dateEnd: '',
+        type: 0,
+        tripType: 'OneWay',
+        nearby: false,
+        hasClickCalendar: false,
+        miles: false
+    };
     const formik = useFormik({
-        enableReinitialize: false,
+        enableReinitialize: false, // ✅ allow reinitialization
         initialValues: {
-            source: '',
-            destination: '',
-            adults: 1,
-            children: 0,
-            infants: 0,
-            promoCode: '',
-            cabinClass: 'Economy',
-            dateStart: '',
-            dateEnd: '',
-            type: 0,
-            tripType: 'OneWay',
-            nearby: false,
-            hasClickCalendar: false,
-            miles: false
+            ...defaultValues,
+            // ...formikData // will override defaults if data exists
         },
         onSubmit: (values) => {
+            console.log("🚀 Form Submitted", values);
+
             const {
                 cabinClass,
                 source,
@@ -149,6 +154,7 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
                 data.date_return = formattedReturn;
             }
             dispatch(setSearchParams(data))
+            dispatch(setFormikData(values))
             if (!dateStart || !source || !destination) {
                 return
             }
@@ -161,6 +167,8 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
 
 
     });
+    console.log('formik', formik.values);
+
 
     const getCityString = (val, type) => {
         const city = airPorts?.items?.find(c => c.id === val);
@@ -328,6 +336,19 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
             setCities(airPorts.items)
         }
     }, [airPorts])
+    const tripType = formik.values.tripType;
+
+    const selected =
+        tripType === 'OneWay'
+            ? formik.values.dateStart
+                ? new Date(formik.values.dateStart)
+                : undefined
+            : formik.values.dateStart
+                ? {
+                    from: new Date(formik.values.dateStart),
+                    to: formik.values.dateEnd ? new Date(formik.values.dateEnd) : undefined,
+                }
+                : undefined;
 
 
     const { type } = formik.values;
@@ -358,6 +379,8 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
                         sliderRef={sliderRef}
                         search={type === 0 ? sourceSearch : destinationSearch}
                         setSearch={isSource ? setSourceSearch : setDestinationSearch}
+                        setOpenAirPortsDropdown={setOpenAirPortsDropdown}
+
                     />
                 </>
             );
@@ -377,6 +400,7 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
                     currentMonth={currentMonth}
                     handleDateSelect={handleDateSelect}
                     handleReset={handleReset}
+                    selected={selected}
                 />
             );
         }
@@ -514,12 +538,17 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
                             sliderRef={sliderRef}
                             search={destinationSearch}
                             setSearch={setDestinationSearch}
+                            setOpenAirPortsDropdown={setOpenAirPortsDropdown}
                         />
                     </>
                 }
 
             />
             {isResultsPage && <InfoBoxes
+                values={formik.values}
+                selected={selected}
+                handleReset={handleReset}
+                tripType={tripType}
                 openDropdown={openDropdown}
                 setOpenDropdown={setOpenDropdown}
                 guestsComponent={<Guests formik={formik} values={formik.values} isMobile={isMobile} isResultsPage={isResultsPage} />}
@@ -539,10 +568,15 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
 
             }
             {isResultsPage && (
-                <ModalFooter
-                    setFieldValue={formik.setFieldValue}
-                    values={formik.values}
-                />
+                <form onSubmit={formik.handleSubmit}>
+                    {/* all form inputs, selects, checkboxes */}
+                    <ModalFooter
+                        setFieldValue={formik.setFieldValue}
+                        values={formik.values}
+                        handleSubmit={formik.handleSubmit}
+                    />
+                </form>
+
             )}
             <AirportModal
                 key={showMobileModal ? 'open' : 'closed'}

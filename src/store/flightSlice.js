@@ -10,6 +10,7 @@ const flightSlice = createSlice({
         IndirectAirPort: [],
         pos: [],
         searchParams: {},
+        formikData: {},
         selectedFlight: {},
         selectedPlan: {},
         isLoading: false,
@@ -30,6 +31,9 @@ const flightSlice = createSlice({
         },
         setSearchParams: (state, action) => {
             state.searchParams = action.payload;
+        },
+        setFormikData: (state, action) => {
+            state.formikData = action.payload;
         },
         setSelectedF: (state, action) => {
             state.selectedFlight = action.payload;
@@ -119,5 +123,5 @@ const flightSlice = createSlice({
     },
 });
 
-export const { setAirports, setSearchParams, setSelectedF, setSelectedPlan, setSelectedpassengers, setPos, setPnr } = flightSlice.actions;
+export const { setAirports, setSearchParams, setSelectedF, setSelectedPlan, setSelectedpassengers, setPos, setPnr,setFormikData } = flightSlice.actions;
 export default flightSlice.reducer;

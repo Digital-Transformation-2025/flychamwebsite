@@ -29,7 +29,7 @@ const LottieComponent = () => {
             <Lottie
                 options={options}
                 height={400}
-                width={isMobile ? 150 :800}
+                width={isMobile ? 500 :800}
             />
         </div>
     );

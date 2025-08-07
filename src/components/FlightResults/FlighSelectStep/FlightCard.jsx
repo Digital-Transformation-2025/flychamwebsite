@@ -9,7 +9,6 @@ import FlightCodes from '../FlightCodes';
 import FlightTimeInfo from '../FlightTimeInfo';
 import useFormattedFlightTimes from '@/hooks/useFormattedFlightTimes';
 import DetailsTab from './DetailsTab';
-import SkeletonFlightCard from './SkeletonFlightCard';
 import { useSelector } from 'react-redux';
 
 
@@ -27,11 +26,11 @@ const FlightCard = ({
     const isLg = useIsMobile(1078);
     const isMd = useIsMobile(768);
     const [expanded, setExpanded] = useState(isExpanded);
-    if (isLoadingFlights) {
-        return <SkeletonFlightCard />;
-    }
+    // if (isLoadingFlights) {
+    //     return <SkeletonFlightCard />;
+    // }
     return (
-
+        
         <article
             ref={cardRef}
 
@@ -161,7 +160,7 @@ const FlightCard = ({
                         )
                     })}
                 </div>
-                {expanded &&flightType ==="Return"&&
+                {expanded && flightType === "Return" &&
                     <DetailsTab
                         activeTab={activeTab}
                         setActiveTab={setActiveTab}

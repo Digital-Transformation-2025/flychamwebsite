@@ -79,7 +79,7 @@ const FromToSelector = ({ setShowModal, setShowMobileModal, cities, values, isMo
           onClick={() => handleClickCard('from')}
         />
         {openAirPortsDropdown === 'from' && isResultsPage && (
-          <div className="absolute left-0 mt-1 bg-white shadow-md border rounded-lg p-4 w-full z-10">
+          <div className="absolute left-0 mt-1 bg-white border border-[#ccc] shadow-md  rounded-lg p-4 w-full z-10">
             {/* Dropdown content for "From" */}
             {AirPortsSourceComponent}
           </div>
@@ -108,7 +108,7 @@ const FromToSelector = ({ setShowModal, setShowMobileModal, cities, values, isMo
         />
 
         {openAirPortsDropdown === 'to' && isResultsPage && (
-          <div className="absolute left-0 mt-1 bg-white shadow-md border rounded-lg p-4 w-full z-10">
+          <div className="absolute left-0 mt-1 bg-white shadow-md border border-[#ccc] rounded-lg p-4 w-full z-10">
             {/* Dropdown content for "To" */}
             {AirPortsDestenationComponent}
           </div>
