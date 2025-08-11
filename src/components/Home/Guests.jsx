@@ -42,7 +42,7 @@ const Guests = ({ formik, values, isMobile, isResultsPage }) => {
 
 
     return (
-        <div className="flex flex-col md:flex-row justify-between gap-12 px-2 py-6 md:px-8   bg-white rounded-2xl">
+        <div className={`flex flex-col md:flex-row justify-between gap-12 px-2  ${isResultsPage ? 'md:px-2 py-2' : 'md:px-8 py-6'}   bg-white rounded-2xl`}>
             {/* Guests Section */}
             <div className="flex-1">
                 <div className="flex justify-between items-center ">

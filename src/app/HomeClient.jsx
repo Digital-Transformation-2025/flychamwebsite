@@ -1,19 +1,13 @@
 'use client'
-import BottomMobileMenu from '@/components/Layout/BottomMobileMenu'
 import DestinationCards from '@/components/Home/DestinationSlider'
-import FlightSearch from '@/components/Home/FlightSearch'
-import Footer from '@/components/Layout/Footer'
 import Hero from '@/components/Home/Hero'
 import AboutFlyChamSection from '@/components/Home/OurCompanyCard'
-import SideBar from '@/components/Layout/SideBar'
 import useIsMobile from '@/hooks/useIsMobile'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 // import { useRouter } from 'next/navigation';
 
 import DestinationCarousel from '@/components/Home/DestinationCarousel'
-import Topic from '@/components/About/Topic'
-import Panner from '@/components/Home/Panner'
-import Help from '@/components/Home/Help'
+
 import SectionTexts from '@/components/Ui/SectionTexts'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation';
@@ -23,10 +17,6 @@ import bg3 from '../assets/images/main-slider/bg3.webp';
 import ImportantAlert from '@/components/Ui/Alert'
 import BookingBox from '@/components/Home/BookingBox'
 import { useDispatch, useSelector } from 'react-redux'
-import { setAirports, setPos, setSearchParams } from '@/store/flightSlice'
-import { getAirports, getFlightsService } from '@/store/Services/flightServices'
-import { useFormik } from 'formik'
-import formatDate from '@/util/formatDate'
 const HomeClient = ({ flights, pos }) => {
 
   const dispatch = useDispatch()
@@ -37,8 +27,6 @@ const HomeClient = ({ flights, pos }) => {
     router.push('/destenations')
   }
   const slides = [bg1, bg2, bg3];
-
-
 
 
   return (

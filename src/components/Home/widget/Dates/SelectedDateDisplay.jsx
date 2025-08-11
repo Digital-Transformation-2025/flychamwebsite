@@ -4,9 +4,10 @@ import { format, isSameDay } from 'date-fns';
 import useIsMobile from '@/hooks/useIsMobile';
 
 const SelectedDateDisplay = ({ selected, tripType, handleReset, hasClickCalendar }) => {
+
     const isMobile = useIsMobile()
     const text = tripType === 'Return' && selected?.from ? (
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-center justify-center gap-2 text-sm">
             Departure: <strong>{format(selected.from, 'dd MMM yyyy')}</strong> — Return:
             {!selected.to ? null : (
                 <>

@@ -38,10 +38,10 @@ const StepBar = ({ onClose, stepsData, formikValues, handleClick }) => {
                     // [...Array(5)].map((_, i) => (
                     //   <div key={i} className="w-1 h-1 bg-main rounded-full" />
                     // ))
-                    <Image src={stepsConnecter} />
+                    <Image src={stepsConnecter} alt="step-container" />
                   ) : (
                     // Gray bullets for upcoming steps
-                    <Image src={stepsConnectorInActive} />
+                    <Image src={stepsConnectorInActive} alt="step-bullets" />
 
                   )}
                 </div>

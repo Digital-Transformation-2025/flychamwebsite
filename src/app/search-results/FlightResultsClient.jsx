@@ -11,7 +11,7 @@ import Divider from '@/components/FlightResults/FlighSelectStep/Divider'
 import PassengerDetails from '@/components/FlightResults/PassengerDetails/PassengerDetails'
 import Payment from '@/components/FlightResults/PaymentStep/Payment'
 import { useDispatch, useSelector } from 'react-redux'
-import { setPnr, setSearchParams, setSelectedF, setSelectedpassengers, setSelectedPlan } from '@/store/flightSlice'
+import { setFormikData, setPnr, setSearchParams, setSelectedF, setSelectedpassengers, setSelectedPlan } from '@/store/flightSlice'
 import { createListPassengerService, createPaymentService, getFlightsService } from '@/store/Services/flightServices'
 import NoResults from '@/components/FlightResults/NoResults'
 import SessionExpiredModal from '@/components/FlightResults/SessionExpiredModal'
@@ -30,15 +30,16 @@ import ModifySearchModal from '@/components/FlightResults/ModifySearchModal'
 import SummaryMobileBox from '@/components/FlightResults/PassengerDetails/SummaryMobileBox'
 import Summary from '@/components/FlightResults/PassengerDetails/Summary'
 import SkeletonFlightCard from '@/components/FlightResults/FlighSelectStep/SkeletonFlightCard'
-
+import { useRouter } from 'next/navigation'
 const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
+    const router = useRouter()
 
     const scrollRef = useRef(null)
 
     const dispatch = useDispatch()
-    const { flights, selectedPassengers, searchParams, isLoadingFlights, selectedPlan, IndirectAirPort } = useSelector((state) => state.flights);
+    const { flights, selectedPassengers, searchParams, isLoadingFlights, selectedPlan, IndirectAirPort, formikData } = useSelector((state) => state.flights);
     const NonEmptySearch = (flights?.length > 0 || IndirectAirPort.length > 0)
-    const { adults, children, infants } = searchParams;
+    const { adults, children, infants } = formikData;
     const passengerNumber = adults + children + infants
     const { info } = useFlightDetails(selectedPlan);
 
@@ -77,6 +78,13 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
         // Make sure we don't go below step 0
         setActiveStep((prevStep) => Math.max(prevStep - 1, 0));
     };
+    const handleResetToFirstStep = () => {
+        setActiveStep(0)
+        setSelectedFlight(null)
+        setSelectedFlight({})
+        dispatch(setSelectedPlan([]))
+
+    }
 
 
 
@@ -132,10 +140,13 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
             if (createPaymentService.fulfilled.match(action)) {
                 const { checkoutUrl, pnr } = action.payload;
                 if (pnr) dispatch(setPnr(pnr));
+                dispatch(setSearchParams({}))
+                dispatch(setFormikData({}))
+                // router.push("/")
                 checkoutUrl ? window.open(checkoutUrl, '_self') : console.error("Checkout URL not found");
             } else if (createPaymentService.rejected.match(action)) {
                 const status = action.payload?.status || action.error?.status;
-                alert(status === 400 ? "There was a problem with your request. Please try again." : "Something went wrong. Please try again later.");
+                // alert(status === 400 ? "There was a problem with your request. Please try again." : "Something went wrong. Please try again later.");
             }
         });
 
@@ -162,30 +173,37 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
         dispatch(setSearchParams({ ...searchParams, date: formattedFullDate }));
         // loadFlightsWithDelay({ date: formattedFullDate });
     };
-    let globalIndex = 0;
-    const passengers = [
-        { type: 'adult', count: adults, typeValue: 'ADT' },
-        { type: 'child', count: children, typeValue: 'CHD' },
-        { type: 'infant', count: infants, typeValue: 'INF' },
-    ].filter(p => p.count > 0);
-    const initialPassengers = passengers.flatMap(p =>
-        Array.from({ length: p.count }, () => ({
-            idx: globalIndex++,
-            type: p.type,
-            typeValue: p.typeValue,
-            firstName: '',
-            lastName: '',
-            dateOfBirth: '',
-            title: '',
-        }))
-    );
 
+    // Build passengers array when counts change
+    useEffect(() => {
+        let globalIndex = 0;
+        const passengers = [
+            { type: 'adult', count: adults, typeValue: 'ADT' },
+            { type: 'child', count: children, typeValue: 'CHD' },
+            { type: 'infant', count: infants, typeValue: 'INF' },
+        ]
+            .filter(p => p.count > 0)
+            .flatMap(p =>
+                Array.from({ length: p.count }, () => ({
+                    idx: globalIndex++,
+                    type: p.type,
+                    typeValue: p.typeValue,
+                    firstName: '',
+                    lastName: '',
+                    dateOfBirth: '',
+                    title: '',
+                }))
+            );
+
+        // ✅ Update Formik passengers field
+        formik.setFieldValue("passengers", passengers);
+    }, [adults, children, infants]);
 
 
 
     const formik = useFormik({
         initialValues: {
-            passengers: initialPassengers,
+            passengers: {},
             contact: {
                 countryCode: '',
                 phoneNumber: '',
@@ -301,6 +319,7 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
         },
 
     });
+
 
 
 
@@ -489,6 +508,7 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                 onClose={() => setIsModifySearchOpen(false)}
                 airPorts={airPorts}
                 pos={pos}
+                handleResetToFirstStep={handleResetToFirstStep}
 
             />
             <PosSelectorModal handleSelectPos={handleSelectPos} isOpen={showPosModal} setIsOpen={setShowPosModal} />

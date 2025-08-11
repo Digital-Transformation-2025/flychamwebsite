@@ -34,11 +34,11 @@ import {
 } from '@phosphor-icons/react';
 import { ReduxProvider } from "@/store";
 import useBlockInspect from "@/hooks/useBlockInspect";
+import { setFormikData, setSearchParams } from "@/store/flightSlice";
 
 export default function ClientLayoutWrapper({ children }) {
   const [isOpen, setIsOpen] = useState(true)
-  useBlockInspect()
-
+  // useBlockInspect()
   const pathname = usePathname()
   const isMobile = useIsMobile()
   const { t } = useTranslation();
@@ -109,7 +109,9 @@ export default function ClientLayoutWrapper({ children }) {
     '/booking-confirm',
     '/about',
     '/Mission',
+    '/manage-booking',
   ];
+
 
 
 

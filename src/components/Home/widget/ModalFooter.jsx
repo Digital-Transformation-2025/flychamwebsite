@@ -13,11 +13,11 @@ const ModalFooter = ({ values, setFieldValue, handleSubmit }) => {
                     label="Include nearby airports"
                 />
                 <button
-                    type="button"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        handleSubmit();
-                    }}
+                    type="submit"
+                    // onClick={(e) => {
+                    //     e.preventDefault();
+                    //     handleSubmit();
+                    // }}
                     className="cursor-pointer px-6 py-2 rounded-md text-sm font-medium transition-opacity duration-200 bg-secondary text-white hover:opacity-90"
                 >
                     Search flights

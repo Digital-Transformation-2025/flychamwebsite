@@ -95,7 +95,7 @@ export const validateEmailService = createAsyncThunk(
     async (email, thunkAPI) => {
         try {
 
-            const response = await apiClient.get(`/api/booking/AbstractApi/ValidateEmail?email=${email}`);
+            const response = await apiClient.get(`/api/AbstractValidation/EmailDetail/ValidateEmail?email=${email}`);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(
@@ -110,7 +110,7 @@ export const validatePhoneNumberService = createAsyncThunk(
     async (phoneNumber, thunkAPI) => {
         try {
 
-            const response = await apiClient.get(`/api/booking/AbstractApi/ValidatePhone?phoneNumber=${phoneNumber}`);
+            const response = await apiClient.get(`/api/AbstractValidation/PhoneDetail/ValidatePhone?phoneNumber=${phoneNumber}`);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(

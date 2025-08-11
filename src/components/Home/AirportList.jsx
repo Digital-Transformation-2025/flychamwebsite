@@ -1,5 +1,5 @@
 'use client'
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import CustomCheckbox from '../Ui/CustomCheckbox';
 
@@ -13,6 +13,7 @@ const AirportList = ({ search, setSearch, type, values, setFieldValue, isMobile,
 
 
   const handleAirportSelection = ({ type, id }) => {
+
     setFieldValue(type, id);
 
     switch (type) {
@@ -20,14 +21,14 @@ const AirportList = ({ search, setSearch, type, values, setFieldValue, isMobile,
         setSearch("");
 
         setFieldValue("destination", "");
-        if (isMobile && sliderRef?.current) sliderRef.current.slickGoTo(1);
         setFieldValue("type", 1);
+        if (isMobile && sliderRef?.current) sliderRef.current.slickGoTo(1);
         break;
 
       case "destination":
         setSearch("");
-        if (isMobile && sliderRef?.current) sliderRef.current.slickGoTo(2);
         setFieldValue("type", 2);
+        if (isMobile && sliderRef?.current) sliderRef.current.slickGoTo(2);
         break;
 
       default:
@@ -68,6 +69,12 @@ const AirportList = ({ search, setSearch, type, values, setFieldValue, isMobile,
             return (
               <div
                 key={id}
+                // Fire before blur closes the popover
+                onMouseDown={(e) => {
+                  e.preventDefault();            // prevents focus change that causes blur
+                  handleAirportSelection({ type, id });
+                }}
+                // keep onClick just in case for keyboard/Touch (optional)
                 onClick={() => handleAirportSelection({ type, id })}
                 className={`flex items-center justify-between border-b border-gray-300 p-3 rounded-md transition-colors duration-150 hover:bg-[#F5F5F4] cursor-pointer ${values[type] === iataCode ? 'bg-[#E5E5E3]' : ''
                   }`}

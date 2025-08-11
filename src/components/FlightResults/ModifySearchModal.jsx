@@ -7,7 +7,7 @@ import { Warning } from '@phosphor-icons/react';
 import FromToSelector from '../Home/FromToSelector';
 import BookingBox from '../Home/BookingBox';
 
-const ModifySearchModal = ({ isOpen, onClose, pos, airPorts }) => {
+const ModifySearchModal = ({ isOpen, onClose, pos, airPorts ,handleResetToFirstStep}) => {
     const router = useRouter();
 
     return (
@@ -40,7 +40,7 @@ const ModifySearchModal = ({ isOpen, onClose, pos, airPorts }) => {
                         <Dialog.Panel className="w-full max-w-7xl rounded-xl  p-6 text-center shadow-xl transition-all">
 
                             <div className="flex justify-center gap-4">
-                                <BookingBox pos={pos} flights={airPorts} isResultsPage />
+                                <BookingBox pos={pos} flights={airPorts} isResultsPage  handleResetToFirstStep={handleResetToFirstStep}/>
 
                             </div>
                         </Dialog.Panel>

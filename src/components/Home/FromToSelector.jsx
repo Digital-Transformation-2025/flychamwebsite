@@ -6,7 +6,7 @@ import SwapIcon from './SwapIcon';
 const CityBox = ({ icon, label, city, airport, onClick, AirPortsComponent }) => (
   <div
     onClick={onClick}
-    className="w-full flex-1 flex items-center space-x-4 bg-[#F5F5F4] hover:bg-[#E7E7E5] transition-colors duration-200 rounded-xl px-6 py-5 cursor-pointer"
+    className="w-full flex-1 text-start flex items-center space-x-4 bg-[#F5F5F4] hover:bg-[#E7E7E5] transition-colors duration-200 rounded-xl px-6 py-5 cursor-pointer"
   >
     <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
       {icon}

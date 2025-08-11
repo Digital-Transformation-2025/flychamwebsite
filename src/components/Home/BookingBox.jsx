@@ -29,8 +29,9 @@ import SearchInput from "./SearchInput";
 import ModalTitle from "./widget/ModalTitle";
 import ModalFooter from "./widget/ModalFooter";
 import InfoBoxes from "./widget/InfoBoxes";
+import ManageTap from "./widget/Manage/ManageTap";
 const tabs = ["book", "manage", "flight status"];
-const BookingBox = ({ flights, pos, isResultsPage }) => {
+const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep }) => {
     const isMobile = useIsMobile()
     const dispatch = useDispatch()
     const router = useRouter()
@@ -115,10 +116,10 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
         miles: false
     };
     const formik = useFormik({
-        enableReinitialize: false, // ✅ allow reinitialization
+        enableReinitialize: true, // ✅ allow reinitialization
         initialValues: {
             ...defaultValues,
-            // ...formikData // will override defaults if data exists
+            ...(isResultsPage ? formikData : {})
         },
         onSubmit: (values) => {
             console.log("🚀 Form Submitted", values);
@@ -160,6 +161,7 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
             }
             router.push('/search-results');
 
+            handleResetToFirstStep()
 
 
         }
@@ -353,6 +355,8 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
 
     const { type } = formik.values;
 
+
+
     const renderStepComponent = () => {
         const { type } = formik.values;
 
@@ -462,7 +466,12 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
         </div>
     );
     const DesktopView = () => (
-        <div id="search-widget" className="bg-white rounded-2xl shadow-md p-6 w-full max-w-5xl mx-auto mt-[-130px] relative z-20 ">
+
+        <div id="search-widget" className={`bg-white rounded-2xl shadow-md p-6 w-full max-w-5xl mx-auto mt-[-130px] relative z-20 ${!isResultsPage && 'h-[291px]'}`}>
+
+
+
+
             {!isResultsPage &&
                 <TabNavigation
                     tabs={tabs}
@@ -472,125 +481,137 @@ const BookingBox = ({ flights, pos, isResultsPage }) => {
                     formik={formik}
                 />
             }
-            {isResultsPage && (
-                <ModalTitle />
-            )}
-
-            <div className="flex items-center justify-between mb-6">
-                <TripTypeSelector values={formik.values}
-                    setFieldValue={formik.setFieldValue}
-                    handleReset={handleReset}
-                />
-                <MilesToggle isMobile={isMobile} />
-            </div>
-            <FromToSelector
-                setShowModal={setDesktopShowModal}
-                setShowMobileModal={setShowMobileModal}
-                cities={cities}
-                values={formik.values}
-                handleSwitch={handleSwitch}
-                isResultsPage={isResultsPage}
-                openAirPortsDropdown={openAirPortsDropdown}
-                setOpenAirPortsDropdown={setOpenAirPortsDropdown}
-                AirPortsSourceComponent={
-                    <>
-                        <SearchInput
-                            search={sourceSearch}
-                            handleSearch={handleSearch}
-                            onClose={onClose}
-                            placeholder={"Search for airport or city"}
-                            type={"source"}
-                            values={formik.values}
-                            airPorts={airPorts.items}
-                        />
-                        <AirportList
-                            type={"source"}
-                            values={formik.values}
-                            setFieldValue={formik.setFieldValue}
-
-                            getCitiesArray={getCitiesArray}
-                            isMobile={isMobile}
-                            sliderRef={sliderRef}
-                            search={sourceSearch}
-                            setSearch={setSourceSearch}
-                            setOpenAirPortsDropdown={setOpenAirPortsDropdown}
-                        />
-                    </>
-                }
-                AirPortsDestenationComponent={
-                    <>
-                        <SearchInput
-                            search={destinationSearch}
-                            handleSearch={handleSearch}
-                            onClose={onClose}
-                            placeholder={"To"}
-                            type={"destination"}
-                            values={formik.values}
-                            airPorts={airPorts.items}
-                        />
-                        <AirportList
-                            type={"destination"}
-                            values={formik.values}
-                            setFieldValue={formik.setFieldValue}
-
-                            getCitiesArray={getCitiesArray}
-                            isMobile={isMobile}
-                            sliderRef={sliderRef}
-                            search={destinationSearch}
-                            setSearch={setDestinationSearch}
-                            setOpenAirPortsDropdown={setOpenAirPortsDropdown}
-                        />
-                    </>
-                }
-
-            />
-            {isResultsPage && <InfoBoxes
-                values={formik.values}
-                selected={selected}
-                handleReset={handleReset}
-                tripType={tripType}
-                openDropdown={openDropdown}
-                setOpenDropdown={setOpenDropdown}
-                guestsComponent={<Guests formik={formik} values={formik.values} isMobile={isMobile} isResultsPage={isResultsPage} />}
-                CalendarComponent={<Dates
-                    formik={formik}
-                    minMonth={minMonth}
-                    setMinMonth={setMinMonth}
-                    setCurrentMonth={setCurrentMonth}
-                    currentMonth={currentMonth}
-                    handleDateSelect={handleDateSelect}
-                    handleReset={handleReset}
-                    isResultsPage={isResultsPage}
-                />}
-
-
-            />
-
+            {activeTab === "manage" &&
+                <ManageTap />
             }
-            {isResultsPage && (
-                <form onSubmit={formik.handleSubmit}>
-                    {/* all form inputs, selects, checkboxes */}
-                    <ModalFooter
-                        setFieldValue={formik.setFieldValue}
+            {activeTab === "book" &&
+                <>
+
+                    {isResultsPage && (
+                        <ModalTitle />
+                    )}
+
+                    <div className="flex items-center justify-between mb-6">
+                        <TripTypeSelector values={formik.values}
+                            setFieldValue={formik.setFieldValue}
+                            handleReset={handleReset}
+                        />
+                        <MilesToggle isMobile={isMobile} />
+                    </div>
+                    <FromToSelector
+                        setShowModal={setDesktopShowModal}
+                        setShowMobileModal={setShowMobileModal}
+                        cities={cities}
                         values={formik.values}
-                        handleSubmit={formik.handleSubmit}
+                        handleSwitch={handleSwitch}
+                        isResultsPage={isResultsPage}
+                        openAirPortsDropdown={openAirPortsDropdown}
+                        setOpenAirPortsDropdown={setOpenAirPortsDropdown}
+                        AirPortsSourceComponent={
+                            <>
+                                <SearchInput
+                                    search={sourceSearch}
+                                    handleSearch={handleSearch}
+                                    onClose={onClose}
+                                    placeholder={"Search for airport or city"}
+                                    type={"source"}
+                                    values={formik.values}
+                                    airPorts={airPorts.items}
+                                />
+                                <AirportList
+                                    type={"source"}
+                                    values={formik.values}
+                                    setFieldValue={formik.setFieldValue}
+
+                                    getCitiesArray={getCitiesArray}
+                                    isMobile={isMobile}
+                                    sliderRef={sliderRef}
+                                    search={sourceSearch}
+                                    setSearch={setSourceSearch}
+                                    setOpenAirPortsDropdown={setOpenAirPortsDropdown}
+                                />
+                            </>
+                        }
+                        AirPortsDestenationComponent={
+                            <>
+                                <SearchInput
+                                    search={destinationSearch}
+                                    handleSearch={handleSearch}
+                                    onClose={onClose}
+                                    placeholder={"To"}
+                                    type={"destination"}
+                                    values={formik.values}
+                                    airPorts={airPorts.items}
+                                />
+                                <AirportList
+                                    type={"destination"}
+                                    values={formik.values}
+                                    setFieldValue={formik.setFieldValue}
+
+                                    getCitiesArray={getCitiesArray}
+                                    isMobile={isMobile}
+                                    sliderRef={sliderRef}
+                                    search={destinationSearch}
+                                    setSearch={setDestinationSearch}
+                                    setOpenAirPortsDropdown={setOpenAirPortsDropdown}
+                                />
+                            </>
+                        }
+
                     />
-                </form>
+                    {isResultsPage && <InfoBoxes
+                        values={formik.values}
+                        selected={selected}
+                        handleReset={handleReset}
+                        tripType={tripType}
+                        openDropdown={openDropdown}
+                        setOpenDropdown={setOpenDropdown}
+                        guestsComponent={<Guests formik={formik} values={formik.values} isMobile={isMobile} isResultsPage={isResultsPage} />}
+                        CalendarComponent={<Dates
+                            formik={formik}
+                            selected={selected}
 
-            )}
-            <AirportModal
-                key={showMobileModal ? 'open' : 'closed'}
+                            minMonth={minMonth}
+                            setMinMonth={setMinMonth}
+                            setCurrentMonth={setCurrentMonth}
+                            currentMonth={currentMonth}
+                            handleDateSelect={handleDateSelect}
+                            handleReset={handleReset}
+                            isResultsPage={isResultsPage}
+                        />}
 
-                isOpen={showDesktopModal}
-                onClose={onClose}
-                formikValues={formik.values}
-                setFieldValue={formik.setFieldValue}
-                handleSubmit={formik.handleSubmit}
-                stepsData={stepsData}
-                handleClick={handleClick}
-                renderStepComponent={renderStepComponent}
-                setCurrentMonth={setCurrentMonth}
-            />
+
+                    />
+
+                    }
+                    {isResultsPage && (
+                        <form onSubmit={formik.handleSubmit}>
+                            {/* all form inputs, selects, checkboxes */}
+                            <ModalFooter
+                                setFieldValue={formik.setFieldValue}
+                                values={formik.values}
+                                handleSubmit={formik.handleSubmit}
+                            />
+                        </form>
+
+                    )}
+                    <AirportModal
+                        key={showMobileModal ? 'open' : 'closed'}
+
+                        isOpen={showDesktopModal}
+                        onClose={onClose}
+                        formikValues={formik.values}
+                        setFieldValue={formik.setFieldValue}
+                        handleSubmit={formik.handleSubmit}
+                        stepsData={stepsData}
+                        handleClick={handleClick}
+                        renderStepComponent={renderStepComponent}
+                        setCurrentMonth={setCurrentMonth}
+                    />
+
+                </>
+            }
+
         </div>
     );
 

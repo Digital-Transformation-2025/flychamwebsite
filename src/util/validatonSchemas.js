@@ -243,3 +243,9 @@ export const contactSchema = Yup.object().shape({
     countryCode: Yup.string().required('Country code is required'),
     passengerIndex: Yup.number().nullable().required('Please select a contact passenger'),
 });
+export const contactSchemaInManage = Yup.object({
+    countryCode: Yup.string().required('Country code is required'),
+    mobile: Yup.string().required('Mobile number is required'),
+    email: Yup.string().email('Invalid email').required('Email is required'),
+})
+
