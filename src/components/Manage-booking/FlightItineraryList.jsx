@@ -2,7 +2,7 @@
 import React from 'react';
 import { Info, ArrowsLeftRight, ArrowCircleUp, Clock } from '@phosphor-icons/react';
 import logo from '../../assets/images/tabicon.png';
-import { Airplane, ArrowFatLinesUp, ArrowsClockwise } from '@phosphor-icons/react/dist/ssr';
+import { Airplane, ArrowFatLinesUp, ArrowsClockwise, XCircle } from '@phosphor-icons/react/dist/ssr';
 
 /* =========================
    Sample data (you can pass your own via props)
@@ -116,36 +116,41 @@ const MidTimeline = ({ duration, cabin }) => (
 /* =========================
    Section header (title + actions)
 ========================= */
+const ActionButton = ({ icon: Icon, label, action, color = "text-[13px] text-primary-1", onAction }) => (
+    <button
+        type="button"
+        onClick={() => onAction?.(action)}
+        className={`flex items-center font-semibold gap-2 hover:opacity-90 ${color}`}
+    >
+        <Icon size={18} /> {label}
+    </button>
+);
+
+const Divider = () => <span className="hidden sm:block h-5 w-px bg-[#DADAD7]" />;
+
 const SectionHeader = ({ title, onAction }) => (
-    <div className="mb-4 flex flex-wrap items-center gap-4 text-[#5F5F5C]">
-        <div className="flex items-center gap-2 text-[15px] font-medium">
-            <span className="grid h-6 w-6 place-items-center rounded-full bg-primary-1 text-white rotate-270">
-                <Airplane size={16} />
-            </span>
-            {title}
+    <div className="mb-4 flex items-center justify-between text-[#5F5F5C]">
+        <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-2 text-[15px] font-medium">
+                <span className="grid h-6 w-6 place-items-center rounded-full bg-primary-1 text-white rotate-270">
+                    <Airplane size={16} />
+                </span>
+                {title}
+            </div>
+            <Divider />
+            <div className="flex items-center gap-4">
+                <ActionButton icon={ArrowsClockwise} label="Change Flight" action="change" onAction={onAction} />
+                <Divider />
+                <ActionButton icon={ArrowFatLinesUp} label="Upgrade Class" action="upgrade" onAction={onAction} />
+            </div>
         </div>
-
-        <span className="hidden sm:block h-5 w-px bg-[#DADAD7]" />
-
-        <div className="flex items-center gap-4 text-primary-1">
-            <button
-                type="button"
-                onClick={() => onAction?.('change')}
-                className="flex items-center font-semibold gap-2 text-[13px]  hover:opacity-90"
-            >
-                <ArrowsClockwise size={18} />
-
-                Change Flight
-            </button>
-            <span className="hidden sm:block h-5 w-px bg-[#DADAD7]" />
-            <button
-                type="button"
-                onClick={() => onAction?.('upgrade')}
-                className="flex items-center font-semibold gap-2 text-[13px]  hover:opacity-90"
-            >
-                <ArrowFatLinesUp size={18} /> Upgrade Class
-            </button>
-        </div>
+        <ActionButton
+            icon={XCircle}
+            label="Cancel booking"
+            action="upgrade"
+            color="text-alert text-[13px]"
+            onAction={onAction}
+        />
     </div>
 );
 

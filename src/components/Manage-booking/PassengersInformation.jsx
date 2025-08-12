@@ -1,14 +1,9 @@
 'use client';
 import React, { useState } from 'react';
 import {
-    UserCircle,
-    SuitcaseSimple,
-    SuitcaseRolling,
     Armchair,
-    ForkKnife,
-    CaretRight,
 } from '@phosphor-icons/react';
-import { Baby, Briefcase, ForkKnifeIcon, Seat, Suitcase, User } from '@phosphor-icons/react/dist/ssr';
+import { Baby, Briefcase, ForkKnifeIcon,  Suitcase, User } from '@phosphor-icons/react/dist/ssr';
 import SectionTitle from './SectionTitle';
 
 /* =========================
@@ -51,25 +46,6 @@ const Pill = ({ children }) => (
     <span className="ml-2 text-[12px] font-medium text-white/90">({children})</span>
 );
 
-const Divider = () => <div className="h-[2px] w-full bg-primary-1 opacity-90" />;
-
-const Rail = ({ left, right }) => (
-    <div className="grid grid-cols-1 md:grid-cols-2">
-        <div className="p-4 border-b md:border-b-0 md:border-r border-[#EAEAE8]">
-            <div className="text-center">
-                <div className="text-primary-1 font-semibold">{left.from} → {left.to}</div>
-                <div className="mt-1 text-xs text-[#8A8A87]">{left.flight}</div>
-            </div>
-        </div>
-        <div className="p-4">
-            <div className="text-center">
-                <div className="text-[#8A8A87]">{right.from} → {right.to}</div>
-                <div className="mt-1 text-xs text-[#8A8A87]">{right.flight}</div>
-            </div>
-        </div>
-    </div>
-);
-
 const InfoLabel = ({ title, icon, value }) => (
     <div className="flex flex-col gap-2">
         <div className="text-[13px] text-500">{title}</div>
@@ -92,96 +68,68 @@ const SmallButton = ({ children, onClick }) => (
 /* =========================
    Passenger Card
 ========================= */
+const TabButton = ({ leg, isActive, onClick }) => (
+    <button
+        onClick={onClick}
+        className={`p-3 text-center border-b ${isActive ? 'bg-[#F0F5F8]' : 'bg-white'} border-[#EAEAE8]`}
+    >
+        <div className={`${isActive ? 'text-primary-1' : 'text-[#8A8A87]'} font-semibold`}>
+            {leg.from} → {leg.to}
+        </div>
+        <div className={`text-xs ${isActive ? 'text-primary-1' : 'text-[#8A8A87]'} mt-1`}>
+            {leg.flight}
+        </div>
+    </button>
+);
+
 const PassengerCard = ({ passenger }) => {
-    // active leg tab per card (0: outbound, 1: return)
     const [tab, setTab] = useState(0);
-    const activeLeft = passenger.legs[0];
-    const activeRight = passenger.legs[1];
+    console.log('tab', tab);
+
+    const icons = {
+        hand: Briefcase,
+        checked: Suitcase,
+        seats: Armchair,
+        meals: ForkKnifeIcon
+    };
+
+    const infoData = [
+        { title: 'Hand baggage', value: passenger.baggage.hand, icon: icons.hand },
+        { title: 'Checked baggage', value: passenger.baggage.checked, icon: icons.checked, btn: 'Add extra' },
+        { title: 'Seats', value: passenger.seats.label, icon: icons.seats, btn: 'Select seats' },
+        { title: 'Meals', value: passenger.meals.label, icon: icons.meals }
+    ];
 
     return (
         <div className="rounded-xl ring-1 ring-[#EAEAE8] overflow-hidden bg-white">
-            {/* Header bar */}
+            {/* Header */}
             <div className="flex items-center gap-3 rounded-t-xl bg-primary-1 px-4 py-3 text-white">
-                {passenger.type === "Adult" && <User size={18} weight="regular" />}
-                {passenger.type === "Infant" && <Baby size={18} weight="regular" />}
-
+                {passenger.type === "Adult" && <User size={18} />}
+                {passenger.type === "Infant" && <Baby size={18} />}
                 <span className="text-[14px] font-semibold">{passenger.name}</span>
                 <Pill>{passenger.type}</Pill>
             </div>
 
-            {/* Tabs mimic (left tab highlighted) */}
-            <div className="hidden md:block">
-                <Rail left={activeLeft} right={activeRight} />
-                <Divider />
+            {/* Tabs */}
+            <div className="grid grid-cols-2">
+                {passenger.legs.map((leg, i) => (
+                    <TabButton key={i} leg={leg} isActive={tab === i} onClick={() => setTab(i)} />
+                ))}
             </div>
 
-            {/* Mobile stack for the two tabs */}
-            <div className="md:hidden grid grid-cols-2">
-                <button
-                    onClick={() => setTab(0)}
-                    className={`p-3 text-center border-b ${tab === 0 ? 'bg-[#F0F5F8]' : 'bg-white'} border-[#EAEAE8]`}
-                >
-                    <div className={`${tab === 0 ? 'text-primary-1' : 'text-[#8A8A87]'} font-semibold`}>
-                        {activeLeft.from} → {activeLeft.to}
-                    </div>
-                    <div className="text-xs text-[#8A8A87] mt-1">{activeLeft.flight}</div>
-                </button>
-                <button
-                    onClick={() => setTab(1)}
-                    className={`p-3 text-center border-b ${tab === 1 ? 'bg-[#F0F5F8]' : 'bg-white'} border-[#EAEAE8]`}
-                >
-                    <div className={`${tab === 1 ? 'text-primary-1' : 'text-[#8A8A87]'} font-semibold`}>
-                        {activeRight.from} → {activeRight.to}
-                    </div>
-                    <div className="text-xs text-[#8A8A87] mt-1">{activeRight.flight}</div>
-                </button>
-            </div>
-
-            {/* Content row */}
+            {/* Info */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-10 px-6 py-5 bg-white">
-                {/* Hand baggage */}
-                <div>
-                    <InfoLabel
-                        title="Hand baggage"
-                        value={passenger.baggage.hand}
-                        icon={<Briefcase size={18} className="text-primary-1" />}
-                    />
-                </div>
-
-                {/* Checked baggage */}
-                <div>
-                    <InfoLabel
-                        title="Checked baggage"
-                        value={passenger.baggage.checked}
-                        icon={<Suitcase size={18} className="text-primary-1" />}
-                    />
-                    <SmallButton>Add extra</SmallButton>
-                </div>
-
-                {/* Seats */}
-                <div>
-                    <InfoLabel
-                        title="Seats"
-                        value={passenger.seats.label}
-                        icon={<Armchair size={18} className="text-primary-1" />}
-                    />
-                    <SmallButton>
-                        Select seats
-                    </SmallButton>
-                </div>
-
-                {/* Meals */}
-                <div>
-                    <InfoLabel
-                        title="Meals"
-                        value={passenger.meals.label}
-                        icon={<ForkKnifeIcon size={18} className="text-primary-1" />}
-                    />
-                </div>
+                {infoData.map(({ title, value, icon: Icon, btn }, i) => (
+                    <div key={i}>
+                        <InfoLabel title={title} value={value} icon={<Icon size={18} className="text-primary-1" />} />
+                        {btn && <SmallButton>{btn}</SmallButton>}
+                    </div>
+                ))}
             </div>
         </div>
     );
 };
+
 
 /* =========================
    Main List

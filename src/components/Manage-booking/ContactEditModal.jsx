@@ -5,6 +5,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import ErrorMessage from '../Ui/ErrorMessage';
 import CustomDropdown from '../Ui/TitleDropdown';
 import Input from '../Ui/Input';
+import { X } from '@phosphor-icons/react/dist/ssr';
 export function ContactEditModal({
     isOpen,
     onClose,
@@ -24,6 +25,7 @@ export function ContactEditModal({
     ];
 
     const getErr = (name) => touched && touched[name] && errors && errors[name];
+    const Divider = () => <span className="hidden sm:block h-5 w-px bg-[#DADAD7]" />;
 
     return (
         <Transition appear show={isOpen} as={Fragment}>
@@ -38,14 +40,16 @@ export function ContactEditModal({
                             <Dialog.Panel className="w-full max-w-2xl rounded-xl bg-white ring-1 ring-gray-200 shadow-xl">
                                 {/* Header */}
                                 <div className="relative px-6 pt-5 pb-4 border-b border-gray-200">
-                                    <Dialog.Title className="text-[15px] font-medium text-gray-800">Contact details</Dialog.Title>
-                                    <button onClick={onClose} aria-label="Close" className="absolute right-5 top-4 text-gray-500 hover:text-gray-700 text-xl leading-none">×</button>
+                                    <Dialog.Title className="text-[15px] font-medium text-600">Contact details</Dialog.Title>
+                                    <button onClick={onClose} aria-label="Close" className="absolute right-5 top-4 text-600 hover:text-700 leading-none">
+                                        <X size={18} />
+                                    </button>
                                 </div>
 
                                 {/* Name */}
-                                <div className="px-6 pt-4 text-center">
-                                    <a className="text-[#0F5E92] font-medium hover:underline cursor-pointer">{contact?.name || 'Passenger'}</a>
-                                    <span className="ml-2 text-sm text-gray-500">(Adult)</span>
+                                <div className="px-6 pt-4 text-start text-sm">
+                                    <span className="text-primary-1 font-medium  cursor-pointer">{contact?.name || 'Passenger'}</span>
+                                    <span className="mx-2  text-500">(Adult)</span>
                                 </div>
 
                                 {/* Form */}
@@ -91,6 +95,14 @@ export function ContactEditModal({
                                             error={getErr('email')}
                                         />
                                         <ErrorMessage error={(getErr('email'))} />
+                                    </div>
+
+                                    {/* Name */}
+                                    <div className=" text-start text-sm">
+                                        <span className="text-primary-1 font-medium  cursor-pointer"> Alternative Mobile Number</span>
+                                        <span className="mx-2  text-500">(Adult)</span>
+                                       <Divider />
+
                                     </div>
 
                                     <div className="pt-2 flex justify-center">
