@@ -38,7 +38,7 @@ import { setFormikData, setSearchParams } from "@/store/flightSlice";
 
 export default function ClientLayoutWrapper({ children }) {
   const [isOpen, setIsOpen] = useState(true)
-  // useBlockInspect()
+  useBlockInspect()
   const pathname = usePathname()
   const isMobile = useIsMobile()
   const { t } = useTranslation();
