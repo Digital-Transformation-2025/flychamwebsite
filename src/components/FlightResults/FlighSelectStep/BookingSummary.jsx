@@ -23,7 +23,7 @@ const BookingSummary = ({ onContinue, setSelectedFlight, selectedType }) => {
                         Booking total:
                     </div>
                     <div className="text-[#3E3E3B] font-semibold text-lg sm:text-xl md:text-2xl lg:text-3xl">
-                        {flights?.[0]?.common_info?.currency} {selectedPlan.price}
+                        {selectedPlan.currency} {selectedPlan.price}
                     </div>
                 </div>
 
