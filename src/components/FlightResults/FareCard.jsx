@@ -21,12 +21,12 @@ const FareCard = ({ isMissingPlan, type, price, special, isLg, currecny, isConfi
         <div className={` ${border} rounded-xl overflow-hidden w-full lg:w-[175px] h-fit lg:h-[141px] flex flex-col`}>
 
             {/* Header */}
-            <div className={`${bg} ${textMobile} text-[12px] lg:text-sm font-semibold ${(!isMissingPlan && !isMobile) ? 'text-start' : 'text-center'}  p-2 lg:p-1`}>
+            <div className={`${bg} ${textMobile} text-[12px] lg:text-sm font-semibold ${(!isMissingPlan && !isMobile) ? 'text-start' : 'text-center'} ${isConfirmed && '!text-center'}  p-2 lg:p-1`}>
                 {type}
             </div>
 
             {/* Body */}
-            <div className={`${isLg ? bg : 'bg-white'} flex flex-row lg:flex-col gap-1 lg:gap-0 items-center  flex-1 ${(!isMissingPlan && !isMobile) ? 'justify-start' : 'justify-center'} p-2 lg:p-1`}>
+            <div className={`${isLg ? bg : 'bg-white'} flex flex-row lg:flex-col gap-1 lg:gap-0 items-center  flex-1 ${(!isMissingPlan && !isMobile) ? 'justify-start' : 'justify-center'} ${isConfirmed && '!justify-center'} p-2 lg:p-1`}>
                 {price ? (
                     <>
                         {/* Mobile */}
