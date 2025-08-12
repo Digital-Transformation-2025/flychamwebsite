@@ -98,11 +98,38 @@ export function ContactEditModal({
                                     </div>
 
                                     {/* Name */}
-                                    <div className=" text-start text-sm">
-                                        <span className="text-primary-1 font-medium  cursor-pointer"> Alternative Mobile Number</span>
-                                        <span className="mx-2  text-500">(Adult)</span>
-                                       <Divider />
+                                    <div className="flex gap-2 text-start text-sm">
+                                        <span className="text-primary-1 font-medium  cursor-pointer"> Alternative Mobile Number </span>
+                                        <Divider />
+                                        <span className="text-alert font-medium  underline cursor-pointer"> Delete </span>
 
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <CustomDropdown
+                                                type="countries"
+                                                selected={values.altCountryCode}
+                                                onChange={(v) => setFieldValue('altCountryCode', v)}
+                                                options={codeOptions}
+                                                placeholder="Country code"
+                                                error={Boolean(getErr('altCountryCode'))}
+                                            />
+                                            <ErrorMessage error={(getErr('altCountryCode'))} />
+                                        </div>
+
+                                        <div>
+                                            <Input
+                                                id="mobile"
+                                                name="altMobile"
+                                                type="tel"
+                                                label="Mobile number"
+                                                placeholder=" "
+                                                value={values.altMobile}
+                                                onChange={handleChange}
+                                                error={getErr('altMobile')}
+                                            />
+                                            <ErrorMessage error={(getErr('altMobile'))} />
+                                        </div>
                                     </div>
 
                                     <div className="pt-2 flex justify-center">

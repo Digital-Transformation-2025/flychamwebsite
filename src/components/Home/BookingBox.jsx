@@ -158,8 +158,8 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
                 return
             }
             router.push('/search-results');
-            // handleResetToFirstStep()
-            // onCloseMidifySearch()
+            handleResetToFirstStep()
+            onCloseMidifySearch()
         }
 
 

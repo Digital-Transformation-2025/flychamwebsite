@@ -22,6 +22,7 @@ const contact = {
     type: 'Primary',
     email: 'moaidhawari@gmail.com',
     mobile: '+963 935679806',
+    altMobile: '+963 935679806',
 };
 const ManageBookingClient = () => {
     const [showContactModal, setShowContactModal] = useState(false)
@@ -33,6 +34,8 @@ const ManageBookingClient = () => {
         initialValues: {
             countryCode: contact.countryCode,
             mobile: contact.mobile,
+            altCounryCode: contact.altCounryCode,
+            altMobile: contact.altMobile,
             email: contact.email,
         },
         validationSchema: contactSchemaInManage,
