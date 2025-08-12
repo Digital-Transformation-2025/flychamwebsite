@@ -57,7 +57,7 @@ const Guests = ({ formik, values, isMobile, isResultsPage }) => {
                                         value={option}
                                         checked={formik.values.cabinClass === option}
                                         onChange={() => formik.setFieldValue("cabinClass", option)}
-                                        className="accent-primary-1"
+                                        className="accent-[#054E72]"
                                     />
                                     {option}
                                 </label>
@@ -72,7 +72,7 @@ const Guests = ({ formik, values, isMobile, isResultsPage }) => {
 
                     const minusEnabled = key === "adults" ? formik.values[key] > 1 : formik.values[key] > 0;
                     const plusDisabled =
-                        totalGuests >= 9 || // ✅ NEW RULE: max total guests 9
+                        totalGuests >= 9 ||
                         (key === "adults" && formik.values.adults >= 9) ||
                         (key === "children" && formik.values.children >= 9) ||
                         (key === "infants" && formik.values.infants >= formik.values.adults);
@@ -87,14 +87,13 @@ const Guests = ({ formik, values, isMobile, isResultsPage }) => {
                                 <p className="text-[12px] text-gray-500">{sub}</p>
                             </div>
                             <div className="flex items-center gap-2">
-                                {/* ➖ Minus Button */}
                                 <button
                                     onClick={(e) => {
-                                        e.stopPropagation(); // ✅ prevent closing dropdown
+                                        e.stopPropagation();
                                         handleGuestChange(key, -1);
                                     }} disabled={!minusEnabled}
                                     className={`w-8 h-8 flex items-center justify-center rounded-[4px] transition 
-                        ${minusEnabled ? "bg-primary-1 cursor-pointer" : "bg-[#D9D9D9] opacity-50 cursor-not-allowed"}`}
+                        ${minusEnabled ? "bg-primary-1 cursor-pointer" : "bg-[#5F5F5C] opacity-50 cursor-not-allowed"}`}
                                 >
                                     <Minus
                                         size={12}
@@ -121,14 +120,14 @@ const Guests = ({ formik, values, isMobile, isResultsPage }) => {
                                     }}
                                 />
 
-                                {/* ➕ Plus Button */}
+
                                 <button
                                     onClick={(e) => {
-                                        e.stopPropagation(); // ✅ prevent closing dropdown
+                                        e.stopPropagation();
                                         handleGuestChange(key, 1);
                                     }} disabled={plusDisabled}
                                     className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition 
-                        ${plusDisabled ? "bg-gray-300 cursor-not-allowed" : "bg-primary-1 cursor-pointer"}`}
+                        ${plusDisabled ? "bg-gray-600 cursor-not-allowed" : "bg-primary-1 cursor-pointer"}`}
                                 >
                                     <Plus
                                         size={12}
