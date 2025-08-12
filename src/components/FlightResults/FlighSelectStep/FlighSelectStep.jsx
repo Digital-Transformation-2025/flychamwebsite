@@ -22,7 +22,7 @@ const FlighSelectStep = ({
   setSelectedFlight,
   handleDetailsClick,
   handleSelectPlan,
-  activeTab,setActiveTab
+  activeTab, setActiveTab
 }) => {
   const { destination, origin } = useFlightRouteDetails()
 

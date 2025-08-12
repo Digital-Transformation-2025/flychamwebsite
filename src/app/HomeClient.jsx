@@ -3,7 +3,7 @@ import DestinationCards from '@/components/Home/DestinationSlider'
 import Hero from '@/components/Home/Hero'
 import AboutFlyChamSection from '@/components/Home/OurCompanyCard'
 import useIsMobile from '@/hooks/useIsMobile'
-import React from 'react'
+import React, { useEffect } from 'react'
 // import { useRouter } from 'next/navigation';
 
 import DestinationCarousel from '@/components/Home/DestinationCarousel'
@@ -17,6 +17,7 @@ import bg3 from '../assets/images/main-slider/bg3.webp';
 import ImportantAlert from '@/components/Ui/Alert'
 import BookingBox from '@/components/Home/BookingBox'
 import { useDispatch, useSelector } from 'react-redux'
+import { setFormikData, setSearchParams } from '@/store/flightSlice'
 const HomeClient = ({ flights, pos }) => {
 
   const dispatch = useDispatch()
@@ -28,7 +29,10 @@ const HomeClient = ({ flights, pos }) => {
   }
   const slides = [bg1, bg2, bg3];
 
-
+  useEffect(() => {
+    dispatch(setFormikData(null))
+    dispatch(setSearchParams(null))
+  }, [])
   return (
     <div className="transition-all duration-700">
 

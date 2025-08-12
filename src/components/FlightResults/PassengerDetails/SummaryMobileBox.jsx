@@ -1,10 +1,16 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import Summary from './Summary';
+import useFormattedFlightTimes from '@/hooks/useFormattedFlightTimes';
+import { useSelector } from 'react-redux';
 
 const SummaryMobileBox = ({ selectedFlight, selectedType }) => {
+    const { selectedPlan } = useSelector((s) => s.flights)
     const [isModalOpen, setIsModalOpen] = useState(false);
     const modalRef = useRef(null);
+    console.log('selectedPlan', selectedPlan);
+
+    const { duration, stops, ecoFare, busFare, segments, flightType } = useFormattedFlightTimes(selectedFlight);
 
     // Close modal on outside click
     useEffect(() => {
@@ -32,8 +38,8 @@ const SummaryMobileBox = ({ selectedFlight, selectedType }) => {
                 </div>
                 <div className="flex justify-between my-4">
                     <div className="flex gap-1">
-                        <div className="text-[12px] text-primary-1 font-medium ">USD</div>
-                        <div className="text-[13px] text-primary-1 font-bold ">900</div>
+                        <div className="text-[12px] text-primary-1 font-medium ">{selectedPlan?.currency}</div>
+                        <div className="text-[13px] text-primary-1 font-bold ">{selectedPlan?.price}</div>
                     </div>
                     <div
                         onClick={() => setIsModalOpen(true)}

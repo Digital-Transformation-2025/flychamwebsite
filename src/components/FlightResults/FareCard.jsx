@@ -3,9 +3,11 @@ import useIsMobile from '@/hooks/useIsMobile';
 import formatPrice from '@/util/formatePrice';
 import React from 'react';
 
-const FareCard = ({ type, price, special, isLg, currecny, isConfirmed }) => {
+const FareCard = ({ isMissingPlan, type, price, special, isLg, currecny, isConfirmed }) => {
     const isEconomy = type === 'Economy';
     const isMobile = !useIsMobile(1100)
+    console.log('isMobile', !isMobile);
+
     const bg = isEconomy ? `${isMobile ? "bg-[rgba(var(--primary-1-rgb),0.2)]" : "bg-[rgba(var(--primary-1-rgb),0.1)]"}` : 'bg-primary-1';
     const border = isMobile && (isEconomy ? ' border border-[rgba(var(--primary-1-rgb),0.5)]' : ' border border-[var(--primary-1)]')
 
@@ -19,12 +21,12 @@ const FareCard = ({ type, price, special, isLg, currecny, isConfirmed }) => {
         <div className={` ${border} rounded-xl overflow-hidden w-full lg:w-[175px] h-fit lg:h-[141px] flex flex-col`}>
 
             {/* Header */}
-            <div className={`${bg} ${textMobile} text-[12px] lg:text-sm font-semibold  text-start lg:text-center p-2 lg:p-1`}>
+            <div className={`${bg} ${textMobile} text-[12px] lg:text-sm font-semibold ${(!isMissingPlan && !isMobile) ? 'text-start' : 'text-center'}  p-2 lg:p-1`}>
                 {type}
             </div>
 
             {/* Body */}
-            <div className={`${isLg ? bg : 'bg-white'} flex flex-row lg:flex-col gap-1 lg:gap-0 items-center justify-start lg:justify-center flex-1 text-center p-2 lg:p-1`}>
+            <div className={`${isLg ? bg : 'bg-white'} flex flex-row lg:flex-col gap-1 lg:gap-0 items-center  flex-1 ${(!isMissingPlan && !isMobile) ? 'justify-start' : 'justify-center'} p-2 lg:p-1`}>
                 {price ? (
                     <>
                         {/* Mobile */}

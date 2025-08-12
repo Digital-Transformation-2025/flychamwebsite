@@ -7,6 +7,7 @@ import {
 } from '@phosphor-icons/react';
 import formatPrice from '@/util/formatePrice';
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
 const getIcon = (key) => {
     switch (key) {
@@ -211,7 +212,9 @@ const FareColumn = ({
     );
 };
 
-const FlightDetails = ({ handleSelectPlan, flight, activeTab }) => {
+const FlightDetails = ({ handleSelectPlan, flight, activeTab, isConfirmed }) => {
+
+
     const isLg = !useIsMobile(1024)
     const Economy = flight.Economy
     const Business = flight.Business
@@ -247,7 +250,7 @@ const FlightDetails = ({ handleSelectPlan, flight, activeTab }) => {
         () => `${Math.floor(Math.random() * 10) + 1} seats left`,
         []
     );
-    
+
     const columns = [
         {
             type: 'Info',

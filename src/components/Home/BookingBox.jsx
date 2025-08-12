@@ -466,7 +466,7 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
     );
     const DesktopView = () => (
 
-        <div id="search-widget" className={`bg-white rounded-2xl shadow-md p-6 w-full max-w-5xl mx-auto mt-[-130px] relative z-20 ${!isResultsPage && 'h-[291px]'}`}>
+        <div id="search-widget" className={`bg-white rounded-2xl shadow-md p-6 w-full max-w-5xl mx-auto mt-[-130px] relative z-20 ${!isResultsPage &&'h-[291px]'}`}>
 
 
 
@@ -487,7 +487,7 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
                 <>
 
                     {isResultsPage && (
-                        <ModalTitle />
+                        <ModalTitle onCloseMidifySearch={onCloseMidifySearch} />
                     )}
 
                     <div className="flex items-center justify-between mb-6">
@@ -583,14 +583,11 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
                             handleReset={handleReset}
                             isResultsPage={isResultsPage}
                         />}
-
-
                     />
 
                     }
                     {isResultsPage && (
                         <form onSubmit={formik.handleSubmit}>
-                            {/* all form inputs, selects, checkboxes */}
                             <ModalFooter
                                 setFieldValue={formik.setFieldValue}
                                 values={formik.values}

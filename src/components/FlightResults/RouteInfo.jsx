@@ -6,6 +6,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 const RouteInfo = ({ activeStep, selectedFlight }) => {
+    
     const { selectedPlan } = useSelector((s) => s.flights)
     const firstSegment = selectedPlan?.commonInfo?.segments?.[0];
     const destenationAirPortName = firstSegment
@@ -13,6 +14,7 @@ const RouteInfo = ({ activeStep, selectedFlight }) => {
         : '';
     const isLg = !useIsMobile(1024);
     const { destination, origin, date, flighttype } = useFlightRouteDetails()
+
     return (
         <section className="">
             <div className="flex">
@@ -40,7 +42,7 @@ const RouteInfo = ({ activeStep, selectedFlight }) => {
                         }
                         {flighttype === "Return" &&
                             <div className="flex justify-center items-center">
-                                <ArrowsLeftRight  size={isLg ? 30 : 20} className='text-400' />
+                                <ArrowsLeftRight size={isLg ? 30 : 20} className='text-400' />
                             </div>
                         }
                     </div>

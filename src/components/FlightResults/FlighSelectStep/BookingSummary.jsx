@@ -1,11 +1,12 @@
 'use client';
+import { setSelectedF } from '@/store/flightSlice';
 import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const BookingSummary = ({ onContinue, setSelectedFlight, selectedType }) => {
     const { flights } = useSelector((s) => s.flights);
-
+    const dispatch = useDispatch()
     return (
         <div className="flex flex-col md:flex-row-reverse justify-between items-stretch w-full gap-4">
 
@@ -39,10 +40,13 @@ const BookingSummary = ({ onContinue, setSelectedFlight, selectedType }) => {
             {/* Left: Back Button */}
             <div className="w-full md:w-auto">
                 <button
-                    onClick={() => setSelectedFlight(null)}
+                    onClick={() => {
+                        setSelectedFlight(null)
+                        dispatch(setSelectedF(null))
+                    }}
                     className="group w-full md:w-auto px-6 py-3 border border-[var(--primary-1)] text-[var(--primary-1)] hover:bg-[var(--primary-1)] hover:text-white font-semibold rounded-md inline-flex items-center justify-center gap-2 transition-all duration-200"
                 >
-                    
+
                     <CaretLeft
                         size={20}
                         weight="regular"

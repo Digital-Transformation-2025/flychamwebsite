@@ -18,7 +18,10 @@ const FlightCard = ({
     isExpanded = false,
     onDetailsClick, isConfirmed, handleSelectPlan, selectedType, activeTab, setActiveTab
 }) => {
+    const { searchParams } = useSelector((s) => s.flights)
+    const isMissingPlan = (!flight.Economy || !flight.Business)
 
+    console.log('isMissingPlan', isMissingPlan);
     const cardRef = useRef(null);
     const { isLoadingFlights } = useSelector((s) => s.flights)
     const { duration, stops, ecoFare, busFare, segments, flightType } = useFormattedFlightTimes(flight);
@@ -30,7 +33,7 @@ const FlightCard = ({
     //     return <SkeletonFlightCard />;
     // }
     return (
-        
+
         <article
             ref={cardRef}
 
@@ -105,11 +108,19 @@ const FlightCard = ({
                 <div className={`${isConfirmed ? "px-3 py-3" : "p-0"} w-full flex justify-between items-center  flex-wrap gap-4 my-2 md:my-0`}>
                     <div className="w-full flex flex-row gap-10 items-center md:items-start self-center justify-center xl:justify-end">
                         {isConfirmed ?
-                            <FareCard isConfirmed={isConfirmed} type={selectedType.type} currecny={flight?.common_info?.currency} price={selectedType.price} special={selectedType.special} isLg={isLg} />
+                            <FareCard 
+                            isMissingPlan={isMissingPlan}
+                            isConfirmed={isConfirmed} type={selectedType.type} currecny={flight?.common_info?.currency} price={selectedType.price} special={selectedType.special} isLg={isLg} />
                             :
                             <>
-                                <FareCard isConfirmed={isConfirmed} type="Economy" currecny={flight?.common_info?.currency} price={ecoFare} special={false} isLg={isLg} />
-                                <FareCard isConfirmed={isConfirmed} type="Business" currecny={flight?.common_info?.currency} price={busFare} special={false} isLg={isLg} />
+                                {searchParams.flightclass !== "C" &&
+                                    <FareCard
+                                    isMissingPlan={isMissingPlan}
+                                    isConfirmed={isConfirmed} type="Economy" currecny={flight?.common_info?.currency} price={ecoFare} special={false} isLg={isLg} />
+                                }
+                                <FareCard
+                                isMissingPlan={isMissingPlan}
+                                isConfirmed={isConfirmed} type="Business" currecny={flight?.common_info?.currency} price={busFare} special={false} isLg={isLg} />
                             </>
                         }
 
@@ -160,7 +171,7 @@ const FlightCard = ({
                         )
                     })}
                 </div>
-                {expanded && flightType === "Return" &&
+                {expanded && flightType === "Return" && !isConfirmed &&
                     <DetailsTab
                         activeTab={activeTab}
                         setActiveTab={setActiveTab}
@@ -182,7 +193,7 @@ const FlightCard = ({
                             transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
                             className="overflow-hidden w-full "
                         >
-                            <FlightDetails handleSelectPlan={handleSelectPlan} flight={flight} activeTab={activeTab} />
+                            <FlightDetails handleSelectPlan={handleSelectPlan} flight={flight} activeTab={activeTab} isConfirmed={isConfirmed} />
                         </motion.div>
                     )}
                 </AnimatePresence>

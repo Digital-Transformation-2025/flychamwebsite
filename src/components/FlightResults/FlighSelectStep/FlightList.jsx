@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import FlightCard from './FlightCard';
 import BookingSummary from './BookingSummary';
 
-const FlightList = ({ flights, onDetailsClick, handleSelectPlan, selectedFlight, setActiveStep, selectedType, setSelectedFlight,activeTab,setActiveTab }) => {
+const FlightList = ({ flights, onDetailsClick, handleSelectPlan, selectedFlight, setActiveStep, selectedType, setSelectedFlight, activeTab, setActiveTab }) => {
     const displayedCards = selectedFlight ? [selectedFlight] : flights
     const isConfirmed = Boolean(selectedFlight)
 
