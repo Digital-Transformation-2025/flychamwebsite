@@ -1,9 +1,8 @@
 'use client'
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     AirplaneTakeoff,
     AirplaneLanding,
-    ArrowsLeftRight
 } from "@phosphor-icons/react";
 import SwapIcon from "./SwapIcon";
 import AirportModal from "./AirportModal";
@@ -16,10 +15,9 @@ import FlightInfoInputs from "./FlightInfoInputs";
 import SearchFlightsButton from "./SearchFlightsButton";
 import { useFormik } from "formik";
 import MobModal from "./Modals/MobModal";
-import { Users, Calendar, X, Check, CalendarBlank } from "@phosphor-icons/react";
+import { Users, CalendarBlank } from "@phosphor-icons/react";
 import useCities from "@/hooks/useCities";
 import { useDispatch, useSelector } from "react-redux";
-import { getFlightsService } from "@/store/Services/flightServices";
 import { useRouter } from "next/navigation";
 import { setAirports, setFormikData, setPos, setSearchParams } from "@/store/flightSlice";
 import AirportList from "./AirportList";
@@ -31,7 +29,7 @@ import ModalFooter from "./widget/ModalFooter";
 import InfoBoxes from "./widget/InfoBoxes";
 import ManageTap from "./widget/Manage/ManageTap";
 const tabs = ["book", "manage", "flight status"];
-const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep }) => {
+const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onCloseMidifySearch }) => {
     const isMobile = useIsMobile()
     const dispatch = useDispatch()
     const router = useRouter()
@@ -119,7 +117,7 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep }) => 
         enableReinitialize: true, // ✅ allow reinitialization
         initialValues: {
             ...defaultValues,
-            ...(isResultsPage ? formikData : {})
+            ...(formikData ? formikData : {})
         },
         onSubmit: (values) => {
             console.log("🚀 Form Submitted", values);
@@ -160,10 +158,8 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep }) => 
                 return
             }
             router.push('/search-results');
-
-            handleResetToFirstStep()
-
-
+            // handleResetToFirstStep()
+            // onCloseMidifySearch()
         }
 
 
@@ -384,6 +380,8 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep }) => 
                         search={type === 0 ? sourceSearch : destinationSearch}
                         setSearch={isSource ? setSourceSearch : setDestinationSearch}
                         setOpenAirPortsDropdown={setOpenAirPortsDropdown}
+                        isResultsPage={isResultsPage}
+
 
                     />
                 </>
@@ -448,7 +446,8 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep }) => 
                 isMobile
                 values={formik.values}
                 handleSwitch={handleSwitch}
-
+                setOpenAirPortsDropdown={setOpenAirPortsDropdown}
+                setFieldValue={formik.setFieldValue}
             />
 
             <FlightInfoInputs formik={formik} setShowMobileModal={setShowMobileModal}
@@ -499,6 +498,8 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep }) => 
                         <MilesToggle isMobile={isMobile} />
                     </div>
                     <FromToSelector
+
+
                         setShowModal={setDesktopShowModal}
                         setShowMobileModal={setShowMobileModal}
                         cities={cities}
@@ -529,6 +530,7 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep }) => 
                                     search={sourceSearch}
                                     setSearch={setSourceSearch}
                                     setOpenAirPortsDropdown={setOpenAirPortsDropdown}
+                                    isResultsPage={isResultsPage}
                                 />
                             </>
                         }
@@ -554,6 +556,8 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep }) => 
                                     search={destinationSearch}
                                     setSearch={setDestinationSearch}
                                     setOpenAirPortsDropdown={setOpenAirPortsDropdown}
+                                    isResultsPage={isResultsPage}
+
                                 />
                             </>
                         }

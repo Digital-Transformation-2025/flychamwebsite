@@ -3,7 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import CustomCheckbox from '../Ui/CustomCheckbox';
 
-const AirportList = ({ search, setSearch, type, values, setFieldValue, isMobile, sliderRef, getCitiesArray, setOpenAirPortsDropdown }) => {
+const AirportList = ({ search, setSearch, type, values, setFieldValue, isMobile, sliderRef, getCitiesArray, setOpenAirPortsDropdown, isResultsPage }) => {
   const { airPorts } = useSelector(state => state.flights);
 
   const iataSourceCode = airPorts.items.find((item) => item.id === values.source)?.iataCode;
@@ -43,11 +43,13 @@ const AirportList = ({ search, setSearch, type, values, setFieldValue, isMobile,
       <div className="flex  flex-col md:flex-row justify-between items-start  my-2 md:my-0">
 
         <p className="text-sm font-medium text-gray-600 mb-4">Matching Airports</p>
-        <CustomCheckbox
-          checked={values.nearby}
-          onChange={() => setFieldValue("nearby", !values.nearby)}
-          label="Include nearby airports"
-        />
+        {!isResultsPage &&
+          <CustomCheckbox
+            checked={values.nearby}
+            onChange={() => setFieldValue("nearby", !values.nearby)}
+            label="Include nearby airports"
+          />
+        }
 
       </div>
       <div className="bg-gray-300 w-full h-[0.5px]">

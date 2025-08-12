@@ -19,7 +19,7 @@ const CityBox = ({ icon, label, city, airport, onClick, AirPortsComponent }) => 
   </div>
 );
 
-const FromToSelector = ({ setShowModal, setShowMobileModal, cities, values, isMobile, handleSwitch, isResultsPage, AirPortsSourceComponent, AirPortsDestenationComponent, openAirPortsDropdown, setOpenAirPortsDropdown }) => {
+const FromToSelector = ({ setFieldValue, setShowModal, setShowMobileModal, cities, values, isMobile, handleSwitch, isResultsPage, AirPortsSourceComponent, AirPortsDestenationComponent, openAirPortsDropdown, setOpenAirPortsDropdown }) => {
   const fromRef = useRef(null);
   const toRef = useRef(null);
 
@@ -38,15 +38,21 @@ const FromToSelector = ({ setShowModal, setShowMobileModal, cities, values, isMo
 
 
   const handleClickCard = (type) => {
-    if (isResultsPage) {
-      setOpenAirPortsDropdown((prev) => (prev === type ? null : type));
+    console.log('type', type);
 
-    } else if (!isResultsPage && isMobile) {
-      setShowMobileModal(true)
-    } else if (!isResultsPage && !isMobile) {
-      setShowModal(true)
+    if (isResultsPage) {
+      setOpenAirPortsDropdown(prev => prev === type ? null : type);
+      return;
     }
-  }
+
+    if (isMobile) {
+      setFieldValue("type", type === "from" ? 0 : 1);
+      setShowMobileModal(true);
+    } else {
+      setShowModal(true);
+    }
+  };
+
 
 
 

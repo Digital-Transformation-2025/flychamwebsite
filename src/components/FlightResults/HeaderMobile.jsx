@@ -6,6 +6,16 @@ import { useRouter } from 'next/navigation'
 
 const HeaderMobile = ({ handleStepBack }) => {
     const router = useRouter()
+    const ModifySearchMobile = () => {
+        router.back();
+        setTimeout(() => {
+            const searchWidget = document.getElementById('search-widget');
+            if (searchWidget) {
+                searchWidget.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 200); 
+    };
+
     return (
         <>
 
@@ -24,7 +34,7 @@ const HeaderMobile = ({ handleStepBack }) => {
 
                 <RouteInfo />
                 <span
-                    onClick={() => router.back()}
+                    onClick={ModifySearchMobile}
                     className="text-secondary-1 cursor-pointer text-sm  font-bold underline break-words">
                     Modify search
                 </span>

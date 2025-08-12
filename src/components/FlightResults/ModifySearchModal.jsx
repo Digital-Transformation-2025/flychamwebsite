@@ -12,7 +12,7 @@ const ModifySearchModal = ({ isOpen, onClose, pos, airPorts ,handleResetToFirstS
 
     return (
         <Transition appear show={isOpen} as={Fragment}>
-            <Dialog as="div" className="relative z-50" onClose={onClose}>
+            <Dialog as="div" className="relative z-50 hidden lg:block" onClose={onClose}>
                 {/* Backdrop */}
                 <Transition.Child
                     as={Fragment}
@@ -40,7 +40,9 @@ const ModifySearchModal = ({ isOpen, onClose, pos, airPorts ,handleResetToFirstS
                         <Dialog.Panel className="w-full max-w-7xl rounded-xl  p-6 text-center shadow-xl transition-all">
 
                             <div className="flex justify-center gap-4">
-                                <BookingBox pos={pos} flights={airPorts} isResultsPage  handleResetToFirstStep={handleResetToFirstStep}/>
+                                <BookingBox pos={pos} flights={airPorts} isResultsPage  handleResetToFirstStep={handleResetToFirstStep}
+                                onCloseMidifySearch = {onClose}
+                                />
 
                             </div>
                         </Dialog.Panel>

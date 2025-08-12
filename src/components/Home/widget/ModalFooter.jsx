@@ -1,8 +1,10 @@
 import Divider from '@/components/FlightResults/FlighSelectStep/Divider'
 import CustomCheckbox from '@/components/Ui/CustomCheckbox'
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 const ModalFooter = ({ values, setFieldValue, handleSubmit }) => {
+    const { isLoadingFlights } = useSelector((s) => s.flights)
     return (
         <>
             <Divider />

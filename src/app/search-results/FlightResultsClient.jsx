@@ -81,8 +81,7 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
     const handleResetToFirstStep = () => {
         setActiveStep(0)
         setSelectedFlight(null)
-        setSelectedFlight({})
-        dispatch(setSelectedPlan([]))
+        dispatch(setSelectedPlan(null))
 
     }
 
