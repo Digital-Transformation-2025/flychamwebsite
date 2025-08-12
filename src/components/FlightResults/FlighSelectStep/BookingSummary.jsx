@@ -5,7 +5,11 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 const BookingSummary = ({ onContinue, setSelectedFlight, selectedType }) => {
-    const { flights } = useSelector((s) => s.flights);
+    const { flights,selectedPlan } = useSelector((s) => s.flights);
+    const price = selectedPlan[selectedPlan.type]
+    console.log('selectedPlan',selectedPlan);
+    console.log('selectedPlan[selectedPlan.type]',selectedPlan[selectedPlan.type]);
+    
     const dispatch = useDispatch()
     return (
         <div className="flex flex-col md:flex-row-reverse justify-between items-stretch w-full gap-4">
@@ -19,7 +23,7 @@ const BookingSummary = ({ onContinue, setSelectedFlight, selectedType }) => {
                         Booking total:
                     </div>
                     <div className="text-[#3E3E3B] font-semibold text-lg sm:text-xl md:text-2xl lg:text-3xl">
-                        {flights?.[0]?.common_info?.currency} {selectedType.price}
+                        {flights?.[0]?.common_info?.currency} {selectedPlan.price}
                     </div>
                 </div>
 
