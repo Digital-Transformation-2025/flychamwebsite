@@ -15,6 +15,7 @@ import useFormattedFlightTimes from '@/hooks/useFormattedFlightTimes';
 import useIsMobile from '@/hooks/useIsMobile';
 import formatTime from '@/util/formatFlightTime';
 import LottieComponent from '@/components/Ui/LottieComponent';
+import { setFormikData, setSearchParams } from '@/store/flightSlice';
 
 const BookingConfirm = () => {
     const dispatch = useDispatch();
@@ -123,7 +124,7 @@ const BookingConfirm = () => {
         },
         {
             label: "Contact",
-            value: ("+"+ sessionInfo?.contact?.countryCode + "-" + sessionInfo?.contact?.areaCode + "-" + sessionInfo?.contact?.mobileNumber) ?? '-'
+            value: ("+" + sessionInfo?.contact?.countryCode + "-" + sessionInfo?.contact?.areaCode + "-" + sessionInfo?.contact?.mobileNumber) ?? '-'
         },
         {
             label: "Email",
@@ -141,6 +142,8 @@ const BookingConfirm = () => {
     const router = useRouter()
     const handleClickHome = () => {
         router.push("/")
+        dispatch(setSearchParams(null))
+        dispatch(setFormikData(null))
     }
     const getTaxesAndFees = (taxes = [], fees = []) => {
         const totalTaxes = taxes.reduce((sum, t) => sum + (t.amount || 0), 0);

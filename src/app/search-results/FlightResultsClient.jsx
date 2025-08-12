@@ -139,8 +139,7 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
             if (createPaymentService.fulfilled.match(action)) {
                 const { checkoutUrl, pnr } = action.payload;
                 if (pnr) dispatch(setPnr(pnr));
-                dispatch(setSearchParams({}))
-                dispatch(setFormikData({}))
+
                 // router.push("/")
                 checkoutUrl ? window.open(checkoutUrl, '_self') : console.error("Checkout URL not found");
             } else if (createPaymentService.rejected.match(action)) {
