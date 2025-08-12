@@ -6,14 +6,17 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 const RouteInfo = ({ activeStep, selectedFlight }) => {
-    
+
     const { selectedPlan } = useSelector((s) => s.flights)
-    const firstSegment = selectedPlan?.commonInfo?.segments?.[0];
-    const destenationAirPortName = firstSegment
-        ? `${firstSegment.destination_name} ${firstSegment.destination_code}`
-        : '';
+    // const firstSegment = selectedPlan?.commonInfo?.segments?.[0];
+    // const destenationAirPortName = firstSegment
+    //     ? `${firstSegment.destination_name} ${firstSegment.destination_code}`
+    //     : '';
     const isLg = !useIsMobile(1024);
+
     const { destination, origin, date, flighttype } = useFlightRouteDetails()
+    console.log('origin', origin);
+    console.log('destination', destination);
 
     return (
         <section className="">
@@ -54,8 +57,8 @@ const RouteInfo = ({ activeStep, selectedFlight }) => {
                         </h1>
                         { }
                         <p className="hidden lg:block text-primary-1 text-xs text-start font-normal">
-                            {(Boolean(selectedFlight) || activeStep > 0) ?
-                                destenationAirPortName :
+                            {(activeStep > 0) ?
+                                destination.destenationAirPortName :
                                 `${destination.destenationAirPortName} (${destination.iataCode})`
                             }
                         </p>

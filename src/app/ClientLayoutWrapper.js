@@ -35,10 +35,13 @@ import {
 import { ReduxProvider } from "@/store";
 import useBlockInspect from "@/hooks/useBlockInspect";
 import { setFormikData, setSearchParams } from "@/store/flightSlice";
+import { useSelector } from "react-redux";
 
 export default function ClientLayoutWrapper({ children }) {
   const [isOpen, setIsOpen] = useState(true)
-  useBlockInspect()
+  // const { isModifySearch } = useSelector((state) => state.flights)
+
+  // useBlockInspect()
   const pathname = usePathname()
   const isMobile = useIsMobile()
   const { t } = useTranslation();

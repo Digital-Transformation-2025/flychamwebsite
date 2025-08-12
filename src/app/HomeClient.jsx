@@ -19,7 +19,7 @@ import BookingBox from '@/components/Home/BookingBox'
 import { useDispatch, useSelector } from 'react-redux'
 import { setFormikData, setSearchParams } from '@/store/flightSlice'
 const HomeClient = ({ flights, pos }) => {
-
+  const { isModifySearch } = useSelector((s) => s.flights)
   const dispatch = useDispatch()
   const isMobile = useIsMobile(1024);
   const router = useRouter()
@@ -30,21 +30,29 @@ const HomeClient = ({ flights, pos }) => {
   const slides = [bg1, bg2, bg3];
 
   useEffect(() => {
-    dispatch(setFormikData(null))
-    dispatch(setSearchParams(null))
+    if (!isModifySearch) {
+
+      dispatch(setFormikData(null))
+      dispatch(setSearchParams(null))
+    }
   }, [])
   return (
     <div className="transition-all duration-700">
 
       {/* <ImportantAlert /> */}
-      <Hero slides={slides} title={t('sliderTitle')} subTitle={t('sliderDesc')} isNavigationBtns />
-      <div className="">
-        <div className="w-[90%] md:w-[70%] mx-auto">
+      {!isModifySearch &&
+        <Hero slides={slides} title={t('sliderTitle')} subTitle={t('sliderDesc')} isNavigationBtns />
+      }
 
-          {/* <FlightSearch isHome /> */}
+      <div className="w-[90%] md:w-[70%] mx-auto">
 
-          <BookingBox pos={pos} flights={flights} />
-        </div>
+        {/* <FlightSearch isHome /> */}
+
+        <BookingBox pos={pos} flights={flights} />
+      </div>
+      {!isModifySearch &&
+
+
         <div className='w-[90%] mx-auto px-2'>
 
 
@@ -84,10 +92,11 @@ const HomeClient = ({ flights, pos }) => {
 
           </div>
         </div>
-        {/* <div className='my-2'>
+      }
+      {/* <div className='my-2'>
               <Help />
             </div> */}
-      </div>
+
 
 
       {/* <BottomMobileMenu navItems={navItems} /> */}

@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 const useFlightRouteDetails = () => {
     const { i18n } = useTranslation();
     const { searchParams, selectedFlight } = useSelector((state) => state.flights);
+    console.log('test',Boolean({}));
+    
     // const { commonInfo } = selectedPlan
     console.log('selectedFlight', selectedFlight);
     const selectedFlightSegments = selectedFlight?.common_info?.segments ?? []
@@ -23,13 +25,12 @@ const useFlightRouteDetails = () => {
     const selectedDestenation = lastSeg
         ? {
             iataCode: (lastSeg.destination_code ?? lastSeg.origin_code) ?? "",
-            originAirPortName: (lastSeg.destination_name ?? lastSeg.origin_name) ?? "",
+            destenationAirPortName: (lastSeg.destination_name ?? lastSeg.origin_name) ?? "",
             city: (lastSeg.destination_city ?? lastSeg.origin_city) ?? "",
         }
         : null;
 
-    console.log('selectedOrigin', selectedOrigin);
-    console.log('selectedDestenation', selectedDestenation);
+
 
 
     const { origin_id, destination_id, date, date_return, flighttype } = searchParams;
@@ -66,14 +67,14 @@ const useFlightRouteDetails = () => {
 
 
     return {
-        origin: {
+        origin: Boolean(selectedOrigin) ? selectedOrigin : {
             id: origin_id,
             iataCode,
             city,
             country,
             originAirPortName: originAirPortName
         },
-        destination: {
+        destination: Boolean(selectedDestenation) ? selectedDestenation : {
             id: destination_id,
             iataCode: destIataCode,
             city: destCity,
