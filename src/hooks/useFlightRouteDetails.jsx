@@ -24,9 +24,9 @@ const useFlightRouteDetails = () => {
 
     const selectedDestenation = lastSeg
         ? {
-            iataCode: (lastSeg.destination_code ?? lastSeg.origin_code) ?? "",
-            destenationAirPortName: (lastSeg.destination_name ?? lastSeg.origin_name) ?? "",
-            city: (lastSeg.destination_city ?? lastSeg.origin_city) ?? "",
+            iataCode: (lastSeg.origin_code ?? lastSeg.origin_code) ?? "",
+            destenationAirPortName: (lastSeg.origin_name ?? lastSeg.origin_name) ?? "",
+            city: (lastSeg.origin_city ?? lastSeg.origin_city) ?? "",
         }
         : null;
 
