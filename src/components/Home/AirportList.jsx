@@ -80,8 +80,8 @@ const AirportList = ({ search, setSearch, type, values, setFieldValue, isMobile,
                   }`}
               >
                 <div>
-                  <p className="text-sm font-semibold text-gray-800">{airPortName}</p>
-                  <p className="text-xs text-gray-500 my-1 md:my-0">{`${country} ${city}`}</p>
+                  <p className="text-start text-sm font-semibold text-gray-800">{airPortName}</p>
+                  <p className= " text-start text-xs text-gray-500 my-1 md:my-0">{`${country} ${city}`}</p>
                 </div>
                 <div className="bg-main w-14 text-center  text-white text-xs p-2 rounded-md font-semibold">{iataCode}</div>
               </div>

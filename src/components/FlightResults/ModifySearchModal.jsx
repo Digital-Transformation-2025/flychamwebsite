@@ -6,9 +6,11 @@ import { useRouter } from 'next/navigation';
 import { Warning } from '@phosphor-icons/react';
 import FromToSelector from '../Home/FromToSelector';
 import BookingBox from '../Home/BookingBox';
+import useIsMobile from '@/hooks/useIsMobile';
 
-const ModifySearchModal = ({ isOpen, onClose, pos, airPorts, handleResetToFirstStep,setSelectedFlight }) => {
+const ModifySearchModal = ({ isOpen, onClose, pos, airPorts, handleResetToFirstStep, setSelectedFlight }) => {
     const router = useRouter();
+    const isMobile = useIsMobile()
 
     return (
         <Transition appear show={isOpen} as={Fragment}>
@@ -27,7 +29,7 @@ const ModifySearchModal = ({ isOpen, onClose, pos, airPorts, handleResetToFirstS
                 </Transition.Child>
 
                 {/* Centered Panel */}
-                <div className="fixed inset-0 flex justify-center p-4 items-start mt-10 md:mt-30">
+                <div className={`fixed inset-0 flex justify-center ${!isMobile && 'p-4 '} items-start mt-10 ${!isMobile && 'md:mt-30'}`}>
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"

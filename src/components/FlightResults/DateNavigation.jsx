@@ -30,14 +30,16 @@ const DateNavigation = ({ isEditFlight, handleClickDate }) => {
         </div>
       ) : (
         <div className="flex justify-between lg:justify-end w-full md:w-auto  self-center items-center gap-8 text-sm text-800">
-          <CaretLeft size={20} className="cursor-pointer text-800" />
+          <CaretLeft onClick={() => handleClickDate('prev')} size={20} className="cursor-pointer text-800" />
           <button onClick={() => handleClickDate('prev')} className="cursor-pointer flex items-center gap-2">
             Previous day
           </button>
 
           <span className="w-px h-4 bg-[var(--text-800)]" />
+          <span className='cursor-pointer' onClick={() => handleClickDate('next')}>
 
-          Next day
+            Next day
+          </span>
           <button onClick={() => handleClickDate('next')} className="cursor-pointer flex items-center gap-2">
             <CaretRight size={20} className="cursor-pointer text-800" />
           </button>

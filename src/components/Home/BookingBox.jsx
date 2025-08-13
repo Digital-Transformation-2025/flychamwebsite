@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useTransition } from "react";
 import {
     AirplaneTakeoff,
     AirplaneLanding,
@@ -87,6 +87,7 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
     const [sourceSearch, setSourceSearch] = useState("");
     const [destinationSearch, setDestinationSearch] = useState("");
     const sliderRef = useRef(null);
+    const [isNavigating, startTransition] = useTransition();
 
     const formatDate = (date) => {
         if (!(date instanceof Date)) return null;
@@ -149,6 +150,7 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
                 pos_id: 0,
                 neirby: nearby
             }
+            // const { dateEnd: formikDataDateEnd, dateStart: formikDataDateStart } = formikData
             if (tripType !== 'OneWay' && formattedReturn) {
                 data.date_return = formattedReturn;
             }
@@ -162,15 +164,16 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
             if (!dateStart || !source || !destination) {
                 return
             }
-            router.push('/search-results');
-            handleResetToFirstStep()
+            startTransition(() => {
+                router.push('/search-results');   // ← navigation wrapped in a transition
+            }); handleResetToFirstStep()
             onCloseMidifySearch()
         }
 
 
 
     });
-console.log('formik',formik.values);
+    console.log('formik', formik.values);
 
 
     const getCityString = (val, type) => {
@@ -614,6 +617,7 @@ console.log('formik',formik.values);
                         handleClick={handleClick}
                         renderStepComponent={renderStepComponent}
                         setCurrentMonth={setCurrentMonth}
+                        isNavigating={isNavigating}
                     />
 
                 </>

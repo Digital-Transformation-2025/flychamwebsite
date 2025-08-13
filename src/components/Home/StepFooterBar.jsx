@@ -8,7 +8,8 @@ const StepFooterBar = ({
   getTripDuration,
   handleStep,
   onClose,
-  formikValues
+  formikValues,
+    isNavigating
 }) => {
   const showExtras = activeTab === 3;
   const tripDuration = getTripDuration();
