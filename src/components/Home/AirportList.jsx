@@ -40,10 +40,10 @@ const AirportList = ({ search, setSearch, type, values, setFieldValue, isMobile,
 
   return (
     <div>
-      <div className="flex  flex-col md:flex-row justify-between items-start  my-2 md:my-0">
+      <div className="flex  flex-col md:flex-row justify-between items-start  my-2 mb-6 md:my-0">
 
         <p className="text-sm font-medium text-gray-600 mb-4">Matching Airports</p>
-        {!isResultsPage &&
+        {(!isResultsPage || isMobile) &&
           <CustomCheckbox
             checked={values.nearby}
             onChange={() => setFieldValue("nearby", !values.nearby)}
@@ -52,9 +52,7 @@ const AirportList = ({ search, setSearch, type, values, setFieldValue, isMobile,
         }
 
       </div>
-      <div className="bg-gray-300 w-full h-[0.5px]">
 
-      </div>
       <div
         className={`${!isMobile && 'max-h-[300px]'} overflow-y-auto pr-1`}
         style={{
@@ -78,14 +76,14 @@ const AirportList = ({ search, setSearch, type, values, setFieldValue, isMobile,
                 }}
                 // keep onClick just in case for keyboard/Touch (optional)
                 onClick={() => handleAirportSelection({ type, id })}
-                className={`flex items-center justify-between border-b border-gray-300 p-3 rounded-md transition-colors duration-150 hover:bg-[#F5F5F4] cursor-pointer ${values[type] === iataCode ? 'bg-[#E5E5E3]' : ''
+                className={`flex items-center justify-between border-b border-gray-300 p-3 transition-colors duration-150 hover:bg-[#F5F5F4] cursor-pointer ${values[type] === iataCode ? 'bg-[#E5E5E3]' : ''
                   }`}
               >
                 <div>
                   <p className="text-sm font-semibold text-gray-800">{airPortName}</p>
                   <p className="text-xs text-gray-500 my-1 md:my-0">{`${country} ${city}`}</p>
                 </div>
-                <div className="bg-main w-13  text-white text-xs px-3 py-1 rounded-md font-semibold">{iataCode}</div>
+                <div className="bg-main w-14 text-center  text-white text-xs p-2 rounded-md font-semibold">{iataCode}</div>
               </div>
             );
           })}

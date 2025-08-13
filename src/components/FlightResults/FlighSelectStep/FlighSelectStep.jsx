@@ -22,8 +22,9 @@ const FlighSelectStep = ({
   setSelectedFlight,
   handleDetailsClick,
   handleSelectPlan,
-  activeTab, setActiveTab
+  activeTab, setActiveTab, handleResetToFirstStep
 }) => {
+
   const { destination, origin } = useFlightRouteDetails()
 
   const hasFlights = flights.length > 0
@@ -50,6 +51,7 @@ const FlighSelectStep = ({
             setSelectedFlight={setSelectedFlight}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
+            handleResetToFirstStep={handleResetToFirstStep}
           />
           <Divider />
         </>
@@ -71,7 +73,7 @@ const FlighSelectStep = ({
               selectedFlight={selectedFlight}
               setActiveStep={setActiveStep}
               selectedType={selectedType}
-              setSelectedFlight={setSelectedFlight}
+              handleResetToFirstStep={handleResetToFirstStep}
               activeTab={activeTab}
               setActiveTab={setActiveTab}
             />
@@ -105,6 +107,7 @@ const FlighSelectStep = ({
             setSelectedFlight={setSelectedFlight}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
+            handleResetToFirstStep={handleResetToFirstStep}
           />
         </>
       )}

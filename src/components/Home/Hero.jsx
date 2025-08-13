@@ -5,9 +5,11 @@ import Image from 'next/image';
 
 import { useTranslation } from 'react-i18next';
 import useIsArabic from '@/hooks/useIsArabic';
+import useIsMobile from '@/hooks/useIsMobile';
 
-const Hero = ({ slides, isNavigationBtns ,title,subTitle}) => {
+const Hero = ({ slides, isNavigationBtns, title, subTitle }) => {
     const { t, i18n } = useTranslation();
+    const isMobile = useIsMobile()
     const [currentSlide, setCurrentSlide] = useState(0);
     const isArabic = useIsArabic();
     const intervalRef = useRef(null);
@@ -29,76 +31,49 @@ const Hero = ({ slides, isNavigationBtns ,title,subTitle}) => {
             style={{
                 position: 'relative',
                 width: '100%',
-                height: '600px',
+                height: isMobile ? '150px' : '600px',
                 overflow: 'hidden',
             }}
         >
             {/* Slides Wrapper */}
-            <div
-                style={{
-                    display: 'flex',
-                    width: `${slides.length * 100}vw`,
-                    transform: isArabic
-                        ? `translateX(${currentSlide * 100}vw)`  // RTL: slide right
-                        : `translateX(-${currentSlide * 100}vw)`, // LTR: slide left
-                    transition: 'transform 0.8s ease-in-out',
-                }}
-            >
-                {slides.map((image, index) => (
-                    <div
-                        key={index}
-                        style={{
-                            width: '100vw',
-                            height: '600px',
-                            flexShrink: 0,
-                            position: 'relative',
-                        }}
-                    >
-                        <Image
-                            src={image}
-                            alt={`Slide ${index + 1}`}
-                            fill
-                            style={{ objectFit: 'cover' }}
-                            priority={index === 0}
-                        />
-                    </div>
-                ))}
-            </div>
+ <div
+  className="flex transition-transform duration-[800ms] ease-in-out"
+  style={{
+    width: `${slides.length * 100}vw`,
+    transform: isArabic
+      ? `translateX(${currentSlide * 100}vw)` // RTL
+      : `translateX(-${currentSlide * 100}vw)`, // LTR
+  }}
+>
+  {slides.map((image, index) => (
+    <div
+      key={index}
+      className={`w-screen relative flex-shrink-0 ${isMobile ? 'h-[200px]' : 'h-[600px]'}`}
+    >
+      <Image
+        src={image}
+        alt={`Slide ${index + 1}`}
+        fill
+        className="object-cover"
+        priority={index === 0}
+      />
+      {/* Black overlay */}
+      <div className="absolute inset-0 bg-black/40" />
+    </div>
+  ))}
+</div>
+
 
             {/* Centered Text */}
-            <div
-                style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    textAlign: 'center',
-                    color: 'white',
-                    zIndex: 10,
-                    maxWidth: '90vw',
-                    lineHeight: '1.2',
-                }}
-            >
-                <h2
-                    style={{
-                        fontSize: 'clamp(1.5rem, 5vw, 3rem)',
-                        fontWeight: 'bold',
-                        marginBottom: '1rem',
-                        lineHeight: '1.1',
-                    }}
-                >
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-white z-10 max-w-[90vw] leading-[1.2]">
+                <h2 className="text-md sm:text-lg md:text-2xl lg:text-3xl font-bold mb-4 leading-[1.1]">
                     {title}
                 </h2>
-                <h1
-                    style={{
-                        fontSize: 'clamp(1.2rem, 4vw, 2rem)',
-                        fontWeight: 'black',
-                        lineHeight: '1.2',
-                    }}
-                >
+                <h1 className="text-sm sm:text-md md:text-xl lg:text-2xl font-black leading-[1.2]">
                     {subTitle}
                 </h1>
             </div>
+
 
             {/* Navigation Dots */}
             {isNavigationBtns &&
@@ -106,7 +81,8 @@ const Hero = ({ slides, isNavigationBtns ,title,subTitle}) => {
                 <div
                     style={{
                         position: 'absolute',
-                        bottom: '160px',
+                        bottom: isMobile ? '10px' : '160px',
+
                         left: '50%',
                         transform: 'translateX(-50%)',
                         display: 'flex',
@@ -119,8 +95,8 @@ const Hero = ({ slides, isNavigationBtns ,title,subTitle}) => {
                             key={index}
                             onClick={() => goToSlide(index)}
                             style={{
-                                width: index === currentSlide ? '40px' : '14px',
-                                height: '14px',
+                                width: index === currentSlide ? (isMobile ? '30px':'40px') :  (isMobile ? '10px':'14px'),
+                                height: isMobile ? '10px':"12px",
                                 borderRadius: '50px',
                                 backgroundColor: index === currentSlide ? '#d2c5a3' : '#fff',
                                 cursor: 'pointer',

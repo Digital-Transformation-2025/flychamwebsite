@@ -54,14 +54,14 @@ const FeatureRow = ({ index, item, isLg, infoIcon, isInfo }) => {
                     {isLg ? (
                         <div className='flex items-center justify-start gap-3'>
                             {(label === "Hand baggage" || label === "Checked baggage") &&
-                                <CheckCircle color='#34C759' size={20} weight='bold' />
+                                <CheckCircle color='#34C759' size={22} weight='bold' />
                             }
                             <span> {label === "No-Show" ? value.slice(0.7) : (value || "-")}</span>
                         </div>
 
                     ) : (
-                        <span className="flex items-center gap-2">
-                            <InfoIcon size={20} className={`text-[#000]`} />
+                        <span className="flex items-start gap-2">
+                            <InfoIcon size={22} className={`text-[#000]`} />
                             {label + ": "}
                             {value || "-"}
                         </span>
@@ -134,8 +134,6 @@ const InfoRows = ({ isHeader, isEconomy, isLg, isInfo, handleSelectPlan, col, fl
     )
 }
 const Header = ({ tag, price, title, isEconomy, isHeader, isLg, currency }) => {
-
-    console.log('currency', currency);
 
     // Don't show anything on mobile if not header
     if (!isHeader && !isLg) {

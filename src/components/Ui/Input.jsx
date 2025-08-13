@@ -25,7 +25,7 @@ const Input = ({
         value={value}
         onChange={onChange}
         aria-invalid={hasError}
-        className={`peer block w-full bg-100 rounded-lg  px-4 pt-6 pb-2 text-[16px] placeholder-transparent focus:outline-none focus:ring-0
+        className={`peer block w-full bg-100 rounded-md   px-4 pt-6 pb-2 text-[16px] placeholder-transparent focus:outline-none focus:ring-0
           ${hasError
             ? 'border border-alert text-alert focus:!border-alert'
             : 'border-gray-300 text-gray-600 focus:!border-[var(--primary-1)]'}

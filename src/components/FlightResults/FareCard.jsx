@@ -5,8 +5,7 @@ import React from 'react';
 
 const FareCard = ({ isMissingPlan, type, price, special, isLg, currecny, isConfirmed }) => {
     const isEconomy = type === 'Economy';
-    const isMobile = !useIsMobile(1100)
-    console.log('isMobile', !isMobile);
+    const isMobile = !useIsMobile(1025)
 
     const bg = isEconomy ? `${isMobile ? "bg-[rgba(var(--primary-1-rgb),0.2)]" : "bg-[rgba(var(--primary-1-rgb),0.1)]"}` : 'bg-primary-1';
     const border = isMobile && (isEconomy ? ' border border-[rgba(var(--primary-1-rgb),0.5)]' : ' border border-[var(--primary-1)]')
@@ -18,10 +17,10 @@ const FareCard = ({ isMissingPlan, type, price, special, isLg, currecny, isConfi
     const currency = currecny || '';
 
     return (
-        <div className={` ${border} rounded-xl overflow-hidden w-full lg:w-[175px] h-fit lg:h-[141px] flex flex-col`}>
+        <div className={` ${border} rounded-xl overflow-hidden w-full lg:w-[175px] h-[74px] lg:h-[141px] flex flex-col`}>
 
             {/* Header */}
-            <div className={`${bg} ${textMobile} text-[12px] lg:text-sm font-semibold ${(!isMissingPlan && !isMobile) ? 'text-start' : 'text-center'} ${isConfirmed && '!text-center'}  p-2 lg:p-1`}>
+            <div className={`${bg} font-medium lg:font-semibold ${textMobile} text-[12px] lg:text-sm  ${(!isMissingPlan && !isMobile) ? 'text-start' : 'text-center'} ${isConfirmed && '!text-center'}  p-2 lg:p-1`}>
                 {type}
             </div>
 
@@ -30,20 +29,20 @@ const FareCard = ({ isMissingPlan, type, price, special, isLg, currecny, isConfi
                 {price ? (
                     <>
                         {/* Mobile */}
-                        <div className=" block lg:hidden text-[12px]">
-                            <div className={`${textMobile} font-semibold`}>{currency}</div>
-                            <div className={`${textMobile} text-[16px]`}>{amount}</div>
+                        <div className=" flex items-center gap-1 lg:hidden text-[12px] ">
+                            <div className={`${textMobile} `}>{currency}</div>
+                            <div className={`${textMobile} font-medium text-[16px]`}>{amount}</div>
                         </div>
 
                         {/* Desktop */}
                         <div className="hidden lg:block text-[12px]">
-                            <div className={`${textDesktop} font-semibold`}>{`From ${currency}`}</div>
-                            <div className={` ${textDesktop} text-[26px]`}>{amount}</div>
+                            <div className={`text-center  !text-[#3E3E3B] `}>{`From ${currency}`}</div>
+                            <div className={`text-center   ${textDesktop} !text-[#3E3E3B] text-[26px]`}>{amount}</div>
                         </div>
                     </>
                 ) : (
                     <>
-                        <div className="text-[#5F5F5C] text-base">Not available</div>
+                        <div className={`text-[#5F5F5C] text-base text-[12px] lg:text-[14px]`}>Not available</div>
                         {special && <div className="text-[#8E6B17] text-xs mt-1">Special deal</div>}
                     </>
                 )}

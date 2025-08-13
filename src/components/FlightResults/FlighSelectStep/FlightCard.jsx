@@ -21,7 +21,6 @@ const FlightCard = ({
     const { searchParams } = useSelector((s) => s.flights)
     const isMissingPlan = (!flight.Economy || !flight.Business)
 
-    console.log('isMissingPlan', isMissingPlan);
     const cardRef = useRef(null);
     const { isLoadingFlights } = useSelector((s) => s.flights)
     const { duration, stops, ecoFare, busFare, segments, flightType } = useFormattedFlightTimes(flight);
@@ -106,7 +105,7 @@ const FlightCard = ({
                     </button>
                 </div>
                 <div className={`${isConfirmed ? "px-3 py-3" : "p-0"} w-full flex justify-between items-center  flex-wrap gap-4 my-2 md:my-0`}>
-                    <div className="w-full flex flex-row gap-10 items-center md:items-start self-center justify-center xl:justify-end">
+                    <div className="w-full flex flex-row gap-4 lg:gap-10 items-center md:items-start self-center justify-center xl:justify-end">
                         {isConfirmed ?
                             <FareCard 
                             isMissingPlan={isMissingPlan}

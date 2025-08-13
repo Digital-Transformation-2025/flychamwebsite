@@ -1,5 +1,6 @@
 'use client'
 import { X } from "@phosphor-icons/react";
+import { MagnifyingGlass } from "@phosphor-icons/react/dist/ssr";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -17,13 +18,15 @@ const SearchInput = ({ search, placeholder, handleSearch, type, values, airPorts
     inputRef.current?.focus();
 
     // Auto-select text when a value exists
-    if (search &&  values?.[type]) {
+    if (search && values?.[type]) {
       inputRef.current?.select();
     }
   }, [search]);
   return (
     <div className="rounded-t-2xl py-6">
+
       <div className="flex items-center border-b border-gray-300">
+ 
         <input
           ref={inputRef}
           type="text"

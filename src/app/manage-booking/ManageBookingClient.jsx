@@ -43,7 +43,6 @@ const ManageBookingClient = () => {
             // call your API here if needed
             // await api.updateContact(values)
             setShowContactModal(false);
-            console.log('✅ Saved', values);
         },
     });
 

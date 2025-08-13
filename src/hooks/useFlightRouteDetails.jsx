@@ -6,14 +6,13 @@ import { useSelector } from "react-redux";
 const useFlightRouteDetails = () => {
     const { i18n } = useTranslation();
     const { searchParams, selectedFlight } = useSelector((state) => state.flights);
-    console.log('test',Boolean({}));
-    
+
     // const { commonInfo } = selectedPlan
-    console.log('selectedFlight', selectedFlight);
     const selectedFlightSegments = selectedFlight?.common_info?.segments ?? []
     const firstSeg = selectedFlightSegments[0] || null;
     const lastSeg = selectedFlightSegments.length ? selectedFlightSegments[selectedFlightSegments.length - 1] : null;
-    // Prefer destination_* on last segment; fallback to origin_* if your API lacks destination fields
+
+    
     const selectedOrigin = firstSeg
         ? {
             iataCode: firstSeg.origin_code ?? "",
@@ -22,14 +21,13 @@ const useFlightRouteDetails = () => {
         }
         : null;
 
-    const selectedDestenation = lastSeg
+    const selectedDestenation = firstSeg
         ? {
-            iataCode: (lastSeg.origin_code ?? lastSeg.origin_code) ?? "",
-            destenationAirPortName: (lastSeg.origin_name ?? lastSeg.origin_name) ?? "",
-            city: (lastSeg.origin_city ?? lastSeg.origin_city) ?? "",
+            iataCode: (firstSeg.destination_code ?? firstSeg.destination_code) ?? "",
+            destenationAirPortName: (firstSeg.destination_name ?? firstSeg.destination_name) ?? "",
+            city: (firstSeg.destination_city ?? firstSeg.destination_city) ?? "",
         }
         : null;
-
 
 
 

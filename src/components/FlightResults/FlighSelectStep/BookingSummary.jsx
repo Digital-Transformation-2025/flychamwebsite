@@ -4,12 +4,11 @@ import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-const BookingSummary = ({ onContinue, setSelectedFlight, selectedType }) => {
-    const { flights,selectedPlan } = useSelector((s) => s.flights);
+const BookingSummary = ({ onContinue, handleResetToFirstStep, selectedType }) => {
+    const { flights, selectedPlan } = useSelector((s) => s.flights);
     const price = selectedPlan[selectedPlan.type]
-    console.log('selectedPlan',selectedPlan);
-    console.log('selectedPlan[selectedPlan.type]',selectedPlan[selectedPlan.type]);
-    
+
+
     const dispatch = useDispatch()
     return (
         <div className="flex flex-col md:flex-row-reverse justify-between items-stretch w-full gap-4">
@@ -44,10 +43,7 @@ const BookingSummary = ({ onContinue, setSelectedFlight, selectedType }) => {
             {/* Left: Back Button */}
             <div className="w-full md:w-auto">
                 <button
-                    onClick={() => {
-                        setSelectedFlight(null)
-                        dispatch(setSelectedF(null))
-                    }}
+                    onClick={handleResetToFirstStep}
                     className="group w-full md:w-auto px-6 py-3 border border-[var(--primary-1)] text-[var(--primary-1)] hover:bg-[var(--primary-1)] hover:text-white font-semibold rounded-md inline-flex items-center justify-center gap-2 transition-all duration-200"
                 >
 

@@ -11,6 +11,7 @@ import SearchInput from "../SearchInput";
 import AirportList from "../AirportList";
 import Guests from "../Guests";
 import Dates from "../widget/Dates/Dates";
+import { CaretLeft } from "@phosphor-icons/react/dist/ssr";
 
 const MobModal = ({ handleReset, isOpen, onClose,
     formik, stepsData, activeTab, handleClick, sliderRef,
@@ -34,6 +35,26 @@ const MobModal = ({ handleReset, isOpen, onClose,
     const isRenderReset = (
         (tripType === "Return" ? (dateStart && dateEnd) : dateStart)
     )
+
+    const ActionFooter = ({ onClick, label, disabled, showReset, onReset }) => (
+        <div className="flex flex-col  justify-center items-center gap-3 px-4 py-8 border-t border-gray-200">
+            <button
+                disabled={disabled}
+                onClick={onClick}
+                className="flex w-full h-[56px] px-[10px] py-[10px] justify-center items-center gap-[10px] 
+        flex-shrink-0 rounded-[8px] bg-secondary text-white font-semibold text-[16px] disabled:opacity-50"
+            >
+                {label}
+            </button>
+            <span
+                onClick={onReset}
+                className={`text-primary-1 font-semibold text-[16px] mt-2 ${showReset ? "visible" : "invisible"}`}
+            >
+                Reset
+            </span>
+        </div>
+    );
+
 
     return (
         <Transition appear show={isOpen} as={Fragment}>
@@ -63,32 +84,30 @@ const MobModal = ({ handleReset, isOpen, onClose,
                         leaveTo="translate-y-full"
                     >
                         <Dialog.Panel className="w-full h-full bg-white shadow-xl flex flex-col">
-                            <div className="px-3 flex items-center justify-between h-16  shadow-md bg-[#F1F1F1]">
+                            <div className="px-5 flex items-center justify-between h-20  shadow-md bg-[#F1F1F1]">
                                 {/* Left Arrow (like IconButton edge="start") */}
                                 {type !== 0 &&
                                     <button
                                         className="text-[var(--Primary-1,#054E72)]"
                                         onClick={handleStepBack}
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none">
-                                            <path d="M13 4 7 10l6 6" stroke="currentColor" strokeWidth="2" />
-                                        </svg>
+                                        <CaretLeft size={24} className="" />
                                     </button>
                                 }
 
 
 
                                 {/* Title (like Typography with sx={{ ml: 2, flex: 1 }}) */}
-                                <h2 className="text-[20px] font-semibold font-[Montserrat] not-italic text-[var(--Primary-1,#054E72)] mx-auto">
+                                <h2 className="text-[20px] font-semibold  not-italic text-[var(--Primary-1,#054E72)] mx-auto">
                                     {stepsData[activeTab].title}
                                 </h2>
 
                                 {/* Close Button (like IconButton edge="end") */}
                                 <button
                                     onClick={onClose}
-                                    className="text-[var(--Primary-1,#054E72)]"
+                                    className=" text-[var(--Primary-1,#054E72)]"
                                 >
-                                    <X size={20} />
+                                    <X size={24} className="" />
                                 </button>
                             </div>
 
@@ -97,52 +116,31 @@ const MobModal = ({ handleReset, isOpen, onClose,
                             {/* Body */}
                             <div className="flex-1 overflow-y-auto p-4">{
                                 <>
-                                    {/* <div className="flex gap-1 justify-between overflow-x-auto px-1">
-                                        {stepsData.map((step, idx) => (
-                                            <div key={idx} className="flex items-center gap-2 cursor-pointer" onClick={() => handleClick(step.id)}>
-                                                <StepItem
-                                                    {...step}
-                                                    isCompleted={step.id < activeTab}
-                                                    isActive={step.id === activeTab}
-                                                />
-
-
-                                            </div>
-                                        ))}
-                                    </div> */}
-
-
                                     {renderStepComponent()}
                                 </>
                             }
                             </div>
-                            {(activeTab === 2) && (
-                                <div className="p-4 border-t border-gray-200">
-                                    <button onClick={() => handleClick(3)} className="cursor-pointer w-full py-3 text-white rounded-md bg-secondary font-semibold text-sm">
-                                        Next
-                                    </button>
-                                </div>
-                            )}
-                            {(activeTab === 3) && (
-                                <div className="flex flex-col justify-center items-center gap-2 px-9 py-6 border-t border-gray-200">
-                                    <button
-                                        disabled={!canWeFly}
-                                        onClick={onClose}
-                                        className="flex w-[344px] h-[56px] px-[10px] py-[10px] justify-center items-center gap-[10px] 
-                flex-shrink-0 rounded-[8px] bg-secondary text-white font-semibold text-sm"
-                                    >
-                                        Continue
-                                    </button>
 
-                                    {/* ✅ Always render, but toggle visibility */}
-                                    <span
-                                        onClick={handleReset}
-                                        className={`text-main ${isRenderReset ? 'visible' : 'invisible'}`}
-                                    >
-                                        Reset
-                                    </span>
-                                </div>
+                            {activeTab === 2 && (
+                                <ActionFooter
+                                    onClick={() => handleClick(3)}
+                                    label="Next"
+                                    disabled={false}
+                                    showReset={false}
+                                    onReset={handleReset}
+                                />
                             )}
+
+                            {activeTab === 3 && (
+                                <ActionFooter
+                                    onClick={onClose}
+                                    label="Continue"
+                                    disabled={!canWeFly}
+                                    showReset={isRenderReset}
+                                    onReset={handleReset}
+                                />
+                            )}
+
 
 
                         </Dialog.Panel>

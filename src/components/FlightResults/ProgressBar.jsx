@@ -1,24 +1,29 @@
 'use client'
 import useIsMobile from '@/hooks/useIsMobile';
+import { Check } from '@phosphor-icons/react/dist/ssr';
 import React from 'react';
 
 const ProgressBar = ({ steps, activeStep }) => {
   const isLg = !useIsMobile(1024);
   const isMb = useIsMobile(1024)
+  const INACTIVE_GAP_X = 'mx-8';
   // Calculate percentage for blue progress
   const completedPercentage = ((activeStep + 1) / steps.length) * ((activeStep === 0 && isMb) ? 150 : 100);
+  // update getWidth to make active bg full-width on mobile
   const getWidth = () => {
+    // if (isMb) return '100%'; // mobile: fill the whole bar
     switch (activeStep) {
       case 0:
-        return `calc(${completedPercentage}% )`; // No overlap for first step
+        return `calc(${completedPercentage}% )`;
       case 1:
-        return `calc(${completedPercentage}% - 15px)`; // Small overlap for step 2
+        return `calc(${completedPercentage}% - 15px)`;
       case 2:
-        return `calc(${completedPercentage}%`; // Bigger overlap for step 3
+        return `calc(${completedPercentage}%`;
       default:
-        return `calc(${completedPercentage}% + 30px)`; // fallback for others
+        return `calc(${completedPercentage}% + 30px)`;
     }
   };
+
 
   return (
     <div className="relative w-full h-[66px] overflow-hidden">
@@ -46,17 +51,16 @@ const ProgressBar = ({ steps, activeStep }) => {
       {/* ⚪ Step Items */}
       <div className="relative z-10 flex justify-between items-center h-full px-4 md:px-10">
         {steps.map((step, index) => {
-          const isCompleted = index <= activeStep;
+          const isCompleted = index < activeStep;
           const isActive = index === activeStep;
 
-          const stepColor = isCompleted ? 'text-white' : 'text-400';
-          const borderColor = isCompleted ? 'border-white' : 'border-[var(--text-400)]';
+          const stepColor = isCompleted ? `text-white ` : `text-400 ${isActive && '!text-white'}`;
 
           // 📱 On mobile, active step wider
           const flexClasses = isLg
-            ? 'flex-row gap-2 flex-1'
+            ? 'flex-row gap-2 flex-3'
             : isActive
-              ? 'flex-[3] flex-row gap-1'
+              ? 'flex-[3] flex-row gap-3'
               : 'flex-[0.5] flex-col items-center';
 
           // Label logic
@@ -64,10 +68,10 @@ const ProgressBar = ({ steps, activeStep }) => {
             if (isLg) {
               return <span className={`text-sm font-medium ${stepColor}`}>{step.label}</span>;
             }
+
             if (isActive) {
               return (
-
-                <span className={`text-sm font-medium text-white `}>{step.label}</span>
+                <span className={`text-sm font-medium text-white`}>{step.label}</span>
               );
             }
             return null;
@@ -76,14 +80,22 @@ const ProgressBar = ({ steps, activeStep }) => {
           return (
             <div
               key={index}
-              className={`flex items-center ${flexClasses} transition-all duration-300`}
+              // update wrapper div className
+              className={`flex items-center ${flexClasses} transition-all duration-300 ${(index > activeStep && !isLg) ? INACTIVE_GAP_X : ''}`}
             >
               {/* Circle */}
               <div
-                className={`w-[26px] h-[26px] flex items-center justify-center rounded-full border ${borderColor} text-xs ${stepColor}`}
+                className={`w-[26px] h-[26px] flex items-center justify-center rounded-full border text-xs 
+    ${isCompleted
+                    ? 'bg-white text-[var(--primary-1)] border-white'
+                    : 'bg-transparent text-[var(--text-400)] border-[var(--text-400)]'
+                  }
+                  ${(!isCompleted && isActive && 'bg-transparent text-white border-white')}
+  `}
               >
-                {index + 1}
+                {isCompleted ? <Check size={16} weight="bold" /> : index + 1}
               </div>
+
 
               {/* Label */}
               {renderLabel()}

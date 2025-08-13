@@ -47,7 +47,7 @@ export default function CustomDropdown({
       <button
         type="button"
         onClick={toggleDropdown}
-        className={`w-full px-4 py-3 rounded-lg text-left  hover:cursor-pointer  relative ${error ? 'border border-alert' : 'border-gray-300'}`}
+        className={`w-full px-4 py-3 rounded-md text-left  hover:cursor-pointer  relative ${error ? 'border border-alert' : 'border-gray-300'}`}
       >
         <span className={`text-[16px]  ${error ? 'text-alert' : 'text-600'}`}>
           {selected
@@ -70,7 +70,7 @@ export default function CustomDropdown({
       </button>
 
       {isOpen && (
-        <div className="absolute w-full mt-1 bg-100 rounded z-100  max-h-72 overflow-auto">
+        <div className="absolute w-full mt-1 bg-100 rounded-md  z-100  max-h-72 overflow-auto">
           {type === "countries" &&
             <input
               ref={inputRef} // ⬅️ attach ref here

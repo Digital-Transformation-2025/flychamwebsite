@@ -84,7 +84,6 @@ const TabButton = ({ leg, isActive, onClick }) => (
 
 const PassengerCard = ({ passenger }) => {
     const [tab, setTab] = useState(0);
-    console.log('tab', tab);
 
     const icons = {
         hand: Briefcase,

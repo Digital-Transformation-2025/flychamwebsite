@@ -19,7 +19,7 @@ import { Users, CalendarBlank } from "@phosphor-icons/react";
 import useCities from "@/hooks/useCities";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import { setAirports, setFormikData, setPos, setSearchParams } from "@/store/flightSlice";
+import { setAirports, setFormikData, setPos, setSearchParams, setSelectedF } from "@/store/flightSlice";
 import AirportList from "./AirportList";
 import Guests from "./Guests";
 import Dates from "./widget/Dates/Dates";
@@ -29,7 +29,7 @@ import ModalFooter from "./widget/ModalFooter";
 import InfoBoxes from "./widget/InfoBoxes";
 import ManageTap from "./widget/Manage/ManageTap";
 const tabs = ["book", "manage", "flight status"];
-const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onCloseMidifySearch }) => {
+const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onCloseMidifySearch, setSelectedFlight }) => {
     const isMobile = useIsMobile()
     const dispatch = useDispatch()
     const router = useRouter()
@@ -120,7 +120,7 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
             ...(formikData ? formikData : {})
         },
         onSubmit: (values) => {
-            console.log("🚀 Form Submitted", values);
+
 
             const {
                 cabinClass,
@@ -154,6 +154,11 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
             }
             dispatch(setSearchParams(data))
             dispatch(setFormikData(values))
+            dispatch(setSelectedF(null))
+            if (setSelectedFlight) {
+
+                setSelectedFlight(null)
+            }
             if (!dateStart || !source || !destination) {
                 return
             }
@@ -165,7 +170,7 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
 
 
     });
-    console.log('formik', formik.values);
+console.log('formik',formik.values);
 
 
     const getCityString = (val, type) => {
@@ -261,7 +266,6 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
         setMinMonth(new Date())
     };
     const handleDateSelect = (value) => {
-        console.log('value', value);
         const tripType = formik.values.tripType;
 
         if (tripType === 'OneWay') {
@@ -364,7 +368,9 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
                         search={type === 0 ? sourceSearch : destinationSearch}
                         handleSearch={handleSearch}
                         onClose={onClose}
-                        placeholder={type === 0 ? "Search for airport or city" : "To"}
+                        placeholder={type === 0 ?
+                            "Search for airport or city"
+                            : "To"}
                         type={type === 0 ? "source" : "destination"}
                         values={formik.values}
                         airPorts={airPorts.items}
@@ -424,15 +430,20 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
 
 
     const MobileView = () => (
-        <div id="search-widget" className="  w-full">
-            <TabNavigation
-                tabs={tabs}
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-                isMobile={false}
-                formik={formik}
+        <div id="search-widget" className={`${isResultsPage && 'rounded-sm bg-white p-6'}   w-full`}>
+            {!isResultsPage &&
+                <TabNavigation
+                    tabs={tabs}
+                    activeTab={activeTab}
+                    setActiveTab={setActiveTab}
+                    isMobile={isMobile}
+                    formik={formik}
 
-            />
+                />
+            }
+            {isResultsPage && (
+                <ModalTitle onCloseMidifySearch={onCloseMidifySearch} />
+            )}
             <TripTypeSelector values={formik.values}
                 setFieldValue={formik.setFieldValue}
                 handleReset={handleReset}
@@ -453,24 +464,20 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
             <FlightInfoInputs formik={formik} setShowMobileModal={setShowMobileModal}
             />
             <SearchFlightsButton handleSubmit={formik.handleSubmit} values={formik.values} />
-            <MilesToggle
-                isMobile={isMobile}
-                miles={formik.values.miles}
-                setFieldValue={formik.setFieldValue}
+            {!isResultsPage &&
 
-            />
+                <MilesToggle
+                    isMobile={isMobile}
+                    miles={formik.values.miles}
+                    setFieldValue={formik.setFieldValue}
 
-
-
+                />
+            }
         </div>
     );
     const DesktopView = () => (
 
-        <div id="search-widget" className={`bg-white rounded-2xl shadow-md p-6 w-full max-w-5xl mx-auto mt-[-130px] relative z-20 ${!isResultsPage &&'h-[291px]'}`}>
-
-
-
-
+        <div id="search-widget" className={`bg-white rounded-2xl shadow-md p-6 w-full max-w-5xl mx-auto mt-[-130px] relative z-20 ${!isResultsPage && 'h-[291px]'}`}>
             {!isResultsPage &&
                 <TabNavigation
                     tabs={tabs}
@@ -549,7 +556,6 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
                                     type={"destination"}
                                     values={formik.values}
                                     setFieldValue={formik.setFieldValue}
-
                                     getCitiesArray={getCitiesArray}
                                     isMobile={isMobile}
                                     sliderRef={sliderRef}

@@ -20,7 +20,6 @@ const ManageTap = () => {
                 .required('Last name is required'),
         }),
         onSubmit: (values) => {
-            console.log("Search:", values);
             // Simulate "not found"
             setModalOpen(true);
         },

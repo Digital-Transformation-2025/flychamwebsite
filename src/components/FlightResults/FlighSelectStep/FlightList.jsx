@@ -3,9 +3,12 @@ import React, { useState } from 'react';
 import FlightCard from './FlightCard';
 import BookingSummary from './BookingSummary';
 
-const FlightList = ({ flights, onDetailsClick, handleSelectPlan, selectedFlight, setActiveStep, selectedType, setSelectedFlight, activeTab, setActiveTab }) => {
+const FlightList = ({ flights, onDetailsClick, handleSelectPlan, selectedFlight, setActiveStep, selectedType, handleResetToFirstStep, activeTab, setActiveTab }) => {
     const displayedCards = selectedFlight ? [selectedFlight] : flights
     const isConfirmed = Boolean(selectedFlight)
+
+
+
 
     return (
         <div className="grid gap-6 my-5 justify-center sm:justify-stretch">
@@ -25,7 +28,11 @@ const FlightList = ({ flights, onDetailsClick, handleSelectPlan, selectedFlight,
                     setActiveTab={setActiveTab}
                 />
             ))}
-            {isConfirmed && <BookingSummary selectedType={selectedType} totalAmount={900} onContinue={() => setActiveStep(1)} setSelectedFlight={setSelectedFlight} />}
+            {isConfirmed && <BookingSummary
+                selectedType={selectedType}
+                handleResetToFirstStep={handleResetToFirstStep}
+                onContinue={() => setActiveStep(1)}
+            />}
 
         </div>
     );

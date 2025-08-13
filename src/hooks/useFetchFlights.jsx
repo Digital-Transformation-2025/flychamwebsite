@@ -6,17 +6,20 @@ import { getFlightsService } from "@/store/Services/flightServices";
 const useFetchFlights = (setLocalLoading, setIsPageLoaded) => {
     const dispatch = useDispatch();
     const router = useRouter();
-    const isFirstLoad = useRef(true); // ✅ Track first load only
+    const isFirstLoad = useRef(true);
 
     const { searchParams } = useSelector((state) => state.flights);
 
     useEffect(() => {
         const { origin_id, destination_id, date } = searchParams || {};
+        console.log('origin_id', origin_id);
+        console.log('destination_id', destination_id);
+        console.log('date', date);
 
-        if (!origin_id || !destination_id || !date) {
-            router.push("/");
-            return;
-        }
+        // if (!origin_id || !destination_id || !date) {
+        //     router.push("/");
+        //     return;
+        // }
 
         // ✅ Show loader only on first load
         if (isFirstLoad.current) {

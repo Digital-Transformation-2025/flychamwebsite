@@ -76,13 +76,16 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
     };
     const handleStepBack = () => {
         // Make sure we don't go below step 0
+        if (activeStep === 0 && Boolean(selectedFlight)) {
+            handleResetToFirstStep()
+        }
         setActiveStep((prevStep) => Math.max(prevStep - 1, 0));
     };
     const handleResetToFirstStep = () => {
         setActiveStep(0)
         setSelectedFlight(null)
         dispatch(setSelectedPlan(null))
-
+        dispatch(setSelectedF())
     }
 
 
@@ -275,7 +278,6 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                 })),
 
             };
-            console.log('values', values);
 
             const hasEmptyFields =
                 !data.title ||
@@ -292,8 +294,6 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                         !p.surname ||
                         !p.nameTitle
                 );
-            console.log('data', data);
-            console.log('hasEmptyFields', hasEmptyFields);
 
             if (hasEmptyFields) {
                 console.warn('Missing required fields. Submission blocked.');
@@ -318,7 +318,9 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
 
     });
 
-
+    useEffect(() => {
+        handleResetToFirstStep()
+    }, [])
 
 
     const steps = [
@@ -341,6 +343,7 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                 handleClickDate={handleClickDate}
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
+                handleResetToFirstStep={handleResetToFirstStep}
             />
         },
         {
@@ -426,7 +429,7 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
 
     const routeInfoSection = (
         <Section>
-            <RouteInfo activeStep={activeStep} selectedFlight={selectedFlight} />
+            <RouteInfo activeStep={activeStep} />
         </Section>
     );
 
@@ -449,8 +452,8 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
     );
 
     const HeaderBarMobile = () => (
-        <div className=" px-3 flex items-center justify-between h-16 shadow-md bg-[#F1F1F1]">
-            <HeaderMobile handleStepBack={handleStepBack} />
+        <div className=" px-3 flex items-center justify-between h-25 shadow-md bg-[#F1F1F1]">
+            <HeaderMobile handleStepBack={handleStepBack} handleOpenModifySearch={handleOpenModifySearch} />
         </div>
     );
     const pageLoding = (isLoadingFlights || localLoading) && isPageLoaded
@@ -471,13 +474,16 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                         <Divider />
 
                     </div>
-                    <div className="lg:hidden  w-full ">
+                    {/*===== Mobile==== */}
+                    <div className="lg:hidden">
                         <HeaderBarMobile />
+                    </div>
+                    <div className="lg:hidden  w-[90%] mx-auto ">
                         {progressBarSection}
                         {dateNavigationSection}
                         {posNoticeSection}
                     </div>
-
+                    {/* ================== */}
                     <main className="w-[95%] md:w-[70%] mx-auto px-2">
                         {noResultsSection}
                         {(isLoadingFlights && !isPageLoaded) ? <SkeletonFlightCard /> : steps[activeStep].content}
@@ -507,6 +513,7 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                 airPorts={airPorts}
                 pos={pos}
                 handleResetToFirstStep={handleResetToFirstStep}
+                setSelectedFlight={setSelectedFlight}
 
             />
             <PosSelectorModal handleSelectPos={handleSelectPos} isOpen={showPosModal} setIsOpen={setShowPosModal} />

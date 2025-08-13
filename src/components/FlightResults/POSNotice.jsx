@@ -63,9 +63,15 @@ const POSNotice = ({ setShowNotice, setShowPosModal }) => {
   return (
     <div className="relative bg-100 rounded-xl p-4 flex flex-col sm:flex-row sm:items-start sm:justify-between text-sm gap-2 sm:gap-4">
       <div className="flex-1">
-        <p className="xs:text-xs sm:text-sm md:text-md lg:text-lg font-semibold text-primary-900 mb-1">
+        {/* title line — add padding-right on md+ to prevent overlap */}
+        <p
+          className="xs:text-xs sm:text-sm md:text-md lg:text-lg font-semibold text-primary-900 mb-1 md:pr-8 
+             max-w-[80%] sm:max-w-full break-words"
+        >
           {`You have been redirected to the ${region} point of sale`}
         </p>
+
+
 
         <p className="leading-relaxed xs:text-xs sm:text-xs md:text-sm lg:text-md text-600">
           {/* ✅ Mobile logic for short/expanded text */}
@@ -84,7 +90,7 @@ const POSNotice = ({ setShowNotice, setShowPosModal }) => {
       {/* Close Button */}
       <button
         onClick={() => setShowNotice?.(false)}
-        className="absolute top-2 right-2 cursor-pointer self-start sm:self-auto text-800 hover:text-700 xs:text-xs sm:text-xs md:text-sm lg:text-md"
+        className="absolute top-4  right-5 md:top-3 md:right-4 cursor-pointer self-start sm:self-auto text-800 hover:text-700 xs:text-xs sm:text-xs md:text-sm lg:text-md"
         aria-label="Close notice"
       >
         <X size={16} />

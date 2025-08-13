@@ -12,7 +12,6 @@ import CustomDayContent from './CustomDayContent';
 
 const Dates = ({ formik,selected, handleDateSelect, currentMonth, setCurrentMonth, minMonth, setMinMonth, handleReset, isResultsPage }) => {
     const [shouldAnimateMonth, setShouldAnimateMonth] = useState(false);
-    console.log('selected', selected);
 
     const isMobile = useIsMobile('768');
     const isArabic = useIsArabic();

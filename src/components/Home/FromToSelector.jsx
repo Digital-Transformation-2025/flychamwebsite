@@ -38,7 +38,6 @@ const FromToSelector = ({ setFieldValue, setShowModal, setShowMobileModal, citie
 
 
   const handleClickCard = (type) => {
-    console.log('type', type);
 
     if (isResultsPage) {
       setOpenAirPortsDropdown(prev => prev === type ? null : type);

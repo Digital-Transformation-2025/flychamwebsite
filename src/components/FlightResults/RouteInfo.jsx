@@ -5,18 +5,12 @@ import { ArrowLeft, ArrowRight, ArrowsLeftRight } from '@phosphor-icons/react';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-const RouteInfo = ({ activeStep, selectedFlight }) => {
-
-    const { selectedPlan } = useSelector((s) => s.flights)
-    // const firstSegment = selectedPlan?.commonInfo?.segments?.[0];
-    // const destenationAirPortName = firstSegment
-    //     ? `${firstSegment.destination_name} ${firstSegment.destination_code}`
-    //     : '';
+const RouteInfo = ({ isMobileHeader }) => {
     const isLg = !useIsMobile(1024);
 
     const { destination, origin, date, flighttype } = useFlightRouteDetails()
-    console.log('origin', origin);
-    console.log('destination', destination);
+    const iconColor = isMobileHeader ? ' text-primary-1' : 'text-400'
+    console.log('destinationdestination.iataCode', destination);
 
     return (
         <section className="">
@@ -40,12 +34,12 @@ const RouteInfo = ({ activeStep, selectedFlight }) => {
                     <div className="flex flex-col item-center">
                         {flighttype === "OneWay" &&
                             <div className="flex justify-center items-center">
-                                <ArrowRight size={isLg ? 30 : 20} className='text-400' />
+                                <ArrowRight size={isLg ? 30 : 20} className={iconColor} />
                             </div>
                         }
                         {flighttype === "Return" &&
                             <div className="flex justify-center items-center">
-                                <ArrowsLeftRight size={isLg ? 30 : 20} className='text-400' />
+                                <ArrowsLeftRight size={isLg ? 30 : 20} className={iconColor} />
                             </div>
                         }
                     </div>
@@ -57,10 +51,7 @@ const RouteInfo = ({ activeStep, selectedFlight }) => {
                         </h1>
                         { }
                         <p className="hidden lg:block text-primary-1 text-xs text-start font-normal">
-                            {(activeStep > 0) ?
-                                destination.destenationAirPortName :
-                                `${destination.destenationAirPortName} (${destination.iataCode})`
-                            }
+                            {destination.destenationAirPortName} ({destination.iataCode})
                         </p>
                     </div>
                 </div>

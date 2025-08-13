@@ -8,7 +8,6 @@ const SummaryMobileBox = ({ selectedFlight, selectedType }) => {
     const { selectedPlan } = useSelector((s) => s.flights)
     const [isModalOpen, setIsModalOpen] = useState(false);
     const modalRef = useRef(null);
-    console.log('selectedPlan', selectedPlan);
 
     const { duration, stops, ecoFare, busFare, segments, flightType } = useFormattedFlightTimes(selectedFlight);
 
@@ -33,17 +32,17 @@ const SummaryMobileBox = ({ selectedFlight, selectedType }) => {
         <>
             {/* Sticky Summary Footer */}
             <div className="w-full block lg:hidden sticky bottom-0 z-50 bg-100 rounded-t-xl px-5 py-4 shadow-[0_-2px_6px_rgba(0,0,0,0.1)]">
-                <div className="text-[14px] text-primary-1 font-semibold ">
+                <div className="text-md text-primary-1 font-semibold ">
                     Price summary
                 </div>
                 <div className="flex justify-between my-4">
                     <div className="flex gap-1">
-                        <div className="text-[12px] text-primary-1 font-medium ">{selectedPlan?.currency}</div>
-                        <div className="text-[13px] text-primary-1 font-bold ">{selectedPlan?.price}</div>
+                        <div className="text-sm text-primary-1 font-medium ">{selectedPlan?.currency}</div>
+                        <div className="text-md  text-primary-1 font-bold ">{selectedPlan?.price}</div>
                     </div>
                     <div
                         onClick={() => setIsModalOpen(true)}
-                        className="text-[12px] text-primary-1 font-medium underline cursor-pointer"
+                        className="text-sm  text-primary-1 font-medium underline cursor-pointer"
                     >
                         View full details
                     </div>

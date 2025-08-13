@@ -2,7 +2,6 @@
 import React from 'react';
 
 const CustomCheckbox = ({ checked, onChange, label, error }) => {
-    console.log('error', error)
 
     return (
 

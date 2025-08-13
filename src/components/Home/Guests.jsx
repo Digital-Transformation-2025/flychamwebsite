@@ -45,8 +45,8 @@ const Guests = ({ formik, values, isMobile, isResultsPage }) => {
         <div className={`flex flex-col md:flex-row justify-between gap-12 px-2  ${isResultsPage ? 'md:px-2 py-2' : 'md:px-8 py-6'}   bg-white rounded-2xl`}>
             {/* Guests Section */}
             <div className="flex-1">
-                <div className="flex justify-between items-center ">
-                    <h3 className="text-[16px] mb-4">Guests</h3>
+                <div className="flex justify-between items-center mb-5">
+                    <h3 className="text-[16px] ">Guests</h3>
                     {isMobile && (
                         <div className="flex items-center gap-3">
                             {CLASS_OPTIONS.map((option) => (
@@ -93,12 +93,13 @@ const Guests = ({ formik, values, isMobile, isResultsPage }) => {
                                         handleGuestChange(key, -1);
                                     }} disabled={!minusEnabled}
                                     className={`w-8 h-8 flex items-center justify-center rounded-[4px] transition 
-                        ${minusEnabled ? "bg-primary-1 cursor-pointer" : "bg-[#5F5F5C] opacity-50 cursor-not-allowed"}`}
+                        ${minusEnabled ? "bg-primary-1 cursor-pointer" : "bg-300  cursor-not-allowed"}`}
                                 >
                                     <Minus
                                         size={12}
                                         weight="bold"
-                                        className={"text-white"}
+                                        // className={minusEnabled ? "text-600" : "text-white"}
+                                        className={!minusEnabled ? "text-600" : "text-white"}
                                     />
                                 </button>
 
@@ -127,12 +128,13 @@ const Guests = ({ formik, values, isMobile, isResultsPage }) => {
                                         handleGuestChange(key, 1);
                                     }} disabled={plusDisabled}
                                     className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition 
-                        ${plusDisabled ? "bg-gray-600 cursor-not-allowed" : "bg-primary-1 cursor-pointer"}`}
+                                        
+                          ${!plusDisabled ? "bg-primary-1 cursor-pointer" : "bg-300  cursor-not-allowed"}`}
                                 >
                                     <Plus
                                         size={12}
                                         weight="bold"
-                                        className={"text-white"}
+                                           className={!plusDisabled ? "text-white" : "text-600"}
                                     />
                                 </button>
                             </div>
