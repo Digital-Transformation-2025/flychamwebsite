@@ -48,7 +48,7 @@ const FlightCard = ({
             })}
             className={`
                         relative  
-            w-full p-4 lg:py-8 lg:px-8 flex flex-col items-center lg:items-stretch 
+            w-full my-5 p-4 lg:py-8 lg:px-8 flex flex-col items-center lg:items-stretch 
             rounded-[12px]
             ${isConfirmed
                     ? 'border border-[#34C759] bg-[#F5F5F4] shadow-[0px_2px_10px_rgba(0,0,0,0.1)]'

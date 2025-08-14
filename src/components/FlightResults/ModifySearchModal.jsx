@@ -29,7 +29,7 @@ const ModifySearchModal = ({ isOpen, onClose, pos, airPorts, handleResetToFirstS
                 </Transition.Child>
 
                 {/* Centered Panel */}
-                <div className={`fixed inset-0 flex justify-center ${!isMobile && 'p-4 '} items-start mt-10 ${!isMobile && 'md:mt-30'}`}>
+                <div className={`fixed inset-0 flex justify-center ${!isMobile && 'p-4  '} items-start  ${!isMobile && 'md:mt-30'}`}>
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -39,7 +39,7 @@ const ModifySearchModal = ({ isOpen, onClose, pos, airPorts, handleResetToFirstS
                         leaveFrom="opacity-100 scale-100"
                         leaveTo="opacity-0 scale-95"
                     >
-                        <Dialog.Panel className="w-full max-w-7xl rounded-xl  p-6 text-center shadow-xl transition-all">
+                        <Dialog.Panel className={`w-full max-w-7xl rounded-xl ${!isMobile && 'p-6'}   text-center shadow-xl transition-all`}>
 
                             <div className="flex justify-center gap-4">
                                 <BookingBox pos={pos} flights={airPorts} isResultsPage handleResetToFirstStep={handleResetToFirstStep}

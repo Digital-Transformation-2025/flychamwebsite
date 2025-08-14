@@ -37,6 +37,7 @@ const FlightTimeInfo = ({
                 [600, 14],
                 [500, 7],
                 [400, 3],
+                [350, 2],
                 [300, 1],
                 [0, 2], // default (smallest)
             ];
