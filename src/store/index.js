@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import flightsReducer from './flightSlice';
+import manageReducer from './manageSlice';
 import { Provider } from 'react-redux';
 
 import { persistStore, persistReducer } from 'redux-persist';
@@ -10,21 +11,23 @@ import { PersistGate } from 'redux-persist/integration/react';
 const flightsPersistConfig = {
   key: 'flights',
   storage,
-//   whitelist: ['airPorts', 'searchResults'], // adjust to your state keys
 };
+const managePersistConfig = { key: 'manage', storage };
 
 // 2️⃣ Persist the reducer
 const persistedFlightsReducer = persistReducer(flightsPersistConfig, flightsReducer);
+const persistedManageReducer = persistReducer(managePersistConfig, manageReducer);
 
 // 3️⃣ Create store with persisted reducer
 export const store = configureStore({
   reducer: {
     flights: persistedFlightsReducer,
+    managSlice: persistedManageReducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false, // required for redux-persist
+      serializableCheck: false,
     }),
 });
 

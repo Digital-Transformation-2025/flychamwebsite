@@ -40,7 +40,7 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
     const dispatch = useDispatch()
     const { flights, selectedPassengers, searchParams, isLoadingFlights, selectedPlan, IndirectAirPort, formikData } = useSelector((state) => state.flights);
     const NonEmptySearch = (flights?.length > 0 || IndirectAirPort.length > 0)
-    const { adults, children, infants } = formikData;
+const { adults, children, infants } = formikData || {};
     const passengerNumber = adults + children + infants
     const { info } = useFlightDetails(selectedPlan);
 
