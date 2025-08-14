@@ -5,6 +5,9 @@ import { useSelector } from 'react-redux'
 
 const ModalFooter = ({ values, setFieldValue, handleSubmit }) => {
     const { isLoadingFlights } = useSelector((s) => s.flights)
+    const { dateStart, source, destination, tripType, dateEnd } = values
+    const isDisabled = !dateStart || !source || !destination || (tripType === "Return" && !dateEnd);
+    // const isDisabled =true
     return (
         <>
             <Divider />
@@ -20,7 +23,16 @@ const ModalFooter = ({ values, setFieldValue, handleSubmit }) => {
                     //     e.preventDefault();
                     //     handleSubmit();
                     // }}
-                    className="cursor-pointer px-6 py-2 rounded-md text-sm font-medium transition-opacity duration-200 bg-secondary text-white hover:opacity-90"
+                    disabled={isDisabled}
+                    className=
+                    {
+                        `cursor-pointer px-6 py-2 rounded-md text-sm font-medium transition-opacity duration-200  
+                      ${isDisabled
+                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                            : 'bg-[#BAA981] text-white cursor-pointer hover:bg-[#a89773]'
+                        }
+                    `
+                    }
                 >
                     Search flights
                 </button>
