@@ -6,7 +6,7 @@ export default function AddAltNumber({ onClickAlternative, isAlternativeInfo }) 
   return (
     <div
       onClick={onClickAlternative}
-      className="flex items-center gap-1 cursor-pointer mb-4 transition-colors hover:opacity-80"
+      className="flex items-start md:items-center gap-1 cursor-pointer mb-4 transition-colors hover:opacity-80"
     >
       <AnimatePresence mode="wait" initial={false}>
         {isAlternativeInfo ? (

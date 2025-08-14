@@ -88,6 +88,7 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
     const [destinationSearch, setDestinationSearch] = useState("");
     const sliderRef = useRef(null);
     const [isNavigating, startTransition] = useTransition();
+    const [submitted, setSubmitted] = useState(false);
 
     const formatDate = (date) => {
         if (!(date instanceof Date)) return null;
@@ -121,6 +122,7 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
             ...(formikData ? formikData : {})
         },
         onSubmit: (values) => {
+            setSubmitted(true);
 
 
             const {
@@ -162,6 +164,7 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
                 setSelectedFlight(null)
             }
             if (!dateStart || !source || !destination) {
+                setSubmitted(false);
                 return
             }
             startTransition(() => {
@@ -617,7 +620,7 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
                         handleClick={handleClick}
                         renderStepComponent={renderStepComponent}
                         setCurrentMonth={setCurrentMonth}
-                        isNavigating={isNavigating}
+                        submitted={submitted}
                     />
 
                 </>

@@ -6,6 +6,7 @@ import CustomDropdown from '@/components/Ui/TitleDropdown';
 import ErrorMessage from '@/components/Ui/ErrorMessage';
 
 const PassengerFormSection = ({ index, values, onChange, setFieldValue, errors, touched, type }) => {
+    console.log('type', type);
     const titleOptions =
         type === 'CHD' || type === 'INF'
             ? [{ label: "Mr", value: "Mr" }, { label: "Ms", value: "Ms" }]
@@ -23,7 +24,7 @@ const PassengerFormSection = ({ index, values, onChange, setFieldValue, errors, 
     return (
         <>
             {/* Title dropdown */}
-            <div className="my-4 w-full max-w-3xs  sm:w-40  flex flex-col gap-1">
+            <div className="my-5 w-full max-w-[160px]  sm:w-40  flex flex-col gap-1">
                 <CustomDropdown
                     selected={values.title}
                     onChange={(val) => setFieldValue(`${basePath}.title`, val)}
@@ -36,7 +37,7 @@ const PassengerFormSection = ({ index, values, onChange, setFieldValue, errors, 
             </div>
 
             {/* First & Last Name */}
-            <div className="my-4 flex flex-col md:flex-row gap-4 md:pr-8">
+            <div className="my-5 flex flex-col md:flex-row gap-4 md:pr-8">
                 <div className="flex-1">
                     <Input
                         id={`${basePath}.firstName`}

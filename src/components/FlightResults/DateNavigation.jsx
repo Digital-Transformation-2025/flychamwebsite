@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 import useFlightRouteDetails from '@/hooks/useFlightRouteDetails';
 
-const DateNavigation = ({ isEditFlight, handleClickDate }) => {
+const DateNavigation = ({ isEditFlight, handleClickDate, isNextDisabled, isPrevDisabled }) => {
   const router = useRouter();
   const { date, dateReturn, flighttype } = useFlightRouteDetails();
 
@@ -30,17 +30,33 @@ const DateNavigation = ({ isEditFlight, handleClickDate }) => {
         </div>
       ) : (
         <div className="flex justify-between lg:justify-end w-full md:w-auto  self-center items-center gap-8 text-sm text-800">
-          <CaretLeft onClick={() => handleClickDate('prev')} size={20} className="cursor-pointer text-800" />
-          <button onClick={() => handleClickDate('prev')} className="cursor-pointer flex items-center gap-2">
-            Previous day
+
+          <button disabled={isPrevDisabled} onClick={() => handleClickDate('prev')} className={`cursor-pointer flex items-center gap-2 ${isPrevDisabled && 'opacity-[50%]'}`}>
+            <CaretLeft onClick={() => handleClickDate('prev')} size={20} className="cursor-pointer text-800" />
           </button>
+          <span
+
+            className={`cursor-pointer ${isPrevDisabled && 'opacity-[50%]'}`}
+            disabled={isPrevDisabled}
+
+            onClick={() => handleClickDate('prev')}
+            >
+            Previous day
+          </span>
+
 
           <span className="w-px h-4 bg-[var(--text-800)]" />
-          <span className='cursor-pointer' onClick={() => handleClickDate('next')}>
 
+          <span
+            className={`cursor-pointer ${isNextDisabled && 'opacity-[50%]'}`}
+            disabled={isNextDisabled}
+
+            onClick={() => handleClickDate('next')}>
             Next day
           </span>
-          <button onClick={() => handleClickDate('next')} className="cursor-pointer flex items-center gap-2">
+          <button
+            disabled={isNextDisabled}
+            onClick={() => handleClickDate('next')} className={`cursor-pointer flex items-center gap-2 ${isNextDisabled && 'opacity-[50%]'}`}>
             <CaretRight size={20} className="cursor-pointer text-800" />
           </button>
         </div>

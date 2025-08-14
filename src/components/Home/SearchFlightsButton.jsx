@@ -8,6 +8,7 @@ const SearchFlightsButton = ({ handleSubmit, values }) => {
 
   return (
     <button
+      id="search-flight-button"
       disabled={isDisabled}
       onClick={handleSubmit}
       type="button"

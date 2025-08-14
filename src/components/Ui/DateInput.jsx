@@ -39,7 +39,7 @@ export default function CustomDateInput({ value, onChange, error }) {
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => !value && setIsFocused(false)}
                 className={
-                    `w-full bg-100 text-600  text-[16px] px-4 py-3 pr-10 rounded-xl  focus:outline-none 
+                    ` h-14 w-full bg-100 text-600  text-[16px] px-4 py-3 pr-10 rounded-xl  focus:outline-none 
 
                      appearance-none
     [-webkit-appearance:none]  

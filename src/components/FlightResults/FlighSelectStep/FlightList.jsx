@@ -11,7 +11,7 @@ const FlightList = ({ flights, onDetailsClick, handleSelectPlan, selectedFlight,
 
 
     return (
-        <div className="grid gap-6 my-5 justify-center sm:justify-stretch">
+        <div className=" my-5 justify-center sm:justify-stretch">
 
             {Array.isArray(displayedCards) && displayedCards.length > 0 && displayedCards?.map((flight, index) => (
                 <FlightCard

@@ -63,9 +63,9 @@ const FlightCard = ({
                 </div>
             )}
 
-            <div className={`flex   gap-0 ${isLg ? 'flex-col' : 'flex-row '}   md:gap-3  justify-between  items-start lg:items-center`}>
+            <div className={`flex  w-full  gap-0 flex-col xl:flex-row   md:gap-3  justify-between  items-start lg:items-center`}>
 
-                <div className='flex flex-col items-start gap-4 '>
+                <div className='flex flex-col  gap-4 w-full items-center xl:items-start'>
                     {segments?.length === 1 &&
                         <div className="text-600 text-sm pt-2 self-center">
                             {stops > 0 ? stops : 'Non-stop , '}
@@ -99,7 +99,7 @@ const FlightCard = ({
                         onClick={(e) => {
                             e.stopPropagation();
                             onDetailsClick(flight);
-                        }} className="cursor-pointer text-primary-1 text-[12px] md:text-sm font-bold underline  w-fit"
+                        }} className="cursor-pointer text-primary-1 my-3 xl:my-0 text-sm md:text-sm font-bold underline  w-fit"
                     >
                         Flight details
                     </button>
@@ -107,19 +107,19 @@ const FlightCard = ({
                 <div className={`${isConfirmed ? "px-3 py-3" : "p-0"} w-full flex justify-between items-center  flex-wrap gap-4 my-2 md:my-0`}>
                     <div className="w-full flex flex-row gap-4 lg:gap-10 items-center md:items-start self-center justify-center xl:justify-end">
                         {isConfirmed ?
-                            <FareCard 
-                            isMissingPlan={isMissingPlan}
-                            isConfirmed={isConfirmed} type={selectedType.type} currecny={flight?.common_info?.currency} price={selectedType.price} special={selectedType.special} isLg={isLg} />
+                            <FareCard
+                                isMissingPlan={isMissingPlan}
+                                isConfirmed={isConfirmed} type={selectedType.type} currecny={flight?.common_info?.currency} price={selectedType.price} special={selectedType.special} isLg={isLg} />
                             :
                             <>
                                 {searchParams.flightclass !== "C" &&
                                     <FareCard
-                                    isMissingPlan={isMissingPlan}
-                                    isConfirmed={isConfirmed} type="Economy" currecny={flight?.common_info?.currency} price={ecoFare} special={false} isLg={isLg} />
+                                        isMissingPlan={isMissingPlan}
+                                        isConfirmed={isConfirmed} type="Economy" currecny={flight?.common_info?.currency} price={ecoFare} special={false} isLg={isLg} />
                                 }
                                 <FareCard
-                                isMissingPlan={isMissingPlan}
-                                isConfirmed={isConfirmed} type="Business" currecny={flight?.common_info?.currency} price={busFare} special={false} isLg={isLg} />
+                                    isMissingPlan={isMissingPlan}
+                                    isConfirmed={isConfirmed} type="Business" currecny={flight?.common_info?.currency} price={busFare} special={false} isLg={isLg} />
                             </>
                         }
 

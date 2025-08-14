@@ -4,7 +4,7 @@ import React from "react";
 import StepFooterBar from "./StepFooterBar";
 import { flushSync } from "react-dom";
 
-const StepWrapper = ({ children, setFieldValue, handleSubmit, onClose, formikValues, setCurrentMonth,isNavigating }) => {
+const StepWrapper = ({ children, setFieldValue, handleSubmit, onClose, formikValues, setCurrentMonth ,submitted}) => {
     const activeTab = formikValues.type;
 
     const handleStep = (direction) => {
@@ -59,7 +59,7 @@ const StepWrapper = ({ children, setFieldValue, handleSubmit, onClose, formikVal
                     handleStep={handleStep}
                     onClose={onClose}
                     formikValues={formikValues}
-                    isNavigating={isNavigating}
+                    submitted={submitted}
                 />
             </form>
         </div>

@@ -46,7 +46,7 @@ const Dates = ({ formik,selected, handleDateSelect, currentMonth, setCurrentMont
 
 
     return (
-        <div className="bg-white rounded-2xl p-3 w-full max-w-7xl mx-auto">
+        <div className="bg-white  rounded-2xl p-3 w-full max-w-7xl mx-auto ">
             {!isResultsPage &&
                 <>
                     <TripTypeSelector values={formik.values}

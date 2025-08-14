@@ -9,7 +9,7 @@ const StepFooterBar = ({
   handleStep,
   onClose,
   formikValues,
-    isNavigating
+  submitted
 }) => {
   const showExtras = activeTab === 3;
   const tripDuration = getTripDuration();
@@ -40,9 +40,8 @@ const StepFooterBar = ({
               type="button"
               onClick={() => handleStep("next")}
               disabled={disabled}
-              className={`cursor-pointer px-6 py-2 rounded-md text-sm font-medium transition-opacity duration-200 ${
-                disabled ? "bg-gray-400 text-white cursor-not-allowed" : "bg-[#B59C6D] text-white hover:opacity-90"
-              }`}
+              className={`cursor-pointer px-6 py-2 rounded-md text-sm font-medium transition-opacity duration-200 ${disabled ? "bg-gray-400 text-white cursor-not-allowed" : "bg-[#B59C6D] text-white hover:opacity-90"
+                }`}
             >
               Next
             </button>
@@ -52,10 +51,9 @@ const StepFooterBar = ({
           {activeTab === 3 && (
             <button
               type="submit"
-              disabled={disabled}
-              className={`cursor-pointer px-6 py-2 rounded-md text-sm font-medium transition-opacity duration-200 ${
-                disabled ? "bg-gray-400 text-white cursor-not-allowed" : "bg-[#B59C6D] text-white hover:opacity-90"
-              }`}
+              disabled={disabled || submitted}
+              className={`cursor-pointer px-6 py-2 rounded-md text-sm font-medium transition-opacity duration-200 ${disabled ? "bg-gray-400 text-white cursor-not-allowed" : "bg-[#B59C6D] text-white hover:opacity-90"
+                }`}
             >
               Search flights
             </button>

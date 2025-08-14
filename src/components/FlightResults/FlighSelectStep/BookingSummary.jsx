@@ -11,7 +11,7 @@ const BookingSummary = ({ onContinue, handleResetToFirstStep, selectedType }) =>
 
     const dispatch = useDispatch()
     return (
-        <div className="flex flex-col md:flex-row-reverse justify-between items-stretch w-full gap-4">
+        <div className="my-4 flex flex-col md:flex-row-reverse justify-between items-stretch w-full gap-4">
 
             {/* Right: Total + Continue */}
             <div className="w-full md:w-auto flex flex-col md:flex-row items-start md:items-center justify-between md:justify-end gap-4">

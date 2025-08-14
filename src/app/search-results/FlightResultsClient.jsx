@@ -31,6 +31,7 @@ import SummaryMobileBox from '@/components/FlightResults/PassengerDetails/Summar
 import Summary from '@/components/FlightResults/PassengerDetails/Summary'
 import SkeletonFlightCard from '@/components/FlightResults/FlighSelectStep/SkeletonFlightCard'
 import { useRouter } from 'next/navigation'
+import useNextDisabled from '@/hooks/useNextDisabled'
 const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
     const router = useRouter()
 
@@ -60,14 +61,16 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
     const [activeTab, setActiveTab] = useState(0);
     const [isPageLoaded, setIsPageLoaded] = useState(true);
 
+
+    // =================== Helper Hooks ======================
     useScrollToTop(scrollRef, [activeStep, selectedFlight]);
     useFetchFlights(setLocalLoading, setIsPageLoaded);
-
-
+    const { isNextDisabled, isPrevDisabled } = useNextDisabled(searchParams);
     const { restartTimer } = useSessionTimer({
         duration: passengerNumber >= 3 ? 60 * 10 : 60 * 7,
         onExpire: () => setSessionModalOpen(true),
     });
+    // =================== =============== ======================
 
     const handleDetailsClick = (flight) => {
         setExpandedFlight(flight);
@@ -154,10 +157,12 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
 
 
     }
-    const handleClickDate = (type) => {
 
+    const handleClickDate = (type) => {
         const originalDate = new Date(searchParams.date + 'Z'); // treat as UTC
-        const dateReturn = searchParams.date_return ? new Date(searchParams.date_return + 'Z') : null;
+        const dateReturn = searchParams.date_return
+            ? new Date(searchParams.date_return + 'Z')
+            : null;
 
         const year = originalDate.getUTCFullYear();
         const month = originalDate.getUTCMonth();
@@ -165,15 +170,27 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
 
         const delta = type === "next" ? 1 : -1;
         const adjustedDate = new Date(Date.UTC(year, month, day + delta));
-        if (dateReturn && adjustedDate > dateReturn) return;
+
+        // ---- NEXT disable rule ----
+        if (type === "next" && dateReturn && adjustedDate > dateReturn) {
+            return;
+        }
+
+        // ---- PREV disable rule ----
+        if (type === "prev") {
+            const todayUTC = new Date();
+            todayUTC.setUTCHours(0, 0, 0, 0);
+            if (adjustedDate < todayUTC) {
+                return;
+            }
+        }
 
         const formattedDateOnly = `${adjustedDate.getUTCFullYear()}-${String(adjustedDate.getUTCMonth() + 1).padStart(2, '0')}-${String(adjustedDate.getUTCDate()).padStart(2, '0')}`;
         const formattedFullDate = `${formattedDateOnly}T00:00:00`;
 
-
         dispatch(setSearchParams({ ...searchParams, date: formattedFullDate }));
-        // loadFlightsWithDelay({ date: formattedFullDate });
     };
+
 
     // Build passengers array when counts change
     useEffect(() => {
@@ -441,7 +458,7 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
 
     const dateNavigationSection = !selectedFlight && (
         <Section>
-            <DateNavigation handleClickDate={handleClickDate} />
+            <DateNavigation handleClickDate={handleClickDate} isNextDisabled={isNextDisabled} isPrevDisabled={isPrevDisabled} />
         </Section>
     );
 
@@ -462,6 +479,7 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
 
             {pageLoding ? <LottieComponent /> :
                 <div ref={scrollRef} className="h-screen overflow-y-auto ">
+                    {/* desktop */}
                     <div className='hidden lg:block'>
                         <Header handleOpenModifySearch={handleOpenModifySearch} />
                         <main className="w-[70%] mx-auto px-2">
@@ -469,9 +487,16 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                             {routeInfoSection}
                             {posNoticeSection}
                             {dateNavigationSection}
+                            <main className="mx-auto px-2">
+                                {noResultsSection}
+                                {(isLoadingFlights && !isPageLoaded) ? <SkeletonFlightCard /> : steps[activeStep].content}
 
+                            </main>
+                            {!selectedFlight &&
+                                <Divider />
+                            }
                         </main>
-                        <Divider />
+
 
                     </div>
                     {/*===== Mobile==== */}
@@ -482,13 +507,14 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                         {progressBarSection}
                         {dateNavigationSection}
                         {posNoticeSection}
+                        <main className="mx-auto px-2">
+                            {noResultsSection}
+                            {(isLoadingFlights && !isPageLoaded) ? <SkeletonFlightCard /> : steps[activeStep].content}
+
+                        </main>
                     </div>
                     {/* ================== */}
-                    <main className="w-[95%] md:w-[70%] mx-auto px-2">
-                        {noResultsSection}
-                        {(isLoadingFlights && !isPageLoaded) ? <SkeletonFlightCard /> : steps[activeStep].content}
 
-                    </main>
                     {(activeStep === 1 || activeStep === 2) &&
                         <SummaryMobileBox
                             selectedType={selectedType} selectedFlight={selectedFlight} />

@@ -133,7 +133,13 @@ const MobModal = ({ handleReset, isOpen, onClose,
 
                             {activeTab === 3 && (
                                 <ActionFooter
-                                    onClick={onClose}
+                                    onClick={() => {
+                                        onClose();
+                                        const btn = document.getElementById("search-flight-button");
+                                        if (btn) {
+                                            btn.scrollIntoView({ behavior: "smooth", block: "center" });
+                                        }
+                                    }}
                                     label="Continue"
                                     disabled={!canWeFly}
                                     showReset={isRenderReset}

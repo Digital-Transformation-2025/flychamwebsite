@@ -43,11 +43,11 @@ export default function CustomDropdown({
     }
   }, [isOpen, type]);
   return (
-    <div className="relative w-full bg-100" ref={dropdownRef}>
+    <div className="relative w-full rounded-md  bg-100" ref={dropdownRef}>
       <button
         type="button"
         onClick={toggleDropdown}
-        className={`w-full px-4 py-3 rounded-md text-left  hover:cursor-pointer  relative ${error ? 'border border-alert' : 'border-gray-300'}`}
+        className={`h-14 md:h-auto w-full px-4 py-3  text-left  hover:cursor-pointer  relative ${error ? 'border border-alert' : 'border-gray-300'}`}
       >
         <span className={`text-[16px]  ${error ? 'text-alert' : 'text-600'}`}>
           {selected

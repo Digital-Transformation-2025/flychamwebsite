@@ -34,7 +34,7 @@ const InfoBoxes = ({ values, selected, tripType, handleReset, guestsComponent, C
     return (
         <div className="flex gap-4 my-4 relative">
             {/* Departure Box */}
-            <div ref={departureRef} className=" w-full">
+            <div ref={departureRef} className=" w-full ">
                 <div
                     onClick={() => toggleDropdown('departure')}
                     className="flex justify-center items-center gap-3  bg-[#F5F5F4] hover:bg-[#E7E7E5] transition-colors duration-200 rounded-xl px-6 py-5 cursor-pointer"
@@ -53,7 +53,7 @@ const InfoBoxes = ({ values, selected, tripType, handleReset, guestsComponent, C
                 </div>
 
                 {openDropdown === 'departure' && (
-                    <div className="absolute left-0 mt-1 bg-white shadow-md  rounded-lg w-full z-10">
+                    <div className="absolute left-0 mt-1 border border-[#ccc] bg-white shadow-md  rounded-2xl w-full z-10">
                         {CalendarComponent}
                     </div>
                 )}

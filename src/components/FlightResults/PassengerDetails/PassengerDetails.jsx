@@ -48,7 +48,7 @@ const PassengerDetails = ({ activeStep, setActiveStep, selectedFlight, selectedT
                     {typeof formik.errors.passengers === 'string' && (
                         <ErrorMessage error={formik.errors.passengers} />
                     )}
-                    <div className="shadow-sm lg:shadow-none p-2 my-4 rounded-lg  lg:p-0 lg:my-0 lg:rounded-none  xl:p-0 xl:my-0 xl:rounded-none">
+                    <div className="shadow-sm lg:shadow-none p-2 my-5 rounded-lg  lg:p-0 lg:my-0 lg:rounded-none  xl:p-0 xl:my-0 xl:rounded-none">
 
 
                         <Section>
