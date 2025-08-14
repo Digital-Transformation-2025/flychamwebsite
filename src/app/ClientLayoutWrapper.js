@@ -40,8 +40,10 @@ import { useSelector } from "react-redux";
 export default function ClientLayoutWrapper({ children }) {
   const [isOpen, setIsOpen] = useState(true)
   // const { isModifySearch } = useSelector((state) => state.flights)
-
+  // ====================== INSPECTOR ====================== 
   useBlockInspect()
+  // ====================== INSPECTOR ====================== 
+
   const pathname = usePathname()
   const isMobile = useIsMobile()
   const { t } = useTranslation();
