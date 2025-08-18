@@ -8,7 +8,7 @@ export const searchBookService = createAsyncThunk(
     async (data, thunkAPI) => {
         try {
 
-            const response = await apiClient.post(`/api/booking/InquirePNR/ManageBooking/?filters=language==en`, data);
+            const response = await apiClient.post(`/api/booking/InquirePNR/ManageBooking?language=en`, data);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(

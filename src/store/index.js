@@ -22,7 +22,7 @@ const persistedManageReducer = persistReducer(managePersistConfig, manageReducer
 export const store = configureStore({
   reducer: {
     flights: persistedFlightsReducer,
-    managSlice: persistedManageReducer,
+    manageBook: persistedManageReducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) =>

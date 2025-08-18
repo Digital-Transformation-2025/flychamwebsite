@@ -13,7 +13,7 @@ const Header = () => {
         <header className="w-full bg-[#F5F5F4] py-4 px-2 flex justify-start items-center">
             <div
                 onClick={onclickLogo}
-                className="w-[174px] flex justify-center items-center">
+                className="cursor-pointer w-[174px] flex justify-center items-center">
                 <Image
                     src={logoblue}
                     alt="FlyCham Logo"

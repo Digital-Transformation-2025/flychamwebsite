@@ -74,7 +74,7 @@ const TestClient = ({ flights, pos}) => {
         <div className="transition-all duration-700">
 
             <div className="">
-                <div className="w-[90%] md:w-[70%] mx-auto">
+                <div className="w-[90%] mt-50 md:w-[70%] mx-auto">
 
                     <BookingBox getCitiesArray={getCitiesArray} setCities={setCities} cities={cities} airPorts={airPorts}
                         search={search}

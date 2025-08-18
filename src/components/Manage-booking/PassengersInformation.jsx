@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import {
     Armchair,
 } from '@phosphor-icons/react';
-import { Baby, Briefcase, ForkKnifeIcon,  Suitcase, User } from '@phosphor-icons/react/dist/ssr';
+import { Baby, Briefcase, ForkKnifeIcon, Seat, Suitcase, User } from '@phosphor-icons/react/dist/ssr';
 import SectionTitle from './SectionTitle';
+import getPassengerType from '@/util/getLabelByType';
 
 /* =========================
    Sample data (pass your own via props)
@@ -43,7 +44,7 @@ const samplePassengers = [
 
 
 const Pill = ({ children }) => (
-    <span className="ml-2 text-[12px] font-medium text-white/90">({children})</span>
+    <span className=" text-[12px] font-medium text-white/90">({children})</span>
 );
 
 const InfoLabel = ({ title, icon, value }) => (
@@ -82,13 +83,12 @@ const TabButton = ({ leg, isActive, onClick }) => (
     </button>
 );
 
-const PassengerCard = ({ passenger }) => {
-    const [tab, setTab] = useState(0);
+const PassengerCard = ({ passenger, isTraveleAgent, isReturnFlightExists, tab, setTab }) => {
 
     const icons = {
         hand: Briefcase,
         checked: Suitcase,
-        seats: Armchair,
+        seats: Seat ,
         meals: ForkKnifeIcon
     };
 
@@ -106,11 +106,11 @@ const PassengerCard = ({ passenger }) => {
                 {passenger.type === "Adult" && <User size={18} />}
                 {passenger.type === "Infant" && <Baby size={18} />}
                 <span className="text-[14px] font-semibold">{passenger.name}</span>
-                <Pill>{passenger.type}</Pill>
+                <Pill>{getPassengerType(passenger.type)}</Pill>
             </div>
 
             {/* Tabs */}
-            <div className="grid grid-cols-2">
+            <div className={`grid grid-cols-${isReturnFlightExists ? 2 : 1}`}>
                 {passenger.legs.map((leg, i) => (
                     <TabButton key={i} leg={leg} isActive={tab === i} onClick={() => setTab(i)} />
                 ))}
@@ -121,7 +121,7 @@ const PassengerCard = ({ passenger }) => {
                 {infoData.map(({ title, value, icon: Icon, btn }, i) => (
                     <div key={i}>
                         <InfoLabel title={title} value={value} icon={<Icon size={18} className="text-primary-1" />} />
-                        {btn && <SmallButton>{btn}</SmallButton>}
+                        {btn && !isTraveleAgent && <SmallButton>{btn}</SmallButton>}
                     </div>
                 ))}
             </div>
@@ -133,14 +133,52 @@ const PassengerCard = ({ passenger }) => {
 /* =========================
    Main List
 ========================= */
-export default function PassengersInformation({ passengers = samplePassengers }) {
-    return (
-        <section className="w-full  mx-auto">
-            <SectionTitle>Passengers information</SectionTitle>
+export default function PassengersInformation({ passengers, isTraveleAgent, firstSegment, secoundSegment }) {
+    const [tabs, setTabs] = useState({}); // Store active tab per passenger by ID
 
-            <div className="mt-4 flex flex-col gap-8 ">
-                {passengers.map((p) => (
-                    <PassengerCard key={p.id} passenger={p} />
+    const isReturnFlightExists = secoundSegment && secoundSegment.departureAirport && secoundSegment.arrivalAirport;
+
+    const handleTabChange = (passengerId, tabIndex) => {
+        setTabs(prevTabs => ({
+            ...prevTabs,
+            [passengerId]: tabIndex, // Set active tab for the specific passenger
+        }));
+    };
+
+    const passengersInfo = passengers.map((p, index) => {
+        const ancillary = p.ancillary || []; // Ensure ancillary exists
+
+        return {
+            id: `p${index}`,
+            name: `${p.title}. ${p.firstName} ${p.lastName}`,
+            type: p.passengerType,
+            legs: [
+                { id: 'out', from: firstSegment.departureAirport, to: firstSegment.arrivalAirport, flight: firstSegment.flightNumber },
+                ...(isReturnFlightExists ? [{ id: 'ret', from: secoundSegment.departureAirport, to: secoundSegment.arrivalAirport, flight: secoundSegment.flightNumber }] : []),
+            ],
+            baggage: { 
+                hand: `${ancillary[0]?.handBaggage || '0'}kg`, 
+                checked: `${ancillary[0]?.checkedBaggage || '0'}kg` 
+            },
+            seats: { label: ancillary[0]?.seats || 'Not selected' },
+            meals: { label: ancillary[0]?.meal || 'Not selected' },
+        };
+    });
+
+    return (
+        <section className="w-full mx-auto">
+            <SectionTitle >Passengers information</SectionTitle>
+
+            <div className="mt-4 flex flex-col gap-8">
+                {passengersInfo.map((p) => (
+                    <PassengerCard 
+                        key={p.id} 
+                        passenger={p} 
+                        isTraveleAgent={isTraveleAgent} 
+                        isReturnFlightExists={isReturnFlightExists} 
+                        tab={tabs[p.id] || 0} // Default to first tab if no tab is set
+                        setTab={(tabIndex) => handleTabChange(p.id, tabIndex)} // Pass individual tab change handler
+                    />
                 ))}
             </div>
         </section>

@@ -47,7 +47,7 @@ const flightSlice = createSlice({
         setPnr: (state, action) => {
             state.pnr = action.payload;
         },
-    
+
 
     },
     extraReducers: (builder) => {

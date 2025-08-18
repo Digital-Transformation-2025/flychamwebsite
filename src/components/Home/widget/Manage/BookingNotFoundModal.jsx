@@ -18,7 +18,7 @@ const BookingNotFoundModal = ({ open, onClose, title, description, isBtn }) => {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className="fixed inset-0 bg-black/50" />
+                    <div className="fixed inset-0 bg-black/75" />
                 </Transition.Child>
 
                 {/* Centered panel */}
@@ -48,19 +48,22 @@ const BookingNotFoundModal = ({ open, onClose, title, description, isBtn }) => {
                                     {/* Title row */}
                                     <div className="flex items-start gap-3">
                                         {/* red dot */}
-                                        <Info size={24} color='#B00300' weight='fill' />
-
-
+                                        {title &&
+                                            <Info size={24} color='#B00300' weight='fill' />
+                                        }
                                         {/* title + text */}
                                         <div className="flex-1">
-                                            <Dialog.Title className="font-medium text-[16px] leading-5 text-800">
-                                                {title}
-                                            </Dialog.Title>
+                                            {title &&
+                                                <Dialog.Title className="font-medium text-[16px] leading-5 text-800">
+                                                    {title}
+                                                </Dialog.Title>
+                                            }
+                                            {description &&
+                                                <Dialog.Description className="mt-2 text-[18px] leading-6 text-[#5F5F5C]">
 
-                                            <Dialog.Description className="mt-2 text-[18px] leading-6 text-[#5F5F5C]">
-
-                                                {description}
-                                            </Dialog.Description>
+                                                    {description}
+                                                </Dialog.Description>
+                                            }
                                         </div>
                                     </div>
 

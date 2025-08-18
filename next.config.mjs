@@ -9,7 +9,7 @@ const nextConfig = {
 //     return config
 //   },
   images: {
-    // unoptimized: true,
+    domains: ['flycham.com'],  // Add the domain here
   },
   // staticPageGenerationTimeout: 60,
 };

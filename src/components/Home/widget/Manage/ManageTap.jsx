@@ -7,12 +7,18 @@ import BookingNotFoundModal from "./BookingNotFoundModal";
 import FloatingInput from "./FloatingInput";
 import ManageFooter from "./ManageFooter";
 import ModalDescription from "./ModalDescription";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { searchBookService } from "@/store/Services/manageBookingServices";
 import { useRouter } from "next/navigation";
 
 const ManageTap = () => {
+    const { isLoading } = useSelector((s) => s.manageBook)
+
     const [modalOpen, setModalOpen] = useState(false);
+    const [alert, setAlert] = useState({
+        title: '',
+        description: ''
+    });
     const dispatch = useDispatch()
     const router = useRouter()
     const formik = useFormik({
@@ -26,20 +32,24 @@ const ManageTap = () => {
                 .matches(/^[A-Za-z]+$/, 'Last name must contain only English letters (A–Z)')
                 .required('Last name is required'),
         }),
-        onSubmit: (values) => {
-            const { pnr, lastName } = values;
-            const data = {
-                lastName, PNR: pnr
-            }
-            dispatch(searchBookService(data)).then((action) => {
-                if (searchBookService.fulfilled.match(action)) {
-                    router.push("/manage-booking")
-                }
-            })
-            console.log('values', values);
+        onSubmit: ({ pnr, lastName }) => {
+            const data = { lastName, PNR: pnr };
+            dispatch(searchBookService(data))
+                .then(({ payload }) => {
+                    const { data: bookData, status } = payload || {};
+                    console.log('payload', payload);
 
-            setModalOpen(true);
+                    if (status === 200 && Object.keys(bookData).length > 0) {
+                        router.push("/manage-booking");
+                    } else {
+                        const { alert } = payload || {};
+                        const { title, description } = alert || {};
+                        setAlert({ title, description })
+                        setModalOpen(true);
+                    }
+                });
         },
+
     });
 
     // Limit PNR to 6 chars and force uppercase
@@ -54,7 +64,7 @@ const ManageTap = () => {
         formik.setFieldValue('lastName', englishOnly);
     };
 
-    const canSearch = !!formik.values.pnr && !!formik.values.lastName;
+    const canSearch = (!!formik.values.pnr && !!formik.values.lastName)
 
     return (
         <>
@@ -91,8 +101,8 @@ const ManageTap = () => {
             <BookingNotFoundModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
-                title="Booking not found"
-                description={<ModalDescription />}
+                title={alert?.title}
+                description={alert?.description}
                 isBtn
             />
         </>

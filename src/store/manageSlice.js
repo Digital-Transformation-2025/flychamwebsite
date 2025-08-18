@@ -6,6 +6,7 @@ const manageSlice = createSlice({
     name: 'manage',
     initialState: {
         isLoading: false,
+        bookInfo: {}
     },
     reducers: {
 
@@ -18,6 +19,7 @@ const manageSlice = createSlice({
             })
             .addCase(searchBookService.fulfilled, (state, action) => {
                 state.isLoading = false;
+                state.bookInfo = action.payload.data
             })
             .addCase(searchBookService.rejected, (state, action) => {
                 state.isLoading = false;

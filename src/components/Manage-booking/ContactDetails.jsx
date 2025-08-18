@@ -16,26 +16,27 @@ export default function ContactDetailsCard({
         mobile: '+963 935679806',
     },
     onEdit,
+    contactInfo
 }) {
-
+    const { title, firstName, lastName, telephone, mobile, email, countryCode } = contactInfo || {}
 
     // Define fields as an array and render with .map()
     const fields = [
-        { label: 'Passenger name', value: contact.name },
+        { label: 'Passenger name', value: `${title}.${firstName} ${lastName}` },
         { label: 'Type', value: contact.type },
         {
             label: 'E-mail',
             value: (
-                <a href={`mailto:${contact.email}`} className="hover:underline">
-                    {contact.email}
+                <a href={`mailto:${email}`} className="hover:underline">
+                    {email}
                 </a>
             ),
         },
         {
             label: 'Mobile number',
             value: (
-                <a href={`tel:${contact.mobile.replace(/\s/g, '')}`} className="hover:underline">
-                    {contact.mobile}
+                <a href={`tel:${countryCode} ${mobile}`} className="hover:underline">
+                    {countryCode} {mobile}
                 </a>
             ),
         },
@@ -44,7 +45,10 @@ export default function ContactDetailsCard({
     return (
         <div className="w-full my-4">
             {/* Card container */}
-            <SectionTitle>Contact  details</SectionTitle>
+            <div className='mb-4'>
+
+                <SectionTitle>Contact  details</SectionTitle>
+            </div>
 
             <div className="relative rounded-xl bg-[#F5F5F4] ring-1 ring-[#EAEAE8] p-4 md:p-5">
                 {/* Edit action */}
