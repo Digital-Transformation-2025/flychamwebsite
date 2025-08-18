@@ -34,13 +34,37 @@ const Tabs = ({ tabs, active = 0, onChange }) => {
     };
   }, [active, tabs]);
 
-  const handleClick = (tab) => {
-    // const section = document.getElementById(tab.id);
-    // if (section) {
-    //   section.scrollIntoView({ behavior: "smooth", block: "start" });
-    // }
+  const handleClick = (tab, i) => {
+    const section = document.getElementById(tab.id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    const container = containerRef.current;
+    const el = itemRefs.current[i];
+    if (container && el) {
+      const containerRect = container.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+
+      // if tab is before container's left edge → scroll to start
+      if (elRect.left < containerRect.left) {
+        container.scrollTo({
+          left: container.scrollLeft - (containerRect.left - elRect.left) - 20,
+          behavior: "smooth",
+        });
+      }
+      // if tab is after container's right edge → scroll to end
+      else if (elRect.right > containerRect.right) {
+        container.scrollTo({
+          left: container.scrollLeft + (elRect.right - containerRect.right) + 20,
+          behavior: "smooth",
+        });
+      }
+    }
+
     onChange?.(tab);
   };
+
 
 
   return (
@@ -57,7 +81,7 @@ const Tabs = ({ tabs, active = 0, onChange }) => {
                 <button
                   ref={(el) => (itemRefs.current[i] = el)}
                   type="button"
-                  onClick={() => handleClick(tab)}
+                  onClick={() => onChange(tab, i, containerRef, itemRefs)}
                   className={`whitespace-nowrap py-4 text-sm transition-colors ${isActive ? 'text-primary-1 font-medium' : 'text-[#8A8A87]'
                     }`}
                 >

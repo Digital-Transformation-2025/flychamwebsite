@@ -70,14 +70,38 @@ const ManageBookingClient = () => {
             setShowContactModal(false);
         },
     });
-    const onChangeTab = (tab) => {
+    const onChangeTab = (tab, index, containerRef, itemRefs) => {
         setActive(tab.id);
+
+        // scroll to section vertically
         const el =
             document.getElementById(`section-${tab.id}`) ||
             document.getElementById(String(tab.id));
-        if (!el) return;
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
 
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // scroll tab horizontally if clipped
+        const container = containerRef.current;
+        const elTab = itemRefs.current[index];
+        if (container && elTab) {
+            const containerRect = container.getBoundingClientRect();
+            const elRect = elTab.getBoundingClientRect();
+
+            if (elRect.left < containerRect.left) {
+                // scroll left
+                container.scrollTo({
+                    left: container.scrollLeft - (containerRect.left - elRect.left) - 20,
+                    behavior: 'smooth',
+                });
+            } else if (elRect.right > containerRect.right) {
+                // scroll right
+                container.scrollTo({
+                    left: container.scrollLeft + (elRect.right - containerRect.right) + 20,
+                    behavior: 'smooth',
+                });
+            }
+        }
     };
 
 
@@ -139,13 +163,13 @@ const ManageBookingClient = () => {
             }
             <div
                 id="section-0"
-                className="scroll-mt-[220px] md:scroll-mt-0"
+                className="scroll-mt-[360px]  md:scroll-mt-0"
             >
                 <FlightDetailsHeader isTraveleAgent={isTraveleAgent} />
                 <FlightItineraryList firstSegment={firstSegment} secoundSegment={secoundSegment} />
             </div>
 
-            <div id="section-1" className="scroll-mt-[220px] md:scroll-mt-0">
+            <div id="section-1" className="scroll-mt-[360px] md:scroll-mt-0">
                 <PassengersInformation
                     passengers={passengers}
                     isTraveleAgent={isTraveleAgent}
@@ -153,10 +177,10 @@ const ManageBookingClient = () => {
                     secoundSegment={secoundSegment}
                 />
             </div>
-            <div id="section-2" className="scroll-mt-[220px] md:scroll-mt-0">
+            <div id="section-2" className="scroll-mt-[360px] md:scroll-mt-0">
                 <ContactDetails onEdit={onEdit} contactInfo={contactInfo} />
             </div>
-            <div id="section-3" className="scroll-mt-[220px] md:scroll-mt-0">
+            <div id="section-3" className="scroll-mt-[360px] md:scroll-mt-0">
                 <div className="py-20 text-center text-gray-500">Additional services</div>
             </div>
         </div>

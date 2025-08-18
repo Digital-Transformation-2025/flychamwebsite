@@ -9,6 +9,7 @@ const TabNavigation = ({ tabs, activeTab, setActiveTab, isMobile }) => {
     if (pathname === '/test123') {
       setActiveTab(tab);
     }
+    //   setActiveTab(tab);
   };
 
   return (
