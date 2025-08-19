@@ -6,10 +6,10 @@ const TabNavigation = ({ tabs, activeTab, setActiveTab, isMobile }) => {
   const pathname = usePathname();
 
   const handleTabClick = (tab) => {
-    if (pathname === '/test123') {
-      setActiveTab(tab);
-    }
+    // if (pathname === '/test123') {
     //   setActiveTab(tab);
+    // }
+      setActiveTab(tab);
   };
 
   return (

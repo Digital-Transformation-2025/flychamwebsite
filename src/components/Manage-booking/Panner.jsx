@@ -32,7 +32,7 @@ const Panner = ({
                     className="object-cover" // Ensure the image covers the container
                 />
                 {/* Dark gradient overlay for readability */}
-                <div className="absolute inset-0 bg-black/50" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50  to-black/10" />
             </div>
 
             {/* Content overlay */}
@@ -55,10 +55,13 @@ const Panner = ({
                         <span className="font-semibold tracking-wide">{pnr}</span>
                     </div>
 
-                    <div className="flex items-center gap-1.5 sm:gap-2 text-[12px] sm:text-lg">
-                        <div className='flex flex-col lg:flex-row'>
-                            <span className="opacity-90 mx-2">Booking status:</span>
-                            <div className='flex gap-2 items-center'>
+                    <div className="flex items-center gap-1.5 sm:gap-2 text-[12px] sm:text-lg ">
+                        <div
+                            className="flex flex-col lg:flex-row relative
+         rounded-md px-3 py-2"
+                        >
+                            <span className="opacity-90 mx-2 text-white">Booking status:</span>
+                            <div className="flex gap-2 items-center">
                                 {isConfirmed && (
                                     <CheckCircle
                                         weight="fill"
@@ -67,12 +70,14 @@ const Panner = ({
                                     />
                                 )}
                                 <span
-                                    className={`font-semibold ${isConfirmed ? 'text-[#27AE60]' : 'text-yellow-400'}`}
+                                    className={`font-semibold ${isConfirmed ? "text-[#27AE60]" : "text-yellow-400"
+                                        }`}
                                 >
                                     {status}
                                 </span>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

@@ -57,9 +57,9 @@ const InfoLabel = ({ title, icon, value }) => (
     </div>
 );
 
-const SmallButton = ({ children, onClick }) => (
+const SmallButton = ({ children, handleClickBtn }) => (
     <button
-        onClick={onClick}
+        onClick={()=>handleClickBtn(children)}
         className="mt-2 inline-flex items-center justify-center rounded-md bg-secondary-1 px-4 py-1.5 text-[12px] font-semibold text-white hover:opacity-90"
     >
         {children}
@@ -83,12 +83,12 @@ const TabButton = ({ leg, isActive, onClick }) => (
     </button>
 );
 
-const PassengerCard = ({ passenger, isTraveleAgent, isReturnFlightExists, tab, setTab }) => {
+const PassengerCard = ({ passenger, isTraveleAgent, isReturnFlightExists, tab, setTab ,handleClickBtn}) => {
 
     const icons = {
         hand: Briefcase,
         checked: Suitcase,
-        seats: Seat ,
+        seats: Seat,
         meals: ForkKnifeIcon
     };
 
@@ -121,7 +121,7 @@ const PassengerCard = ({ passenger, isTraveleAgent, isReturnFlightExists, tab, s
                 {infoData.map(({ title, value, icon: Icon, btn }, i) => (
                     <div key={i}>
                         <InfoLabel title={title} value={value} icon={<Icon size={18} className="text-primary-1" />} />
-                        {btn && !isTraveleAgent && <SmallButton>{btn}</SmallButton>}
+                        {btn && !isTraveleAgent && <SmallButton handleClickBtn={handleClickBtn}>{btn}</SmallButton>}
                     </div>
                 ))}
             </div>
@@ -133,7 +133,7 @@ const PassengerCard = ({ passenger, isTraveleAgent, isReturnFlightExists, tab, s
 /* =========================
    Main List
 ========================= */
-export default function PassengersInformation({ passengers, isTraveleAgent, firstSegment, secoundSegment }) {
+export default function PassengersInformation({ passengers, isTraveleAgent, firstSegment, secoundSegment, handleClickBtn }) {
     const [tabs, setTabs] = useState({}); // Store active tab per passenger by ID
 
     const isReturnFlightExists = secoundSegment && secoundSegment.departureAirport && secoundSegment.arrivalAirport;
@@ -156,9 +156,9 @@ export default function PassengersInformation({ passengers, isTraveleAgent, firs
                 { id: 'out', from: firstSegment.departureAirport, to: firstSegment.arrivalAirport, flight: firstSegment.flightNumber },
                 ...(isReturnFlightExists ? [{ id: 'ret', from: secoundSegment.departureAirport, to: secoundSegment.arrivalAirport, flight: secoundSegment.flightNumber }] : []),
             ],
-            baggage: { 
-                hand: `${ancillary[0]?.handBaggage || '0'}kg`, 
-                checked: `${ancillary[0]?.checkedBaggage || '0'}kg` 
+            baggage: {
+                hand: `${ancillary[0]?.handBaggage || '0'}kg`,
+                checked: `${ancillary[0]?.checkedBaggage || '0'}kg`
             },
             seats: { label: ancillary[0]?.seats || 'Not selected' },
             meals: { label: ancillary[0]?.meal || 'Not selected' },
@@ -171,13 +171,14 @@ export default function PassengersInformation({ passengers, isTraveleAgent, firs
 
             <div className="mt-4 flex flex-col gap-8">
                 {passengersInfo.map((p) => (
-                    <PassengerCard 
-                        key={p.id} 
-                        passenger={p} 
-                        isTraveleAgent={isTraveleAgent} 
-                        isReturnFlightExists={isReturnFlightExists} 
+                    <PassengerCard
+                        key={p.id}
+                        passenger={p}
+                        isTraveleAgent={isTraveleAgent}
+                        isReturnFlightExists={isReturnFlightExists}
                         tab={tabs[p.id] || 0} // Default to first tab if no tab is set
-                        setTab={(tabIndex) => handleTabChange(p.id, tabIndex)} // Pass individual tab change handler
+                        setTab={(tabIndex) => handleTabChange(p.id, tabIndex)} 
+                        handleClickBtn={handleClickBtn}
                     />
                 ))}
             </div>

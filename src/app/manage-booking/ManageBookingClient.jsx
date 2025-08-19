@@ -1,6 +1,7 @@
 'use client'
 import ContactDetails from '@/components/Manage-booking/ContactDetails';
 import { ContactEditModal } from '@/components/Manage-booking/ContactEditModal';
+import ExtraBaggageModal from '@/components/Manage-booking/ExtraBaggage/ExtraBaggageModal';
 import FlightDetailsHeader from '@/components/Manage-booking/FlightDetailsHeader';
 import FlightItineraryList from '@/components/Manage-booking/FlightItineraryList';
 import Header from '@/components/Manage-booking/Header'
@@ -42,6 +43,13 @@ const ManageBookingClient = () => {
     const { isLoading, bookInfo } = useSelector((s) => s.manageBook)
     const { isTraveleAgent, mainImage, segments, bookingReference: pnr, contactInfo, passengers } = bookInfo || {}
     const [active, setActive] = useState(0);
+    const [openExtra, setOpenExtra] = useState(false)
+
+    const handleClickBtn = (btn) => {
+        if (btn === "Add extra") {
+            setOpenExtra(true)
+        }
+    }
 
 
 
@@ -175,6 +183,7 @@ const ManageBookingClient = () => {
                     isTraveleAgent={isTraveleAgent}
                     firstSegment={firstSegment}
                     secoundSegment={secoundSegment}
+                    handleClickBtn={handleClickBtn}
                 />
             </div>
             <div id="section-2" className="scroll-mt-[360px] md:scroll-mt-0">
@@ -196,6 +205,8 @@ const ManageBookingClient = () => {
             handleChange={formik.handleChange}
             setFieldValue={formik.setFieldValue}
         />
+        <ExtraBaggageModal open={openExtra} onClose={() => setOpenExtra(false)} />
+
     </div>
     return (
         isLoading ? Loading : contet
