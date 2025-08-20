@@ -219,7 +219,7 @@ export default function FlightItineraryList({ onAction, firstSegment, secoundSeg
         arrivalTime: segment?.arrivalTime,
         departureAirPortName: segment?.departureAirPortName,
         arrivalAirPortName: segment?.arrivalAirPortName,
-        flightNumber: segment?.flightNumber
+        flightNumber: segment?.flightNumber,
     });
 
     const firstSegmentData = segmentData(firstSegment);
@@ -240,6 +240,8 @@ export default function FlightItineraryList({ onAction, firstSegment, secoundSeg
             left: { code: firstSegmentData.departureAirport, time: firstSegmentData.departureTime, airport: firstSegmentData.departureAirPortName },
             right: { code: firstSegmentData.arrivalAirport, time: firstSegmentData.arrivalTime, airport: firstSegmentData.arrivalAirPortName },
             mid: { durationText: `Non-stop, ${firstSegmentData.durationText}`, cabin: firstSegmentData.cabin },
+            flightNumber: firstSegmentData?.flightNumber
+
         },
 
         // Conditionally adding the second segment if it exists
@@ -259,6 +261,8 @@ export default function FlightItineraryList({ onAction, firstSegment, secoundSeg
             mid: {
                 durationText: `Non-stop, ${secoundSegmentData.durationText}`, cabin: secoundSegmentData.cabin
             },
+            flightNumber: secoundSegmentData?.flightNumber
+
         }] : []),  // Only add if secoundSegmentData exists
     ];
 
