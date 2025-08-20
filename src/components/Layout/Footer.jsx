@@ -11,56 +11,91 @@ import {
 } from 'react-icons/pi';
 import { FaXTwitter } from "react-icons/fa6";
 import pattern from '@/assets/images/pattern.webp';
+import footerPattern from '@/assets/images/footerPattern.png';
+import sidebarar from '@/assets/images/sidebarar.png';
+import { useTranslation } from 'react-i18next';
+import useIsArabic from '@/hooks/useIsArabic';
 const Footer = () => {
+    const { t } = useTranslation();
+    const isArabic = useIsArabic()
+
     const sections = [
         {
-            title: 'About Fly Cham',
+            title: t('footer.aboutFlyCham.title'),
             links: [
-                'Our Story', 'Our Mission', 'Our Vision', 'Our Values',
-                'Our Responsibility', 'Our Fleet', 'Media Center', 'Chairman’s Message'
+                t('footer.aboutFlyCham.links.ourStory'),
+                t('footer.aboutFlyCham.links.ourMission'),
+                t('footer.aboutFlyCham.links.ourVision'),
+                t('footer.aboutFlyCham.links.ourValues'),
+                t('footer.aboutFlyCham.links.ourResponsibility'),
+                t('footer.aboutFlyCham.links.ourFleet'),
+                t('footer.aboutFlyCham.links.mediaCenter'),
+                t('footer.aboutFlyCham.links.chairmanMessage'),
             ]
         },
         {
-            title: 'Book Flights',
+            title: t('footer.bookFlights.title'),
             links: [
-                'Search A Flight', 'Flight Schedules', 'Hotel Booking', 'Car Rental',
-                'Visa Information', 'Group Travel', 'Request Private Flights'
+                t('footer.bookFlights.links.searchFlight'),
+                t('footer.bookFlights.links.flightSchedules'),
+                t('footer.bookFlights.links.hotelBooking'),
+                t('footer.bookFlights.links.carRental'),
+                t('footer.bookFlights.links.visaInfo'),
+                t('footer.bookFlights.links.groupTravel'),
+                t('footer.bookFlights.links.privateFlights'),
             ]
         },
         {
-            title: 'Our Destinations Network',
+            title: t('footer.destinations.title'),
             links: [
-                'Domestic Destinations', 'International Destinations', 'Indirect Destinations',
-                'Holidays', 'Discover Syria', 'Tourism Programs', 'Family Holidays Packages', 'Honeymoon Packages'
+                t('footer.destinations.links.domestic'),
+                t('footer.destinations.links.international'),
+                t('footer.destinations.links.indirect'),
+                t('footer.destinations.links.holidays'),
+                t('footer.destinations.links.discoverSyria'),
+                t('footer.destinations.links.tourismPrograms'),
+                t('footer.destinations.links.familyPackages'),
+                t('footer.destinations.links.honeymoonPackages'),
             ]
         },
         {
-            title: 'About Loyalty Program',
+            title: t('footer.loyaltyProgram.title'),
             links: [
-                'About The Program', 'Join The Program',
-                'Terms And Conditions'
+                t('footer.loyaltyProgram.links.about'),
+                t('footer.loyaltyProgram.links.join'),
+                t('footer.loyaltyProgram.links.terms'),
             ]
         },
         {
-            title: 'Travel Experience',
+            title: t('footer.travelExperience.title'),
             links: [
-                'Before Travel', 'At The Airport', 'On Board', 'Additional Services',
+                t('footer.travelExperience.links.beforeTravel'),
+                t('footer.travelExperience.links.atAirport'),
+                t('footer.travelExperience.links.onBoard'),
+                t('footer.travelExperience.links.additionalServices'),
+            ]
+        },
+        {
+            title: t('footer.help.title'),
+            links: [
+                t('footer.help.links.travelUpdates'),
+                t('footer.help.links.share'),
+                t('footer.help.links.faq'),
+                t('footer.help.links.contact'),
+                t('footer.help.links.ouroffice'),
+                t('footer.help.links.ourgsa'),
+                t('footer.help.links.travelhub'),
+                t('footer.help.links.apiintegration'),
+                t('footer.help.links.travelAgentGuide'),
 
-            ]
-
-        },
-        {
-            title: 'Help',
-            links: [
-                'Contact Us', 'Inquiries & Complaints', 'Our Sales Offices',
-                'Our Agents Worldwide', 'Join As a Partner', 'FAQs'
             ]
         }
     ];
 
+
     return (
         <div className=" relative  bg-main text-white">
-            <footer className=" w-[75%] xl:w-[65%] mx-auto pt-4 pb-20 md:py-12">
+            <footer className=" w-[90%] px-2  mx-auto pt-4 pb-20 md:py-12">
                 {/* CTA */}
                 {/* <div className=" hidden  xl:flex  flex-wrap justify-between items-center gap-6  pb-8">
                     <div className='flex items-start gap-8'>
@@ -166,17 +201,20 @@ const Footer = () => {
 
                 {/* Footer Bottom */}
                 <div className="text-center md:text-start mt-10 border-t border-white/20 pt-4 flex flex-col md:flex-row justify-between text-xs text-white/70">
-                    <p>© All Rights Reserved. Fly Cham 2025</p>
+                    <p>© {t('appfooter.rights')} Fly Cham 2025</p>
                     <div className="flex gap-4 mt-2 md:mt-0 justify-center">
-                        <span>Site Map</span>
-                        <span>Privacy Policy</span>
-                        <span>Terms and Conditions</span>
+                        <span>{t('appfooter.siteMap')}</span>
+                        <span>{t('appfooter.privacy')}</span>
+                        <span>{t('appfooter.terms')}</span>
                     </div>
                 </div>
                 <Image
-                    src={pattern}
+            src={!isArabic ? sidebarar : footerPattern}
                     alt="Background Pattern"
-                    className="absolute opacity-30 bottom-0 right-0 w-[280px] md:w-[400px] pointer-events-none select-none z-0"
+                    className={
+                        ` hidden md:block
+ absolute opacity-30 bottom-0 ${isArabic ? 'left-0' : 'right-0'} w-[280px] md:w-[400px] pointer-events-none select-none z-0`
+                    }
                     aria-hidden="true"
                 />
             </footer>

@@ -1,9 +1,10 @@
 'use client';
+import useIsArabic from '@/hooks/useIsArabic';
 import React, { useState } from 'react';
 
 export default function SearchTabs({ onClose, activeTab, setActiveTab, tabs, formik, validateTabFields }) {
     const activeIndex = tabs.findIndex((tab) => tab.id === activeTab);
-
+    const isArabic = useIsArabic()
     return (
         <div className=" relative px-4 py-4 bg-white rounded-[20.77px] shadow-lg w-full max-w-6xl mx-auto overflow-x-auto">
             {/* Close Button */}
@@ -19,6 +20,7 @@ export default function SearchTabs({ onClose, activeTab, setActiveTab, tabs, for
                 {tabs.map((tab, index) => {
                     const isSelected = index <= activeIndex;
                     const Icon = tab.icon;
+                    const rotateIcon = isArabic && (tab.id === 0 || tab.id === 1); // departure or arrival
 
                     return (
                         <div key={tab.id} className="flex items-center gap-4 w-full sm:w-[calc(50%-8px)] md:w-auto">
@@ -34,15 +36,18 @@ export default function SearchTabs({ onClose, activeTab, setActiveTab, tabs, for
                                 <div
                                     className={`flex items-center justify-center w-1/3 py-5 transition-colors duration-500 ${isSelected ? 'bg-main' : 'bg-gray-800'}`}
                                 >
-                                    <Icon className="text-white text-xl md:text-2xl" />
+                                    <Icon style={{
+                                        transform: isArabic ? 'scaleX(-1)' : 'none',
+                                        transition: 'transform 0.3s',
+                                    }} className="text-white text-xl md:text-2xl" />
                                 </div>
 
                                 {/* Text */}
                                 <div
                                     className={` flex flex-col justify-center px-4 py-4 w-2/3 transition-colors duration-500 ${isSelected ? 'bg-secondary' : 'bg-gray-600'}`}
                                 >
-                                    <span className="text-white text-sm font-semibold">{tab.title}</span>
-                                    <span className="text-white/70 text-xs">{tab.subtitle}</span>
+                                    <span className="text-white text-sm font-semibold text-start">{tab.title}</span>
+                                    <span className="text-white/70 text-xs text-start">{tab.subtitle}</span>
                                 </div>
                             </div>
 

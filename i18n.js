@@ -1,21 +1,26 @@
-// lib/i18n.ts
+// lib/i18n.js
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import LanguageDetector from 'i18next-browser-languagedetector'
-import HttpBackend from 'i18next-http-backend'
+
+// Import translation files manually (static)
+import translationEN from './public/locales/en/translation.json'
+import translationAR from './public/locales/ar/translation.json'
 
 i18n
-  .use(HttpBackend) // ✅ load translation files via HTTP
-  .use(LanguageDetector) // ✅ detect language from browser/localStorage
-  .use(initReactI18next) // ✅ integrate with React
+  .use(initReactI18next)
   .init({
+    resources: {
+      en: {
+        translation: translationEN,
+      },
+      ar: {
+        translation: translationAR,
+      },
+    },
+    lng: 'en', // default language
     fallbackLng: 'en',
-    debug: false,
     interpolation: {
       escapeValue: false,
-    },
-    backend: {
-      loadPath: '/locales/{{lng}}/{{ns}}.json', // ✅ load from /public/locales/
     },
   })
 

@@ -5,6 +5,8 @@ import { DayPicker } from 'react-day-picker';
 import { addMonths, subMonths } from 'date-fns';
 import 'react-day-picker/dist/style.css';
 import useIsMobile from '@/hooks/useIsMobile';
+import useIsArabic from '@/hooks/useIsArabic';
+import { arSA, enUS } from 'date-fns/locale';
 
 const TravelWhen = ({ formik, activeTap }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -12,7 +14,7 @@ const TravelWhen = ({ formik, activeTap }) => {
   const isTab = useIsMobile('1024');
   const isMb = useIsMobile('768')
   const numberOfMonths = isMb ? 1 : isTab ? 2 : 3;
-
+  const isArabic = useIsArabic()
   const handlePrev = () => {
     setCurrentMonth((prev) => subMonths(prev, 1));
   };
@@ -39,7 +41,7 @@ const TravelWhen = ({ formik, activeTap }) => {
 
   return (
     <div className="w-full max-w-7xl mx-auto bg-white p-4 md:p-6 rounded-2xl shadow">
-      <div className="flex justify-between items-center mb-4 px-2">
+      <div dir='ltr' className="flex justify-between items-center mb-4 px-2">
         <button
           onClick={handlePrev}
           className="cursor-pointer text-xl px-3 py-1 rounded-full hover:bg-gray-200 transition"
@@ -60,18 +62,21 @@ const TravelWhen = ({ formik, activeTap }) => {
           numberOfMonths={numberOfMonths}
           pagedNavigation
           // showOutsideDays
+          locale={isArabic ? arSA : enUS}
+  disabled={{ before: new Date() }} // ✅ Disable past days
+
           mode={activeTap === 0 ? 'single' : 'range'}
           selected={selected}
           onSelect={setSelected}
           className="flex justify-center"
           classNames={{
-            today: `border-main`,
+            today: 'border-main',
             selected: `bg-main border-main text-white ${!activeTap && 'rounded'}`,
-            range_middle: 'bg-main-light  text-black',
-            range_start: 'rounded-l-xl',
-            range_end: 'rounded-r-xl',
-
+            range_middle: 'bg-main-light text-black',
+            range_start: isArabic ? 'rounded-r-xl' : 'rounded-l-xl',
+            range_end: isArabic ? 'rounded-l-xl' : 'rounded-r-xl',
           }}
+
         />
       </div>
     </div>

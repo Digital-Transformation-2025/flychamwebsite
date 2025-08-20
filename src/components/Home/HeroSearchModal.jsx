@@ -13,11 +13,16 @@ import Button from '../Ui/Button';
 import { useFormik } from 'formik';
 import useIsMobile from '@/hooks/useIsMobile';
 import { toast } from 'sonner';
-import cities from '@/util/cities';
 import { FaPlaneArrival } from "react-icons/fa";
+import { useTranslation } from 'react-i18next';
+import useIsArabic from '@/hooks/useIsArabic';
+import useCities from '@/hooks/useCities';
 
 export default function HeroSearchModal({ isOpen, onClose, activeTap }) {
     const isTab = useIsMobile('1024')
+    const isArabic = useIsArabic()
+    const { t } = useTranslation();
+    const cities = useCities();
 
     const [activeTab, setActiveTab] = useState(0);
     const [hasMounted, setHasMounted] = useState(false);
@@ -29,9 +34,9 @@ export default function HeroSearchModal({ isOpen, onClose, activeTap }) {
     function getTabHeight(tabIndex) {
         switch (tabIndex) {
             case 0:
-                return 'h-80'; // Flying Start
+                return 'h-90'; // Flying Start
             case 1:
-                return 'h-80'; // Destination
+                return 'h-90'; // Destination
             case 2:
                 return 'h-80'; // Guests
             case 3:
@@ -80,14 +85,12 @@ export default function HeroSearchModal({ isOpen, onClose, activeTap }) {
             const formattedDeparture = formatDate(dateStart);
             const formattedReturn = type === 1 ? formatDate(dateEnd) : '';
             const flightType = type === 0 ? 'Y' : 'B'
-            console.log('formattedDeparture', formattedDeparture);
-            console.log('formattedReturn', formattedReturn);
             // https://reservations.chamwings.com/service-app/ibe/reservation.html#/fare/en/USD/SY/DAM/KWI/11-06-2025/12-06-2025/1/0/0/Y///
             // Build URL
             const searchUrl = `https://reservations.flycham.com/service-app/ibe/reservation.html#/fare/en/USD/SY/${source}/${destination}/${formattedDeparture}/${formattedReturn}/${adults}/${children}/${infants}/Y///`;
 
             // Open in new tab
-            window.open(searchUrl, '_blank');
+            // window.open(searchUrl, '_blank');
         }
 
 
@@ -97,53 +100,55 @@ export default function HeroSearchModal({ isOpen, onClose, activeTap }) {
     const tabs = [
         {
             id: 0,
-            title: 'Flying From',
+            title: t('tabs.flyingFrom.title'),
             subtitle: cities?.find((c) => c.value === formik.values.source)?.name,
             icon: FaPlaneDeparture,
             render: () => <FlyingStart formik={formik} setActiveTab={setActiveTab} />,
         },
         {
             id: 1,
-            title: 'Destination',
-            subtitle: cities?.find((c) => c.value === formik.values.destination)?.name,
+            title: t('tabs.destination.title'),
+            subtitle: cities?.find((c) => c.value === t(formik.values.destination))?.name,
             icon: FaPlaneArrival,
             render: () => <Destinations formik={formik} setActiveTab={setActiveTab} />,
         },
         {
             id: 2,
-            title: 'Guests',
-            subtitle: 'Add Guest',
+            title: t('tabs.guests.title'),
+            subtitle: t('tabs.guests.subtitle'),
             icon: FaUserFriends,
             render: () => <Guests formik={formik} setActiveTab={setActiveTab} />,
         },
         {
             id: 3,
-            title: 'Travel When',
-            subtitle: 'Check Date',
+            title: t('tabs.travelWhen.title'),
+            subtitle: t('tabs.travelWhen.subtitle'),
             icon: FaCalendarAlt,
             render: () => <TravelWhen formik={formik} setActiveTab={setActiveTab} activeTap={activeTap} />,
         },
     ];
-    function validateTabFields(activeTab, values) {
+
+
+
+    function validateTabFields(activeTab, values, t) {
         if (activeTab === 0 && !values.source) {
-            toast.error('Please select a departure city.', {
-                description: 'You must choose a source before continuing.',
-                duration: 3000
+            toast.error(t('validation.sourceTitle'), {
+                description: t('validation.sourceDescription'),
+                duration: 3000,
             });
             return false;
         }
 
         if (activeTab === 1 && !values.destination) {
-            toast.error('Missing destination', {
-                description: 'Please select your arrival city before continuing.',
-                duration: 3000
+            toast.error(t('validation.destinationTitle'), {
+                description: t('validation.destinationDescription'),
+                duration: 3000,
             });
             return false;
         }
 
         return true;
     }
-
 
     if (!hasMounted) return null;
 
@@ -193,10 +198,10 @@ export default function HeroSearchModal({ isOpen, onClose, activeTap }) {
 
 
                                 {/* Navigation Buttons */}
-                                <div className="flex justify-end gap-4 mt-32 md:mt-6 ">
+                                <div className={`flex ${isArabic ? "justify-start" : "justify-end"} gap-4 mt-32 md:mt-6 `}>
                                     <Button
                                         variant="outlined"
-                                        text="Back"
+                                        text={t("Back")}
                                         onClick={() => {
                                             if (activeTab === 0) {
                                                 onClose()
@@ -207,9 +212,9 @@ export default function HeroSearchModal({ isOpen, onClose, activeTap }) {
                                     />
                                     <Button
                                         variant="contained"
-                                        text={activeTab === tabs.length - 1 ? 'Finish' : 'Next'}
+                                        text={activeTab === tabs.length - 1 ? t('Finish') : t('Next')}
                                         onClick={() => {
-                                            if (!validateTabFields(activeTab, formik.values)) return;
+                                            if (!validateTabFields(activeTab, formik.values, t)) return;
 
                                             activeTab === tabs.length - 1
                                                 ? formik.handleSubmit()

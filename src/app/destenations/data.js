@@ -4,8 +4,9 @@ import oman from '@/assets/images/Destenations/oman.webp';
 import syria from '@/assets/images/Destenations/syria.webp';
 import turkey from '@/assets/images/Destenations/turkey.webp';
 import kuwait from '@/assets/images/Destenations/kuwait.webp';
-const destinations = [
-   
+const destinations =
+ [
+
     {
         country: 'UAE',
         background: uaeImage,
@@ -35,7 +36,7 @@ const destinations = [
             {
                 name: 'Aleppo',
                 description:
-                   "Travel to Aleppo, the oldest continuously inhabited city in the world, the second-largest city after Damascus, and the economic capital of Syria. Renowned as a center of Arabic poetry, art, cuisine, and handicrafts, it is home to a fascinating array of attractions and travel adventures, making it one of the best destinations to visit.",
+                    "Travel to Aleppo, the oldest continuously inhabited city in the world, the second-largest city after Damascus, and the economic capital of Syria. Renowned as a center of Arabic poetry, art, cuisine, and handicrafts, it is home to a fascinating array of attractions and travel adventures, making it one of the best destinations to visit.",
             },
             ,
         ],

@@ -15,12 +15,10 @@ const LanguageSwitcher = () => {
 
   const toggleDropdown = () => setIsOpen(!isOpen)
 
-  const changeLanguage = (langCode) => {
-    console.log('langCode', langCode)
+   const changeLanguage = (langCode) => {
     i18n.changeLanguage(langCode)
     setIsOpen(false)
 
-    // ✅ Update <html> dir and lang
     if (typeof document !== 'undefined') {
       const dir = langCode === 'ar' ? 'rtl' : 'ltr'
       document.documentElement.setAttribute('dir', dir)

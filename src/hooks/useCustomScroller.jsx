@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useRef, useState } from 'react';
 
 export default function useCustomScroller(sectionCount) {
@@ -12,26 +13,61 @@ export default function useCustomScroller(sectionCount) {
     const thumbTop = current * gap;
 
     // Scroll handler
-    useEffect(() => {
-        const handleWheel = (e) => {
-            e.preventDefault();
-            if (isScrolling.current) return;
+useEffect(() => {
+  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
 
-            isScrolling.current = true;
+  const handleWheel = (e) => {
+    if (isTouchDevice) return; // Allow native scroll on touch devices
 
-            setCurrent((prev) => {
-                if (e.deltaY > 0) return Math.min(prev + 1, sectionCount - 1);
-                return Math.max(prev - 1, 0);
-            });
+    e.preventDefault();
+    if (isScrolling.current) return;
 
-            setTimeout(() => {
-                isScrolling.current = false;
-            }, 1000);
-        };
+    isScrolling.current = true;
 
-        window.addEventListener('wheel', handleWheel, { passive: false });
-        return () => window.removeEventListener('wheel', handleWheel);
-    }, [sectionCount]);
+    setCurrent((prev) => {
+      if (e.deltaY > 0) return Math.min(prev + 1, sectionCount - 1);
+      return Math.max(prev - 1, 0);
+    });
+
+    setTimeout(() => {
+      isScrolling.current = false;
+    }, 1000);
+  };
+
+  window.addEventListener('wheel', handleWheel, { passive: false });
+  return () => window.removeEventListener('wheel', handleWheel);
+}, [sectionCount]);
+
+
+useEffect(() => {
+  let startY = 0;
+  let endY = 0;
+
+  const handleTouchStart = (e) => {
+    startY = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e) => {
+    endY = e.changedTouches[0].clientY;
+    const deltaY = startY - endY;
+
+    if (Math.abs(deltaY) < 50) return; // Ignore small swipes
+
+    if (deltaY > 0) {
+      setCurrent((prev) => Math.min(prev + 1, sectionCount - 1)); // Swipe up
+    } else {
+      setCurrent((prev) => Math.max(prev - 1, 0)); // Swipe down
+    }
+  };
+
+  window.addEventListener('touchstart', handleTouchStart);
+  window.addEventListener('touchend', handleTouchEnd);
+
+  return () => {
+    window.removeEventListener('touchstart', handleTouchStart);
+    window.removeEventListener('touchend', handleTouchEnd);
+  };
+}, [sectionCount]);
 
     // Track click handler
     const handleTrackClick = (e) => {
@@ -66,7 +102,6 @@ export default function useCustomScroller(sectionCount) {
         window.addEventListener('mouseup', handleMouseUp);
     };
     const scrollToNext = () => {
-        console.log('clicked', sectionCount);
         setCurrent((prev) => Math.min(prev + 1, sectionCount - 1));
     };
     return {

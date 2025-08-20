@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import Image from 'next/image';
 import phone from '@/assets/images/Help/phone.webp';
@@ -10,7 +11,7 @@ const Help = () => {
             className="w-full rounded-[40px] overflow-hidden bg-center bg-cover "
             style={{
                 backgroundImage: `url(${bg.src})`,
-                backgroundRepeat:'no-repeat'
+                backgroundRepeat: 'no-repeat'
             }}
         >
             <div className="flex flex-col md:flex-row items-center justify-between px-6 md:px-16 py-10 md:py-14 gap-6">

@@ -34,6 +34,493 @@
         "damascus": "Flights to Damascus"
       }
     },
-    "About title":"About Fly Cham"
+    "AboutTitle": "About Fly Cham",
+    "AboutDesc": "Learn more about our company and services"
+  },
+  "aboutFlyCham.cards": {
+    "company.title": "OUR COMPANY",
+    "company.description": "Discover more",
+    "mission.title": "OUR MISSION",
+    "mission.description": "Discover more",
+    "responsibility.title": "OUR RESPONSIBILITY",
+    "responsibility.description": "Discover more"
+  },
+  "footer": {
+    "aboutFlyCham": {
+      "title": "About Fly Cham",
+      "links": {
+        "ourStory": "Our Story",
+        "ourMission": "Our Mission",
+        "ourVision": "Our Vision",
+        "ourValues": "Our Values",
+        "ourResponsibility": "Our Responsibility",
+        "ourFleet": "Our Fleet",
+        "mediaCenter": "Media Center",
+        "chairmanMessage": "Chairman’s Message"
+      }
+    },
+    "bookFlights": {
+      "title": "Book Flights",
+      "links": {
+        "searchFlight": "Search A Flight",
+        "flightSchedules": "Flight Schedules",
+        "hotelBooking": "Hotel Booking",
+        "carRental": "Car Rental",
+        "visaInfo": "Visa Information",
+        "groupTravel": "Group Travel",
+        "privateFlights": "Request Private Flights"
+      }
+    },
+    "destinations": {
+      "title": "Our Destinations Network",
+      "links": {
+        "domestic": "Domestic Destinations",
+        "international": "International Destinations",
+        "indirect": "Indirect Destinations",
+        "holidays": "Holidays",
+        "discoverSyria": "Discover Syria",
+        "tourismPrograms": "Tourism Programs",
+        "familyPackages": "Family Holidays Packages",
+        "honeymoonPackages": "Honeymoon Packages"
+      }
+    },
+    "loyaltyProgram": {
+      "title": "About Loyalty Program",
+      "links": {
+        "about": "About The Program",
+        "join": "Join The Program",
+        "terms": "Terms And Conditions"
+      }
+    },
+    "travelExperience": {
+      "title": "Travel Experience",
+      "links": {
+        "beforeTravel": "Before Travel",
+        "atAirport": "At The Airport",
+        "onBoard": "On Board",
+        "additionalServices": "Additional Services"
+      }
+    },
+    "help": {
+      "title": "Help",
+      "links": {
+        "contact": "Contact Us",
+        "inquiries": "Inquiries & Complaints",
+        "salesOffices": "Our Sales Offices",
+        "agentsWorldwide": "Our Agents Worldwide",
+        "joinPartner": "Join As a Partner",
+        "faq": "FAQs",
+        "travelAgentGuide": "Travel Agent Guide",
+        "apiintegration": "Api Intergration",
+        "travelhub": "Travel Hub - B2B",
+        "ourgsa": "Our GSA",
+        "ouroffice": "Our Offices",
+        "share": "Share Feedback & Review",
+        "travelUpdates": "Travel Updates"
+      }
+    }
+  },
+  "intro": {
+    "title": "About Fly Cham",
+    "followUs": "Follow us on social media",
+    "orContactUs": "or contact us via call center"
+  },
+  "mission": {
+    "heading": "Our Mission, Vision, and Value",
+    "sideText": "Unique experience that reflects our values of comfort and quality toward a future full of excellence.",
+    "paragraph": "Our commitment goes beyond the sky, as we seek to build sustainable and strong ties with our travelers and provide innovative services.",
+    "sections": {
+      "mission": {
+        "title": "Our Mission",
+        "description": "Our mission is to deliver a trusted, seamless, and memorable flight experience for every passenger while providing efficient and reliable airline services across our expanding network of domestic and regional flight destinations. We are committed to raising the bar for the region's aviation sector by ensuring operational safety and security on every flight."
+      },
+      "vision": {
+        "title": "Our Vision",
+        "description": "Fly Cham aspires to be the preferred air carrier, serving as a vital bridge between Syria and international destinations through world-class air travel experiences."
+      },
+      "values": {
+        "title": "Our Core Values"
+      },
+      "excellenceBanner": "Towards a Future Full of Excellence"
+    },
+    "values": {
+      "customerFocus": {
+        "title": "Customer Focus",
+        "description": "We prioritize customer satisfaction, hospitality, and passengers' comfort throughout every journey."
+      },
+      "excellence": {
+        "title": "Excellence",
+        "description": "We maintain the highest levels of efficiency in all aspects of our journeys, from the moment you book your ticket to your arrival at your destination."
+      },
+      "professionalism": {
+        "title": "Professionalism",
+        "description": "Our team is distinguished by professionalism, high skill levels (highest standards), and a commitment to providing exceptional customer service."
+      },
+      "teamwork": {
+        "title": "Teamwork",
+        "description": "We believe great journeys are made possible by great teams. Our team works cooperatively and passionately to provide the highest levels of service and meet passengers' needs, ensuring their comfort throughout the journey."
+      }
+    }
+  },
+  "topic": {
+    "title": "Who We Are",
+    "description": "Shaping the future of air travel with a bold vision and a shared commitment. Fly Cham connects people, cultures, and opportunities across the region with reliability and forward-thinking service",
+    "button": "Discover more",
+    "card1": {
+      "title": "Our Responsibility",
+      "text": "Our journey doesn’t end in the sky. We believe in supporting communities, creating opportunities for youth, and embracing sustainability in everything we do."
+    },
+    "card2": {
+      "title": "Our Fleet",
+      "text": "Modern, efficient, and built for comfort — our fleet is designed to meet the needs of today’s travelers."
+    }
+  },
+  "best": {
+    "heading1": "Fly Cham",
+    "heading2": "is Your Best Choice",
+    "comfort": "More Comfort",
+    "businessClass": "With Business Class",
+    "bookNow": "Book Now",
+    "loyalty": {
+      "title": "Exclusive Benefits with The Loyalty Program",
+      "coming": "Coming Soon"
+    },
+    "trip": {
+      "title": "Plan Your Next Trip to Syria",
+      "coming": "Coming Soon"
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Our team is ready to assist you every step of the way. Whether you're traveling with us, a business partner, or a member of the loyalty program, take advantage of the range of services available and don't hesitate to contact us for any assistance.",
+    "phone": {
+      "number": "+963 4000",
+      "label": "Call us for immediate Help"
+    },
+    "email": {
+      "address": "cs@flycham.com",
+      "label": "Email us for Queries"
+    },
+    "hours": {
+      "range": "Saturday to Thursday, 9:00 AM - Mid Night",
+      "label": "Our Active Hours"
+    }
+  },
+  "destinations": {
+    "uae": {
+      "country": "UAE",
+      "dubai": {
+        "name": "Dubai",
+        "description": "Travel to Dubai with Fly Cham and discover a city unlike any other destination in the world..."
+      },
+      "abudhabi": {
+        "name": "Abu Dhabi",
+        "description": "Travel with Fly Cham to Abu Dhabi, the second largest city in the United Arab Emirates..."
+      },
+      "sharjah": {
+        "name": "Sharjah",
+        "description": "Travel with Fly Cham to Sharjah, a cultural gem of the United Arab Emirates known for its museums, art, and heritage—perfect for those seeking authentic Arabian experiences..."
+      }
+    },
+    "syria": {
+      "country": "Syria",
+      "damascus": {
+        "name": "Damascus",
+        "description": "Travel to the Syrian capital, Damascus, where you'll find a unique blend of culture and history..."
+      },
+      "aleppo": {
+        "name": "Aleppo",
+        "description": "Travel to Aleppo, the oldest continuously inhabited city in the world..."
+      }
+    },
+    "kuwait": {
+      "country": "Kuwait",
+      "kuwait": {
+        "name": "Kuwait",
+        "description": "Travel to Kuwait, one of the most popular tourist destinations in the heart of the Arabian Gulf..."
+      }
+    },
+    "oman": {
+      "country": "Oman",
+      "muscat": {
+        "name": "Muscat",
+        "description": "Travel to Muscat, the enchanting jewel of Oman, offering the perfect blend of traditional charm..."
+      }
+    },
+    "iraq": {
+      "country": "Iraq",
+      "baghdad": {
+        "name": "Baghdad",
+        "description": "Travel to the heart of Arab civilization in Baghdad, Iraq..."
+      },
+      "erbil": {
+        "name": "Erbil",
+        "description": "Travel to Erbil, the enchanting jewel of Kurdistan and the oldest continuously inhabited city..."
+      }
+    }
+  },
+  "hero.title": "Never Stop Exploring The World.",
+  "hero.description": "Discover Fly Cham destinations, including domestic, international, and indirect destinations, offering you comprehensive and comfortable travel services. Browse our flight schedule and book your next journey with us.",
+  "hero.button": "Book Now",
+  "travelAgent": {
+    "join": {
+      "title": "Join Us",
+      "text": "Fill up the form and join us as travel agent."
+    },
+    "login": {
+      "title": "Log in",
+      "text": "Already have an account? log in here"
+    },
+    "button": "Click here"
+  },
+  "whoweare": {
+    "hero": {
+      "title": "Who We Are",
+      "subtitle": "Fly Cham is a Syrian-Emirati joint private commercial airline, officially launched in May 2025, with a bold vision to elevate the aviation sector across Syria and the region. Built on two core pillars, passenger air travel and air cargo transportation, Fly Cham operates an expanding network of domestic and international flight routes, tailored to meet the growing demands of the Syrian market and customers' expectations."
+    },
+    "middle": {
+      "highlight": "Get ready to discover new cities in your own style",
+      "description": "Learn about our modern fleet equipped with the latest technologies to provide a safe and comfortable travel experience"
+    },
+    "button": {
+      "discover": "Discover More"
+    },
+    "responsibility": {
+      "title": "Our Responsibility",
+      "description": "We believe our role extends far beyond air travel. As we are committed to our responsibility toward society, empowering youth and all communities in Syria, and fostering a spirit of innovation among young people. We will be an active partner in building a brighter future and achieving a positive and sustainable impact."
+    },
+    "bottom": {
+      "statementTitle": "Comfort, care, and excellence in every detail",
+      "statementDescription": "Learn about our modern fleet equipped with the latest technologies to provide a safe and comfortable travel experience"
+    },
+    "cards": {
+      "community": {
+        "title": "Our Commitment to Community",
+        "desc": "We believe our role extends far beyond air travel. As we are committed to our responsibility toward society, empowering youth and all communities in Syria, and fostering a spirit of innovation among young people. We will be an active partner in building a brighter future and achieving a positive and sustainable impact."
+      },
+      "passengers": {
+        "title": "Towards Our Passengers",
+        "desc": "We believe our role extends far beyond air travel. As we are committed to our responsibility toward society, empowering youth and all communities in Syria, and fostering a spirit of innovation among young people. We will be an active partner in building a brighter future and achieving a positive and sustainable impact."
+      },
+      "syrianCommunity": {
+        "title": "Towards the Syrian Community",
+        "desc": "We believe in supporting the Syrian community through various community initiatives, and sponsoring and support cultural events and local associations, as well as entrepreneurship, youth, and women's empowerment programs."
+      },
+      "training": {
+        "title": "Training & Development",
+        "desc": "We believe in nurturing talent from within. Through specialized aviation training programs and skills development workshops, we aim to build a new generation of aviation professionals, equipping our team members with the tools to succeed locally and globally via establishing Fly Cham own Training Center."
+      },
+      "futureLeaders": {
+        "title": "Towards Future Leaders",
+        "desc": "Our vision includes creating meaningful opportunities for the youth. By fostering leadership, innovation, and entrepreneurship, to inspire the next wave of Syrian change-makers — in aviation and beyond."
+      }
+    }
+  },
+  "nav": {
+    "bookFlight": "Book Flight",
+    "travelExperience": "Travel Experience",
+    "travelAgent": "Travel Agent",
+    "holiday": "Holiday",
+    "loyaltyProgram": "Loyalty",
+    "aboutUs": "About Us",
+    "support": "Support",
+    "help": "Help",
+    "account": "Account",
+    "flightStatus": " Flight Status",
+    "subSignUp": "Sign up",
+    "subLogin": "Login",
+    "subTravelUpdates": "Travel Updates",
+    "subShareFeedback": "Share Feedback",
+    "subFAQs": "FAQs",
+    "subContactUs": "Contact Us",
+    "subTravelHub": "Travel Hub-B2B"
+  },
+  "flyingStart": {
+    "travelFrom": "Where are you Traveling From?",
+    "placeholder": "Enter airport or city",
+    "matchingAirports": "Matching Airports",
+    "noResults": "No matching results found.",
+    "placeHolder": "Search for airport or city"
+  },
+  "cities": {
+    "dubai": {
+      "name": "Dubai",
+      "label": "Dubai International Airport"
+    },
+    "kuwait": {
+      "name": "Kuwait",
+      "label": "Kuwait International Airport"
+    },
+    "damascus": {
+      "name": "Damascus",
+      "label": "Damascus International Airport"
+    },
+    "aleppo": {
+      "name": "Aleppo",
+      "label": "Aleppo International Airport"
+    },
+    "muscat": {
+      "name": "Muscat",
+      "label": "Muscat International Airport"
+    },
+    "abudhabi": {
+      "name": "Abu Dhabi",
+      "label": "Abu Dhabi International Airport"
+    },
+    "sharjah": {
+      "name": "Sharjah",
+      "label": "Sharjah International Airport"
+    },
+    "erbil": {
+      "name": "Erbil",
+      "label": "Erbil International Airport"
+    },
+    "baghdad": {
+      "name": "Baghdad",
+      "label": "Baghdad International Airport"
+    }
+  },
+  "tabs": {
+    "flyingFrom": {
+      "title": "Flying From"
+    },
+    "destination": {
+      "title": "Destination"
+    },
+    "guests": {
+      "title": "Guests",
+      "subtitle": "Add Guest"
+    },
+    "travelWhen": {
+      "title": "Travel When",
+      "subtitle": "Check Date"
+    }
+  },
+  "guestsTitle": "Guest's",
+  "labels": {
+    "adults": "Adults",
+    "children": "Children",
+    "infants": "Infants"
+  },
+  "subs": {
+    "adults": "+12 Years Old",
+    "children": "2 - 11 years old",
+    "infants": "Under 2 years old"
+  },
+  "classTitle": "Class",
+  "classOptions": {
+    "economy": "Economy",
+    "business": "Business"
+  },
+  "promoTitle": "Promo coupon",
+  "promoPlaceholder": "Enter Coupon Here",
+  "validation": {
+    "sourceTitle": "Please select a departure city.",
+    "sourceDescription": "You must choose a source before continuing.",
+    "destinationTitle": "Missing destination",
+    "destinationDescription": "Please select your arrival city before continuing."
+  },
+  "appfooter": {
+    "rights": "All Rights Reserved.",
+    "siteMap": "Site Map",
+    "privacy": "Privacy Policy",
+    "terms": "Terms and Conditions"
+  },
+  "travelsliderTitle": "Travel Updates",
+  "travelsliderSubTitle": "Stay informed with the latest travel information and guidelines",
+  "updateLabel": "Update",
+  "lastUpdated": "Last updated: 15 June 2025, 06:38 Dubai (GMT+4)",
+  "title": "Flight suspensions - Iraq, Jordan, Lebanon, and Iran",
+  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent auctor purus luctus enim egestas, ac scelerisque ante pulvinar. Donec ut rhoncus ex. Suspendisse ac rhoncus nisl, eu tempor urna.",
+  "linkText": "Manage Your Booking",
+  "moreText": "Morbi convallis convallis diam sit amet lacinia.",
+  "buttonText": "Find more",
+  "travelCard": {
+    "update":"Return of our flights from/to both Damascus International Airport and Aleppo Airport",
+    "updateLabel3":"Return of our flights from/to both Damascus International Airport and Aleppo Airport",
+    "updatecontinue":"Dear passengers, we would like to update you on the return of our flights from/to both Damascus International Airport and Aleppo Airport, as stability returns and air travel resumes as normal.Please check your flight schedule via sales office, or contact customer service.",
+    "pageTitle": "Flight Suspensions",
+    "updateLabel": "Update",
+    "lastUpdated": "Last updated: 19 June 2025, 13:00 Dubai (GMT+4)",
+    "lastUpdated1": "Last updated: 22 June 2025, 13:00 Dubai (GMT+4)",
+    "lastUpdated2": "Last updated: 23 June 2025, 13:00 Dubai (GMT+4)",
+    "lastUpdated3": "Last updated: 25 June 2025, 13:00 Dubai (GMT+4)",
+    "titleUAE": "Flight Suspensions – United Arab Emirates",
+    "titleKuwait": "Flight Suspensions – Kuwait",
+    "titleIraq": "Flight Suspensions – Iraq",
+    "titleMuscat": "Flight Suspensions – Muscat",
+    "descriptionUAE": "We regret to inform our passengers that all Fly Cham flights to and from the United Arab Emirates (Sharjah, Dubai, Abu Dhabi) are suspended until further notice. This decision has been made due to ongoing operational constraints and regional considerations. We apologize for any inconvenience this may cause and remain committed to supporting all affected passengers.",
+    "descriptionKuwait": "We regret to inform our passengers that all Fly Cham flights to and from Kuwait are suspended until further notice. This decision has been made due to ongoing operational constraints and regional considerations. We apologize for any inconvenience this may cause and remain committed to supporting all affected passengers.",
+    "descriptionIraq": "We regret to inform our passengers that all Fly Cham flights to and from Iraq (Baghdad, Erbil) are suspended until further notice. This decision has been made due to ongoing operational constraints and regional considerations. We apologize for any inconvenience this may cause and remain committed to supporting all affected passengers.",
+    "descriptionMuscat": "We regret to inform our passengers that all Fly Cham flights to and from Muscat are suspended until further notice. This decision has been made due to ongoing operational constraints and regional considerations. We apologize for any inconvenience this may cause and remain committed to supporting all affected passengers.",
+    "linkText": "Manage Your Booking",
+    "moreText": "For assistance with your existing reservations, please visit Manage Your Booking or contact our support team.",
+    "buttonText": "Find more",
+    "contactText": "Contact us",
+    "countryUAE": "United Arab Emirates",
+    "countryKuwait": "Kuwait",
+    "countryIraq": "Iraq",
+    "countryMuscat": "Muscat",
+    "damAleppo": "Our flights on June 22 and 23 have been diverted to and from Aleppo International Airport instead of Damascus International Airport.",
+    "descriptionDamAleppo": "Dear passengers, our flights on June 22 and 23 have been diverted to and from Aleppo International Airport instead of Damascus International Airport due to the current circumstances. Please note that free transportation services are available from Damascus to Aleppo and vice versa for diverted flights from Damascus International Airport only.Please be at the bus departure area on Al-Adawi Highway 8.5 hours before the diverted flight's departure time.For more information and assistance, please contact customer service or the office that issued your tickets.",
+    "newUpdate": "Our flights will continue to be diverted on June 24 to and from Aleppo International Airport instead of Damascus International Airport.",
+    "descriptionnewUpdate": "Dear passengers, we would inform you that our flights will continue to be diverted on June 24 to and from Aleppo International Airport instead of Damascus International Airport due to the current circumstances. Please note that free transportation services are available from Damascus to Aleppo and vice versa for diverted flights from Damascus International Airport only.Please be at the bus departure area on Al-Adawi Highway 8 hours before the scheduled departure time of your diverted flight.For more information and assistance, please contact customer service or the office that issued your tickets."
+  },
+  "travelPage": {
+    "subTitleUAE": "Latest travel update for United Arab Emirates flights",
+    "subTitleKuwait": "Latest travel update for Kuwait flights",
+    "subTitleIraq": "Latest travel update for Iraq flights",
+    "subTitleMuscat": "Latest travel update for Muscat flights",
+    "countryIraq": "Iraq",
+    "countryKuwait": "Kuwait",
+    "countryMuscat": "Muscat",
+    "countryUAE": "United Arab Emirates"
+  },
+  "alert": {
+    "important": "Important:",
+    "message": "Flights to/from UAE, Kuwait, Oman, Baghdad, and Erbil are temporarily suspended.",
+    "learn_more": "Find more"
+  },
+  "travelUpdate": {
+    "pageTitle": "Flight Suspensions – UAE, Kuwait, Muscat, and Iraq",
+    "lastUpdated": "Last updated: 19 June 2025, 13:00 Dubai (GMT+4)",
+    "lastUpdated1": "Last updated: 22 June 2025, 13:00 Dubai (GMT+4)",
+    "lastUpdated2": "Last updated: 23 June 2025, 13:00 Dubai (GMT+4)",
+    "introText": "We regret to inform our passengers that all Fly Cham flights to and from the following destinations are currently suspended until further notice:",
+    "suspendedDestinations": [
+      "United Arab Emirates: Sharjah, Dubai, Abu Dhabi",
+      "Kuwait",
+      "Oman: Muscat",
+      "Iraq: Baghdad, Erbil"
+    ],
+    "decisionNotice": "This decision has been made due to ongoing operational constraints and regional considerations. We apologize for any inconvenience this may cause and are committed to supporting all affected passengers.",
+    "supportNotice": "For assistance with your existing reservations, please visit the Manage Your Booking section or contact our support team.",
+    "overviewTitle": "Suspended Routes Overview",
+    "suspendedRoutesTitle": "Fly Cham Routes",
+    "suspendedRoute1": "United Arab Emirates (Sharjah, Dubai, Abu Dhabi)",
+    "suspendedRoute1Date": "Until and including Sunday 30 June 2025",
+    "suspendedRoute2": "Kuwait",
+    "suspendedRoute2Date": "Until and including Sunday 30 June 2025",
+    "suspendedRoute3": "Oman (Muscat)",
+    "suspendedRoute3Date": "Until and including Sunday 30 June 2025",
+    "suspendedRoute4": "Iraq (Baghdad and Erbil)",
+    "suspendedRoute4Date": "Until and including Sunday 30 June 2025",
+    "importantNoticeTitle": "Important Notice",
+    "importantNoticeText": "Customers connecting through suspended cities (UAE, Kuwait, Oman, Iraq), or holding final destinations in these countries, will not be accepted for travel from any origin point until further notice.",
+    "whatYouNeedToKnow": "Passenger Support",
+    "flexibleOptionsIntro": "We understand that these suspensions may affect your travel plans. Passengers holding bookings to the mentioned destinations are kindly advised to review available options by contacting our support team or visiting the Manage Your Booking section.",
+    "flexibleOptions": [
+      "Possible changes to travel dates",
+      "Potential rerouting options within the same region",
+      "Guidance on refunds or credit usage where applicable",
+      "Support for connecting itineraries impacted by these changes"
+    ],
+    "rebookingProcessTitle": "Rebooking Process",
+    "rebookingProcessText": "We are working closely with all concerned teams to provide the best possible assistance and will share updates as soon as they become available.",
+    "flightStatusUpdatesTitle": "Flight Status Updates",
+    "flightStatusUpdatesText": "For assistance with your existing reservations, please visit the Manage Your Booking section or contact our support team.",
+    "buttonCheckStatus": "Check Flight Status",
+    "buttonManageBooking": "Manage Your Booking",
+    "buttonContactUs": "Contact Us"
   }
 }

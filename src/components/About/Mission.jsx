@@ -5,8 +5,11 @@ import Image from 'next/image';
 import mission from '@/assets/images/about/mission.webp';
 import mask from '@/assets/images/about/mask.webp';
 import arrow from '@/assets/images/about/arrow.webp';
+import { useTranslation } from 'react-i18next';
 
 const Mission = () => {
+  const { t } = useTranslation();
+
   return (
     <div id="mission" className="relative w-full min-h-screen flex items-start lg:items-center justify-center bg-white">
       <div className="relative w-full max-w-6xl mx-auto px-4 py-8 lg:py-16 text-[#1A2C39]">
@@ -14,11 +17,10 @@ const Mission = () => {
         {/* Heading + Side Text */}
         <div className="flex flex-col lg:flex-row justify-between mb-6 w-full relative lg:absolute top-0 lg:top-[50px] z-10">
           <h2 className="text-[32px] sm:text-[40px] lg:text-[50px] leading-[1.2] font-semibold text-center lg:text-left">
-            Our Mission, Vision,<br className="hidden sm:block" /> and Value
+            {t("mission.heading")}
           </h2>
           <p className="text-[#133343] text-[14px] font-semibold tracking-[0.98px] font-montserrat text-center lg:text-right mt-4 lg:mt-0">
-            Unique experience that reflects our values of <br />
-            comfort and quality toward a future full of excellence.
+            {t("mission.sideText")}
           </p>
         </div>
 
@@ -62,8 +64,7 @@ const Mission = () => {
 
         {/* Paragraph */}
         <p className="mt-6 w-full lg:max-w-2xl text-[#133343] text-[16px] md:text-[18px] lg:text-[20px] font-[600] tracking-[0.98px] font-montserrat leading-relaxed">
-          Our commitment goes beyond the sky, as we seek to build sustainable and strong ties
-          with our travelers and provide innovative services.
+          {t("mission.paragraph")}
         </p>
       </div>
     </div>

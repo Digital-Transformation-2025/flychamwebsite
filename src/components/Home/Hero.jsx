@@ -1,118 +1,111 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
-import Slider from 'react-slick';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import bg1 from '../../assets/images/main-slider/bg1.webp';
-import bg2 from '../../assets/images/main-slider/bg2.webp';
-import bg3 from '../../assets/images/main-slider/bg3.webp';
+
 import { useTranslation } from 'react-i18next';
 import useIsArabic from '@/hooks/useIsArabic';
+import useIsMobile from '@/hooks/useIsMobile';
 
-const Hero = () => {
-    const { t, i18n } = useTranslation()
-    const sliderRef = useRef(null);
+const Hero = ({ slides, isNavigationBtns, title, subTitle }) => {
+    const { t, i18n } = useTranslation();
+    const isMobile = useIsMobile()
     const [currentSlide, setCurrentSlide] = useState(0);
-    const slides = [bg1, bg2, bg3];
     const isArabic = useIsArabic();
+    const intervalRef = useRef(null);
 
-    const settings = {
-        dots: false,
-        infinite: true,
-        speed: 1000,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 5000,
-        arrows: false,
-        fade: !isArabic,
-        rtl: i18n.language === 'ar', // ✅ works now
-        beforeChange: (_, next) => setCurrentSlide(next),
+    useEffect(() => {
+        intervalRef.current = setInterval(() => {
+            setCurrentSlide((prev) => (prev + 1) % slides.length);
+        }, 5000);
+
+        return () => clearInterval(intervalRef.current);
+    }, [slides.length]);
+
+    const goToSlide = (index) => {
+        setCurrentSlide(index);
     };
 
     return (
-        <div style={{ position: 'relative', width: '100%', height: '600px', overflow: 'hidden' }}>
-            {/* Slider */}
-            <div dir={'ltr'}>
-                <Slider ref={sliderRef} {...settings}>
-                    {slides.map((image, index) => (
-                        <div key={index}>
-                            <div
-                                style={{ position: 'relative', width: '100%', height: '600px' }} >
-                                <Image
-                                    src={image}
-                                    alt={`Slide ${index + 1}`}
-                                    fill
-                                    style={{ objectFit: 'cover' }}
-                                    priority={index === 0}
-                                />
-                            </div>
-                        </div>
-                    ))}
-                </Slider>
-            </div>
+        <div
+            style={{
+                position: 'relative',
+                width: '100%',
+                height: isMobile ? '150px' : '600px',
+                overflow: 'hidden',
+            }}
+        >
+            {/* Slides Wrapper */}
+ <div
+  className="flex transition-transform duration-[800ms] ease-in-out"
+  style={{
+    width: `${slides.length * 100}vw`,
+    transform: isArabic
+      ? `translateX(${currentSlide * 100}vw)` // RTL
+      : `translateX(-${currentSlide * 100}vw)`, // LTR
+  }}
+>
+  {slides.map((image, index) => (
+    <div
+      key={index}
+      className={`w-screen relative flex-shrink-0 ${isMobile ? 'h-[200px]' : 'h-[600px]'}`}
+    >
+      <Image
+        src={image}
+        alt={`Slide ${index + 1}`}
+        fill
+        className="object-cover"
+        priority={index === 0}
+      />
+      {/* Black overlay */}
+      <div className="absolute inset-0 bg-black/40" />
+    </div>
+  ))}
+</div>
 
 
             {/* Centered Text */}
-            <div
-                style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    textAlign: 'center',
-                    color: 'white',
-                    zIndex: 10,
-                    width: 'fit-content',
-                    maxWidth: '90vw', // Prevents overflow on small screens
-                    whiteSpace: 'normal', // Allows text wrapping
-                    wordWrap: 'break-word', // Breaks long words if needed
-                    lineHeight: '1.2' // Better line spacing
-                }}
-            >
-                <h2 style={{
-                    fontSize: 'clamp(1.5rem, 5vw, 3rem)',
-                    fontWeight: 'bold',
-                    marginBottom: '1rem',
-                    lineHeight: '1.1'
-                }}>
-                    {t("sliderTitle")}                </h2>
-                <h1 style={{
-                    fontSize: 'clamp(1.2rem, 4vw, 2rem)',
-                    fontWeight: 'black',
-                    lineHeight: '1.2'
-                }}>
-                {t("sliderDesc")}    
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-white z-10 max-w-[90vw] leading-[1.2]">
+                <h2 className="text-md sm:text-lg md:text-2xl lg:text-3xl font-bold mb-4 leading-[1.1]">
+                    {title}
+                </h2>
+                <h1 className="text-sm sm:text-md md:text-xl lg:text-2xl font-black leading-[1.2]">
+                    {subTitle}
                 </h1>
             </div>
 
-            {/* Navigation Buttons */}
-            <div
-                style={{
-                    position: 'absolute',
-                    bottom: '100px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    display: 'flex',
-                    gap: '10px',
-                    zIndex: 20,
-                }}
-            >
-                {slides.map((_, index) => (
-                    <div
-                        key={index}
-                        onClick={() => sliderRef.current.slickGoTo(index)}
-                        style={{
-                            width: index === currentSlide ? '40px' : '14px',
-                            height: '14px',
-                            borderRadius: '50px',
-                            backgroundColor: index === currentSlide ? '#d2c5a3' : '#fff',
-                            cursor: 'pointer',
-                            transition: 'all 0.3s ease',
-                        }}
-                    />
-                ))}
-            </div>
+
+            {/* Navigation Dots */}
+            {isNavigationBtns &&
+
+                <div
+                    style={{
+                        position: 'absolute',
+                        bottom: isMobile ? '10px' : '160px',
+
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        display: 'flex',
+                        gap: '10px',
+                        zIndex: 20,
+                    }}
+                >
+                    {slides.map((_, index) => (
+                        <div
+                            key={index}
+                            onClick={() => goToSlide(index)}
+                            style={{
+                                width: index === currentSlide ? (isMobile ? '30px':'40px') :  (isMobile ? '10px':'14px'),
+                                height: isMobile ? '10px':"12px",
+                                borderRadius: '50px',
+                                backgroundColor: index === currentSlide ? '#d2c5a3' : '#fff',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s ease',
+                            }}
+                        />
+                    ))}
+                </div>
+            }
         </div>
     );
 };

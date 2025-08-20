@@ -83,7 +83,7 @@ const DestinationCarousel = () => {
   );
 
   return (
-    <div className="w-full  mx-auto ">
+    <div className="w-full  mx-auto " dir='ltr'>
       {/* Main Carousel */}
       <div ref={sliderRef} className="keen-slider mb-6 h-[300px] md:h-[400px]">
         {slides.map((slide, idx) => (
@@ -106,7 +106,7 @@ const DestinationCarousel = () => {
       </div>
 
       {/* Thumbnail Navigation */}
-      <div ref={thumbnailRef} className="keen-slider thumbnail h-[80px]">
+<div ref={thumbnailRef} className="keen-slider thumbnail h-[60px] sm:h-[70px] md:h-[80px]">
         {slides.map((slide, idx) => (
           <div
             key={idx}

@@ -26,7 +26,7 @@ const AboutClient = () => {
     } = useCustomScroller(sections.length);
 
     return (
-        <div className="relative w-screen h-screen bg-white overflow-hidden flex">
+        <div className="relative  bg-white flex h-auto lg:h-screen overflow-y-auto lg:overflow-hidden">
             {/* Section View */}
             <AnimatePresence mode="wait">
                 <motion.div
@@ -46,6 +46,7 @@ const AboutClient = () => {
             </AnimatePresence>
 
             {/* Custom Scrollbar */}
+
             <CustomScroller
                 trackRef={trackRef}
                 thumbTop={thumbTop}

@@ -1,39 +1,28 @@
 'use client';
 
-import { FaLocationArrow, FaExchangeAlt } from 'react-icons/fa';
+import { FaLocationArrow, FaExchangeAlt, FaSearch } from 'react-icons/fa';
 import HeroSearchModal from './HeroSearchModal';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import searchPattern from '@/assets/images/searchPattern.webp';
 import { useTranslation } from 'react-i18next';
+import useIsArabic from '@/hooks/useIsArabic';
 
 const FlightSearch = ({ isHome }) => {
     const [isSwitched, setIsSwitched] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeTap, setActiveTap] = useState(0);
     const { t } = useTranslation()
-    const cardVariants = {
-        initial: { opacity: 0, y: 20 },
-        animate: { opacity: 1, y: 0 },
-        exit: { opacity: 0, y: -20 },
-    };
 
-    // Airport data
-    const damascusAirport = {
-        code: "DAM, Syria",
-        name: "Damascus International Airport"
-    };
-
-    const kuwaitAirport = {
-        code: "KWI, Kuwait",
-        name: "Kuwait International Airport"
-    };
+    const handleModalOpen = () => {
+        // setIsModalOpen(true)
+    }
 
     const fromCard = (
         <motion.div
             layout
             className="cursor-pointer bg-main text-white rounded-2xl p-4 flex-1 w-full"
-            onClick={() => setIsModalOpen(true)}
+            onClick={handleModalOpen}
         >
             <div className="flex items-center gap-2 mb-1 ">
                 <FaLocationArrow className="text-sm" />
@@ -43,7 +32,7 @@ const FlightSearch = ({ isHome }) => {
                 {t(`flightSearch.airports.${isSwitched ? 'kuwait' : 'damascus'}.code`)}
             </h3>
             <p className="text-sm text-blue-100">
-               {t(`flightSearch.airports.${isSwitched ? 'kuwait' : 'damascus'}.name`)}
+                {t(`flightSearch.airports.${isSwitched ? 'kuwait' : 'damascus'}.name`)}
             </p>
         </motion.div>
     );
@@ -52,17 +41,16 @@ const FlightSearch = ({ isHome }) => {
         <motion.div
             layout
             className=" cursor-pointer bg-secondary text-white rounded-2xl p-4 flex-1  w-full"
-            onClick={() => setIsModalOpen(true)}
-        >
+            onClick={handleModalOpen}        >
             <div className="flex items-center gap-2 mb-1">
                 <FaLocationArrow className="text-sm" />
                 <span className="text-xs uppercase tracking-wider text-white">{t('flightSearch.to')}</span>
             </div>
             <h3 className="text-lg font-semibold text-white">
-{t(`flightSearch.airports.${isSwitched ? 'damascus' : 'kuwait'}.code`)}
+                {t(`flightSearch.airports.${isSwitched ? 'damascus' : 'kuwait'}.code`)}
             </h3>
             <p className="text-sm text-white">
-      {t(`flightSearch.airports.${isSwitched ? 'damascus' : 'kuwait'}.name`)}
+                {t(`flightSearch.airports.${isSwitched ? 'damascus' : 'kuwait'}.name`)}
             </p>
         </motion.div>
     );
@@ -75,7 +63,7 @@ const FlightSearch = ({ isHome }) => {
                 backgroundImage: `url(${searchPattern.src})`, backgroundRepeat: 'no-repeat',
                 backgroundPosition: '925px 0px',
             }}
-            className={`max-w-7xl mx-auto ${true && 'mt-[-75px]'} bg-white rounded-3xl shadow-md p-8 relative z-20 transition`}>
+            className={`${true && 'mt-[-75px]'} bg-white rounded-3xl shadow-md p-8 relative z-20 transition`}>
 
             {/* Tabs */}
             <div className="bg-white  p-3  inline-flex space-x-2 mb-6" style={{
@@ -83,7 +71,7 @@ const FlightSearch = ({ isHome }) => {
                 boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
             }}>
 
-                {[t('flightSearch.oneway'), t('flightSearch.roundTrip')].map((label, index) => (
+                {[t('flightSearch.oneWay'), t('flightSearch.Return')].map((label, index) => (
                     <button
                         key={index}
                         onClick={() => setActiveTap(index)}
@@ -116,15 +104,14 @@ const FlightSearch = ({ isHome }) => {
                             {toCard}
                         </motion.div>
                         <button
-                            className="cursor-pointer  bg-secondary text-main font-bold shadow px-3 py-3 shadow-lg rounded-xl shadow-md hover:bg-secondary-light transition mt-4 md:mt-0 whitespace-nowrap"
-                            style={{
-                                fontSize: '12px',
-                                lineHeight: '13.046px',
-                                letterSpacing: '0.024px',
-                            }}
+                            className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 mt-4 md:mt-0 rounded-xl font-semibold text-sm md:text-base tracking-wide whitespace-nowrap
+             text-main bg-secondary hover:bg-secondary-light active:scale-[0.98] transition-all duration-300 ease-in-out
+             shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-secondary-light"
                         >
+                            <FaSearch className="text-sm md:text-base" />
                             {t('flightSearch.search')}
                         </button>
+
 
 
                     </>
