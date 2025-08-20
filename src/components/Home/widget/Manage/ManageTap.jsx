@@ -44,7 +44,7 @@ const ManageTap = () => {
                     } else {
                         const { alert } = payload || {};
                         const { title, description } = alert || {};
-                        setAlert({ title, description })
+                        setAlert({ title: title || "Server Error", description: description || "Something went wrong on our side. Please try again later." })
                         setModalOpen(true);
                     }
                 });

@@ -44,6 +44,9 @@ const contact = {
 const ManageBookingClient = () => {
     const { isLoading, bookInfo } = useSelector((s) => s.manageBook)
     const { isTraveleAgent, mainImage, segments, bookingReference: pnr, contactInfo, passengers } = bookInfo || {}
+    const filteredTabs = isTraveleAgent
+        ? tabs.filter((t) => t.id !== 2)
+        : tabs;
     const [active, setActive] = useState(0);
     const [openExtra, setOpenExtra] = useState(false)
     const [openCancelBook, setOpenCancelBook] = useState(false)
@@ -135,9 +138,9 @@ const ManageBookingClient = () => {
                     departureDate: clickedFlight?.banner?.dateText,
                     Duration: clickedFlight?.mid?.durationText?.split(',')[1],
                     stops: clickedFlight?.mid?.durationText?.split(',')[0],
-                    departure_time:  clickedFlight?.left?.time,
-                    arrival_time:clickedFlight?.right?.time,
-                    origin_name:clickedFlight?.left?.airport,
+                    departure_time: clickedFlight?.left?.time,
+                    arrival_time: clickedFlight?.right?.time,
+                    origin_name: clickedFlight?.left?.airport,
                     destination_name: clickedFlight?.right?.airport,
                     FlightNumber: clickedFlight?.flightNumber,
                 },
@@ -164,7 +167,7 @@ const ManageBookingClient = () => {
                 pnr={pnr}
                 dateLabel={dateLabel}
             />
-            <Tabs tabs={tabs} active={active} onChange={onChangeTab} />
+            <Tabs tabs={filteredTabs} active={active} onChange={onChangeTab} />
         </div>
 
         <div className="max-w-[90%] md:max-w-[70%] mx-auto space-y-8 pt-[220px] md:pt-0">
@@ -195,9 +198,11 @@ const ManageBookingClient = () => {
                     handleClickBtn={handleClickBtn}
                 />
             </div>
-            <div id="section-2" className="scroll-mt-[360px] md:scroll-mt-0">
-                <ContactDetails onEdit={onEdit} contactInfo={contactInfo} />
-            </div>
+            {!isTraveleAgent &&
+                <div id="section-2" className="scroll-mt-[360px] md:scroll-mt-0">
+                    <ContactDetails onEdit={onEdit} contactInfo={contactInfo} />
+                </div>
+            }
             {/* <div id="section-3" className="scroll-mt-[360px] md:scroll-mt-0">
                 <div className="py-20 text-center text-gray-500">Additional services</div>
             </div> */}
