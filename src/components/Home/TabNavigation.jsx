@@ -24,7 +24,7 @@ const TabNavigation = ({ tabs, activeTab, setActiveTab, isMobile }) => {
           <button
             key={tab}
             onClick={() => handleTabClick(tab)}
-            disabled={pathname !== '/test123'}
+            // disabled={pathname !== '/test123'}
             className={`cursor-pointer capitalize px-4 ${
               isMobile ? 'py-4' : 'py-2'
             } text-sm font-semibold border-b-2 transition-colors duration-400 

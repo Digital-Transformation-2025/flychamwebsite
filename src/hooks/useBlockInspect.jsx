@@ -6,13 +6,15 @@ export default function useBlockInspect() {
         let lastCheck = Date.now();
 
         const checkDevTools = () => {
-            const widthThreshold = window.outerWidth - window.innerWidth > 160;
-            const heightThreshold = window.outerHeight - window.innerHeight > 160;
+            const widthGap = window.outerWidth - window.innerWidth;
+            const heightGap = window.outerHeight - window.innerHeight;
 
-            if (widthThreshold || heightThreshold) {
-                window.history.back(); // Detected — go back
+            // Instead of fixed 160, use a ratio
+            if (widthGap > window.outerWidth * 0.25 || heightGap > window.outerHeight * 0.25) {
+                window.history.back(); // likely DevTools open
             }
         };
+
 
         const interval = setInterval(() => {
             if (Date.now() - lastCheck > 1000) {

@@ -1,71 +1,56 @@
 'use client';
-import React, { useRef, useState, useLayoutEffect } from 'react';
+import React, { useRef, useState, useLayoutEffect, useEffect } from 'react';
 
 const Tabs = ({ tabs, active = 0, onChange }) => {
   const containerRef = useRef(null);
   const itemRefs = useRef([]);
+  itemRefs.current = tabs.map((_, i) => itemRefs.current[i] || null);
+
   const [underline, setUnderline] = useState({ left: 0, width: 0 });
 
+  // Convert active (id or index) -> index
+  const getActiveIndex = () => {
+    const byId = tabs.findIndex((t) => String(t.id) === String(active));
+    if (byId !== -1) return byId;          // active is an id
+    const asNum = Number(active);          // fallback: treat as index
+    return Number.isInteger(asNum) && tabs[asNum] ? asNum : 0;
+  };
+  const activeIndex = getActiveIndex();
+
   const measure = () => {
-    const container = containerRef.current;
-    const el = itemRefs.current[active];
-    if (!container || !el) return;
-
-    const containerRect = container.getBoundingClientRect();
-    const elRect = el.getBoundingClientRect();
-
+    const c = containerRef.current;
+    const el = itemRefs.current[activeIndex];
+    if (!c || !el) return;
+    const cr = c.getBoundingClientRect();
+    const er = el.getBoundingClientRect();
     setUnderline({
-      left: elRect.left - containerRect.left + container.scrollLeft,
-      width: elRect.width,
+      left: (er.left - cr.left) + c.scrollLeft, // account for horizontal scroll
+      width: er.width,
     });
   };
 
   useLayoutEffect(() => {
     measure();
-    const handleResize = () => measure();
-    const handleScroll = () => measure();
+  }, [activeIndex, tabs.length]);
 
-    window.addEventListener('resize', handleResize);
-    containerRef.current?.addEventListener('scroll', handleScroll);
+  useEffect(() => {
+    const onResize = () => measure();
+    const onScroll = () => measure();
+
+    window.addEventListener('resize', onResize, { passive: true });
+    window.addEventListener('orientationchange', onResize);
+    const c = containerRef.current;
+    c?.addEventListener('scroll', onScroll, { passive: true });
+
+    // fonts can change widths after render
+    document?.fonts?.ready?.then(measure).catch(() => { });
 
     return () => {
-      window.removeEventListener('resize', handleResize);
-      containerRef.current?.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('orientationchange', onResize);
+      c?.removeEventListener('scroll', onScroll);
     };
-  }, [active, tabs]);
-
-  const handleClick = (tab, i) => {
-    const section = document.getElementById(tab.id);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    const container = containerRef.current;
-    const el = itemRefs.current[i];
-    if (container && el) {
-      const containerRect = container.getBoundingClientRect();
-      const elRect = el.getBoundingClientRect();
-
-      // if tab is before container's left edge → scroll to start
-      if (elRect.left < containerRect.left) {
-        container.scrollTo({
-          left: container.scrollLeft - (containerRect.left - elRect.left) - 20,
-          behavior: "smooth",
-        });
-      }
-      // if tab is after container's right edge → scroll to end
-      else if (elRect.right > containerRect.right) {
-        container.scrollTo({
-          left: container.scrollLeft + (elRect.right - containerRect.right) + 20,
-          behavior: "smooth",
-        });
-      }
-    }
-
-    onChange?.(tab);
-  };
-
-
+  }, [activeIndex]);
 
   return (
     <nav className="w-full bg-white shadow-md">
@@ -73,27 +58,32 @@ const Tabs = ({ tabs, active = 0, onChange }) => {
         <ul
           ref={containerRef}
           className="relative flex gap-6 md:gap-10 overflow-x-auto no-scrollbar"
+          role="tablist"
         >
           {tabs.map((tab, i) => {
-            const isActive = i === active;
+            const isActive = i === activeIndex;
             return (
               <li key={tab.id} className="relative flex-shrink-0">
                 <button
                   ref={(el) => (itemRefs.current[i] = el)}
                   type="button"
-                  onClick={() => onChange(tab, i, containerRef, itemRefs)}
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => onChange?.(tab.id, i, containerRef, itemRefs)}  
                   className={`whitespace-nowrap py-4 text-sm transition-colors ${isActive ? 'text-primary-1 font-medium' : 'text-[#8A8A87]'
                     }`}
                 >
                   {tab.label}
                 </button>
+
               </li>
             );
           })}
           <span
+            aria-hidden
             className="pointer-events-none absolute bottom-0 h-[3px] rounded-full bg-primary-1 transition-all duration-300"
             style={{
-              left: underline.left,
+              transform: `translateX(${underline.left}px)`,
               width: underline.width,
             }}
           />

@@ -152,7 +152,7 @@ export default function PassengersInformation({ passengers, isTraveleAgent,
 
         return {
             id: `p${index}`,
-            name: `${p.title}. ${p.firstName} ${p.lastName}`,
+            name: ` ${p.title ? p.title : ''}${`${p.title ? '.' : ''}`} ${p.firstName} ${p.lastName}`,
             type: p.passengerType,
             legs: [
                 { id: 'out', from: firstSegment.departureAirport, to: firstSegment.arrivalAirport, flight: firstSegment.flightNumber },

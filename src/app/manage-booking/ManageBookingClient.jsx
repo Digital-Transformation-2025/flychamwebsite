@@ -12,9 +12,11 @@ import PassengersInformation from '@/components/Manage-booking/PassengersInforma
 import Tabs from '@/components/Manage-booking/Tabs'
 import TravelAgencyAlert from '@/components/Manage-booking/TravelAgencyAlert';
 import LottieComponent from '@/components/Ui/LottieComponent';
+import { useTabsScrollSpy } from '@/hooks/useTabsScrollSpy';
+// import { useScrollSpy } from '@/hooks/useScrollSpyTabs';
 import { contactSchemaInManage } from '@/util/validatonSchemas';
 import { useFormik } from 'formik';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 const tabs = [
     {
@@ -47,7 +49,15 @@ const ManageBookingClient = () => {
     const filteredTabs = isTraveleAgent
         ? tabs.filter((t) => t.id !== 2)
         : tabs;
-    const [active, setActive] = useState(0);
+
+
+    const { active, onChangeTab } = useTabsScrollSpy(filteredTabs, {
+        headerSelector: "#sticky-head",
+        getSectionId: (t) => `section-${t.id}`,
+    });
+
+    console.log('active', active);
+
     const [openExtra, setOpenExtra] = useState(false)
     const [openCancelBook, setOpenCancelBook] = useState(false)
     const [isShowDetailsModalOpen, setFlightDetailsOpen] = useState(false)
@@ -62,7 +72,6 @@ const ManageBookingClient = () => {
         setOpenCancelBook(true)
     }
     const handleClickDetails = (leg) => {
-        console.log('leg', leg);
         setFlightDetailsOpen(true)
         setClickedFlight(leg)
     }
@@ -94,39 +103,7 @@ const ManageBookingClient = () => {
             setShowContactModal(false);
         },
     });
-    const onChangeTab = (tab, index, containerRef, itemRefs) => {
-        setActive(tab.id);
 
-        // scroll to section vertically
-        const el =
-            document.getElementById(`section-${tab.id}`) ||
-            document.getElementById(String(tab.id));
-        if (el) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        // scroll tab horizontally if clipped
-        const container = containerRef.current;
-        const elTab = itemRefs.current[index];
-        if (container && elTab) {
-            const containerRect = container.getBoundingClientRect();
-            const elRect = elTab.getBoundingClientRect();
-
-            if (elRect.left < containerRect.left) {
-                // scroll left
-                container.scrollTo({
-                    left: container.scrollLeft - (containerRect.left - elRect.left) - 20,
-                    behavior: 'smooth',
-                });
-            } else if (elRect.right > containerRect.right) {
-                // scroll right
-                container.scrollTo({
-                    left: container.scrollLeft + (elRect.right - containerRect.right) + 20,
-                    behavior: 'smooth',
-                });
-            }
-        }
-    };
 
 
     const flight = {
@@ -153,7 +130,7 @@ const ManageBookingClient = () => {
 
 
     const Loading = <LottieComponent />
-    const contet = <div className='h-[400vh]'>
+    const contet = <div className=''>
         <div
             id="sticky-head"
 

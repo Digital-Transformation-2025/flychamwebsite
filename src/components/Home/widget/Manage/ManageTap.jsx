@@ -60,9 +60,14 @@ const ManageTap = () => {
 
     // Force uppercase for last name
     const handleLastNameChange = (e) => {
-        const englishOnly = e.target.value.replace(/[^A-Za-z]/g, '').toUpperCase();
+        const englishOnly = e.target.value
+            .replace(/[^A-Za-z\s]/g, '')   // only letters + spaces
+            .replace(/\s+/g, ' ')          // collapse multiple spaces
+            .trimStart()                   // optional: prevent leading space
+            .toUpperCase();
         formik.setFieldValue('lastName', englishOnly);
     };
+
 
     const canSearch = (!!formik.values.pnr && !!formik.values.lastName)
 

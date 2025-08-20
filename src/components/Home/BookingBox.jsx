@@ -447,41 +447,49 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
 
                 />
             }
-            {isResultsPage && (
-                <ModalTitle onCloseMidifySearch={onCloseMidifySearch} />
-            )}
-            <TripTypeSelector values={formik.values}
-                setFieldValue={formik.setFieldValue}
-                handleReset={handleReset}
-
-            />
-            <FromToSelector
-                // setShowModal={setDesktopShowModal}
-                setShowModal={setDesktopShowModal}
-                setShowMobileModal={setShowMobileModal}
-                cities={cities}
-                isMobile
-                values={formik.values}
-                handleSwitch={handleSwitch}
-                setOpenAirPortsDropdown={setOpenAirPortsDropdown}
-                setFieldValue={formik.setFieldValue}
-            />
-
-            <FlightInfoInputs formik={formik} setShowMobileModal={setShowMobileModal}
-            />
-            <SearchFlightsButton handleSubmit={formik.handleSubmit} values={formik.values}
-                submitted={submitted}
-
-            />
-            {!isResultsPage &&
-
-                <MilesToggle
-                    isMobile={isMobile}
-                    miles={formik.values.miles}
-                    setFieldValue={formik.setFieldValue}
-
-                />
+            {activeTab === "manage" &&
+                <ManageTap />
             }
+            {activeTab === "book" &&
+                <>
+                    {isResultsPage && (
+                        <ModalTitle onCloseMidifySearch={onCloseMidifySearch} />
+                    )}
+                    <TripTypeSelector values={formik.values}
+                        setFieldValue={formik.setFieldValue}
+                        handleReset={handleReset}
+
+                    />
+                    <FromToSelector
+                        // setShowModal={setDesktopShowModal}
+                        setShowModal={setDesktopShowModal}
+                        setShowMobileModal={setShowMobileModal}
+                        cities={cities}
+                        isMobile
+                        values={formik.values}
+                        handleSwitch={handleSwitch}
+                        setOpenAirPortsDropdown={setOpenAirPortsDropdown}
+                        setFieldValue={formik.setFieldValue}
+                    />
+
+                    <FlightInfoInputs formik={formik} setShowMobileModal={setShowMobileModal}
+                    />
+                    <SearchFlightsButton handleSubmit={formik.handleSubmit} values={formik.values}
+                        submitted={submitted}
+
+                    />
+                    {!isResultsPage &&
+
+                        <MilesToggle
+                            isMobile={isMobile}
+                            miles={formik.values.miles}
+                            setFieldValue={formik.setFieldValue}
+
+                        />
+                    }
+                </>
+            }
+
         </div>
     );
     const DesktopView = () => (
