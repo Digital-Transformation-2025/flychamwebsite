@@ -469,7 +469,10 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
 
             <FlightInfoInputs formik={formik} setShowMobileModal={setShowMobileModal}
             />
-            <SearchFlightsButton handleSubmit={formik.handleSubmit} values={formik.values} />
+            <SearchFlightsButton handleSubmit={formik.handleSubmit} values={formik.values}
+                submitted={submitted}
+
+            />
             {!isResultsPage &&
 
                 <MilesToggle

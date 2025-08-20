@@ -8,6 +8,8 @@ import Divider from './Divider';
 
 
 const FlightDetailsModal = ({ flight, isOpen, onClose }) => {
+    console.log('flight', flight);
+
     const { stops, } = useFormattedFlightTimes(flight);
     return (
         <Transition appear show={isOpen} as={Fragment}>
@@ -22,14 +24,14 @@ const FlightDetailsModal = ({ flight, isOpen, onClose }) => {
                             <Dialog.Panel className="w-[610px] rounded-2xl bg-white p-6 shadow-xl">
                                 {/* Header */}
                                 <div className="flex justify-between items-center mb-4">
-                                    
+
                                     <Dialog.Title className="text-[18px] font-semibold text-[#111827]">
                                         Flight details
                                     </Dialog.Title>
 
                                     <button onClick={onClose}><X size={20} /></button>
                                 </div>
-                                        <Divider />
+                                <Divider />
 
                                 {flight?.common_info?.segments?.map((s, index) => (
                                     <FlightSegmentDetails

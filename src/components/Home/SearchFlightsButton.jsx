@@ -1,10 +1,10 @@
 'use client'
 import React from 'react';
 
-const SearchFlightsButton = ({ handleSubmit, values }) => {
+const SearchFlightsButton = ({ handleSubmit, values, submitted }) => {
   const { source, destination, dateStart, tripType, dateEnd } = values;
 
-  const isDisabled = !dateStart || !source || !destination || (tripType === "Return" && !dateEnd);
+  const isDisabled = !dateStart || !source || !destination || (tripType === "Return" && !dateEnd) || submitted
 
   return (
     <button

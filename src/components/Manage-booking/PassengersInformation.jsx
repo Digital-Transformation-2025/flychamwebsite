@@ -59,8 +59,9 @@ const InfoLabel = ({ title, icon, value }) => (
 
 const SmallButton = ({ children, handleClickBtn }) => (
     <button
-        onClick={()=>handleClickBtn(children)}
-        className="mt-2 inline-flex items-center justify-center rounded-md bg-secondary-1 px-4 py-1.5 text-[12px] font-semibold text-white hover:opacity-90"
+        disabled
+        onClick={() => handleClickBtn(children)}
+        className="mt-2 inline-flex items-center justify-center rounded-md bg-secondary-500 px-4 py-1.5 text-[12px] font-semibold text-white !cursor-not-allowed"
     >
         {children}
     </button>
@@ -83,7 +84,7 @@ const TabButton = ({ leg, isActive, onClick }) => (
     </button>
 );
 
-const PassengerCard = ({ passenger, isTraveleAgent, isReturnFlightExists, tab, setTab ,handleClickBtn}) => {
+const PassengerCard = ({ passenger, isTraveleAgent, isReturnFlightExists, tab, setTab, handleClickBtn }) => {
 
     const icons = {
         hand: Briefcase,
@@ -133,7 +134,8 @@ const PassengerCard = ({ passenger, isTraveleAgent, isReturnFlightExists, tab, s
 /* =========================
    Main List
 ========================= */
-export default function PassengersInformation({ passengers, isTraveleAgent, firstSegment, secoundSegment, handleClickBtn }) {
+export default function PassengersInformation({ passengers, isTraveleAgent,
+    firstSegment, secoundSegment, handleClickBtn }) {
     const [tabs, setTabs] = useState({}); // Store active tab per passenger by ID
 
     const isReturnFlightExists = secoundSegment && secoundSegment.departureAirport && secoundSegment.arrivalAirport;
@@ -177,8 +179,9 @@ export default function PassengersInformation({ passengers, isTraveleAgent, firs
                         isTraveleAgent={isTraveleAgent}
                         isReturnFlightExists={isReturnFlightExists}
                         tab={tabs[p.id] || 0} // Default to first tab if no tab is set
-                        setTab={(tabIndex) => handleTabChange(p.id, tabIndex)} 
+                        setTab={(tabIndex) => handleTabChange(p.id, tabIndex)}
                         handleClickBtn={handleClickBtn}
+
                     />
                 ))}
             </div>

@@ -1,5 +1,5 @@
 'use client';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
     X,
     CaretLeft,
@@ -20,52 +20,63 @@ const SectionLabel = ({ children }) => (
     <div className="text-[16px] md:text-[18px] font-medium text-800">{children}</div>
 );
 
-const Subtle = ({ children, className = '' }) => (
-    <p className={`text-sm text-600 ${className}`}>{children}</p>
-);
-
-const Chip = ({ children, tone = 'green' }) => (
-    <span
-        className={`inline-flex items-center gap-1 rounded-full px-2 py-[2px] text-[12px] font-semibold ${tone === 'green'
-            ? 'bg-[#E8F6EE] text-[#1E874B]'
-            : 'bg-[#FFF2F2] text-[#B00300]'
-            }`}
-    >
-        {children}
-    </span>
-);
-
-const Divider = () => <div className="h-px w-full bg-[#EAEAE8]" />;
 
 const Money = ({ children }) => (
-    <span className="text-[18px] font-semibold text-700">{children}</span>
+    <span className="text-[18px] md:text-[24px] font-medium text-700">{children}</span>
 );
 
 /* =========================
    Leg Tabs
 ========================= */
 const LegTabs = ({ legs, activeId, onChange }) => {
+    const containerRef = useRef(null);
+    const [indicatorStyle, setIndicatorStyle] = useState({ id: 'out', label: 'DAM → DXB' });
+
+    useEffect(() => {
+        const activeBtn = containerRef.current?.querySelector(
+            `[data-id="${activeId}"]`
+        );
+        if (activeBtn) {
+            const rect = activeBtn.getBoundingClientRect();
+            const containerRect = containerRef.current.getBoundingClientRect();
+
+            setIndicatorStyle({
+                width: rect.width,
+                left: rect.left - containerRect.left,
+            });
+        }
+    }, [activeId, legs]);
+
     return (
-        <div className="mt-3 border-b border-[#EAEAE8]">
-            <div className="flex gap-8">
+        <div className="mt-3 border-b border-[#EAEAE8] ">
+            <div
+                ref={containerRef}
+                className="relative flex gap-8 justify-center md:justify-start"
+            >
                 {legs.map((leg) => {
                     const active = leg.id === activeId;
                     return (
                         <button
                             key={leg.id}
                             type="button"
+                            data-id={leg.id}
                             onClick={() => onChange(leg.id)}
-                            className={`relative py-3 text-[16px] md:text-[20px] font-semibold transition-colors ${active ? 'text-primary-1' : 'text-500'
+                            className={`relative py-3 text-[16px] md:text-[20px] w-[221px] font-semibold transition-colors ${active ? "text-primary-1" : "text-500"
                                 }`}
                         >
                             {leg.label}
-                            <span
-                                className={`absolute left-0 -bottom-[1px] h-[3px] rounded-full transition-all ${active ? 'w-full bg-primary-1' : 'w-0 bg-transparent'
-                                    }`}
-                            />
                         </button>
                     );
                 })}
+
+                {/* Animated underline indicator */}
+                <span
+                    className="absolute -bottom-[1px] h-[3px] bg-primary-1 rounded-full transition-all duration-300"
+                    style={{
+                        width: indicatorStyle.width,
+                        left: indicatorStyle.left,
+                    }}
+                />
             </div>
         </div>
     );
@@ -77,7 +88,7 @@ const LegTabs = ({ legs, activeId, onChange }) => {
 const PassengerChip = ({ show, selectedKg }) => {
     if (!show || !selectedKg) return null;
     return (
-        <span className="inline-flex items-center gap-1 rounded-full px-2 py-[2px] text-sm md:text-[16px] font-semibold">
+        <span className="inline-flex items-center gap-1   text-sm md:text-[15px] font-medium">
             <span className="text-700">+{selectedKg}kg</span>
             <CheckCircle size={20} weight="fill" color="#22C55E" />
         </span>
@@ -125,7 +136,8 @@ const PassengerCard = ({
     active,
     onSelect,
     selectedKg,
-    onClear, // optional – if you later add a clear action
+    onClear,
+    onSelectClick
 }) => {
     const disabled = passenger.disabled;
 
@@ -134,11 +146,11 @@ const PassengerCard = ({
             type="button"
             onClick={() => !disabled && onSelect?.(passenger.id)}
             className={[
-                'w-full rounded-lg border-2  p-6 text-left transition',
+                'w-full rounded-lg border-2  p-6 text-start transition',
                 active
                     ? 'border-[#054E72]'
                     : 'border-[#E5E5E3]',
-                disabled ? 'opacity-60 cursor-not-allowed' : 'hover:bg-[#FAFAF9]',
+                disabled ? 'opacity-60 cursor-not-allowed' : ' hover:bg-[#FAFAF9]',
             ].join(' ')}
         >
             <div className="flex items-start gap-2 w-full">
@@ -157,7 +169,11 @@ const PassengerCard = ({
                         hand={passenger.hand}
                         checked={passenger.checked}
                     />
-
+                    {passenger.type !== 'Infant' &&
+                        <p
+                            onClick={onSelectClick}
+                            className='text-[12px] font-semibold text-primary-1 underline w-full  flex md:hidden justify-end cursor-pointer '>Select</p>
+                    }
                     {/* <div className="mt-3 h-px w-full bg-[#EAEAE8]" /> */}
                 </div>
             </div>
@@ -203,13 +219,66 @@ const OptionTile = ({ option, active, onSelect, disabled }) => {
 };
 
 /* =========================
+   Header (responsive)
+========================= */
+const ModalHeader = ({ onClose, legs, activeLeg, setActiveLeg }) => {
+    return (
+        <>
+            {/* Desktop header */}
+            <div className="hidden md:block p-6  ">
+                <div className="flex items-start justify-between">
+                    <div>
+                        <h2 className="text-[28px] font-semibold text-800">
+                            Select additional baggage
+                        </h2>
+                        <p className="text-sm text-600">
+                            Avoid higher airport fees and long queues — secure your baggage
+                            online in just a few clicks.
+                        </p>
+                    </div>
+                    <button
+                        onClick={onClose}
+                        className="p-2 rounded hover:bg-gray-100"
+                        aria-label="Close"
+                    >
+                        <X size={16} />
+                    </button>
+                </div>
+                <LegTabs legs={legs} activeId={activeLeg} onChange={setActiveLeg} />
+            </div>
+
+            {/* Mobile header (fixed) */}
+            <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white md:shadow-sm p-4">
+                <div className="flex items-center gap-3">
+                    <button onClick={onClose} aria-label="Back" className="p-1">
+                        <CaretLeft size={24} />
+                    </button>
+                    <div>
+                        <h2 className="text-[18px] font-semibold text-800 text-center">
+                            Select additional baggage
+                        </h2>
+                        <p className="text-sm text-600 text-center">
+                            Avoid higher airport fees and long queues — secure your baggage
+                            online in just a few clicks.
+                        </p>
+                    </div>
+                </div>
+                <LegTabs legs={legs} activeId={activeLeg} onChange={setActiveLeg} />
+            </div>
+        </>
+    );
+};
+
+/* =========================
    Footer (responsive)
 ========================= */
 const ModalFooter = ({ total, onCancel, onContinue }) => {
     const ContinueBtn = ({ full }) => (
         <button
             onClick={onContinue}
-            className={`${full ? "w-full py-3" : "px-6 py-4"} rounded-md bg-secondary-1 text-[#3D3B35] font-semibold hover:bg-[#A89565] transition`}
+            className={`${full ? "w-full py-3" : "px-6 py-4"}
+            text-sm md:text-[16px] justify-self-end
+            rounded-md bg-secondary-1 text-[#3D3B35] font-semibold hover:bg-[#A89565] transition`}
         >
             Continue to next flight
         </button>
@@ -218,17 +287,12 @@ const ModalFooter = ({ total, onCancel, onContinue }) => {
     return (
         <div className="border-t border-[#EAEAE8] bg-[#F7F7F6] px-4 py-4">
             {/* desktop */}
-            <div className="hidden md:flex items-center justify-between max-w-5xl mx-auto">
-                <button
-                    onClick={onCancel}
-                    className="px-6 py-4 rounded-md border border-primary-1 text-primary-1 hover:bg-[#F3F6F7] transition"
-                >
-                    Cancel
-                </button>
+            <div className="hidden md:flex items-center justify-end max-w-5xl mx-auto">
+
 
                 <div className="flex items-center gap-6">
                     <div className="text-right">
-                        <Subtle>Total for all passengers</Subtle>
+                        <p className={`text-sm  md:text-[20px] text-700 `}>Total for all passengers</p>
                         <Money>USD {total.toFixed(2)}</Money>
                     </div>
                     <ContinueBtn />
@@ -238,7 +302,8 @@ const ModalFooter = ({ total, onCancel, onContinue }) => {
             {/* mobile */}
             <div className="md:hidden flex flex-col gap-3 max-w-md mx-auto">
                 <div className="flex items-center justify-between">
-                    <Subtle>Total for all passengers</Subtle>
+                    <p className={`text-sm  md:text-[20px] text-700 `}>Total for all passengers</p>
+
                     <span className="text-[14px] font-semibold text-700">
                         USD {total.toFixed(2)}
                     </span>
@@ -251,6 +316,121 @@ const ModalFooter = ({ total, onCancel, onContinue }) => {
         </div>
     );
 };
+
+const MobileOptionsSheet = ({
+    open,
+    onClose,
+    options,
+    selectedId,
+    onSelect,
+    disabled,
+}) => {
+    if (!open) return null;
+
+    return (
+        <div className="md:hidden fixed inset-0 z-[120]">
+            {/* dim background */}
+            <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+            {/* sheet */}
+            <div className="absolute inset-x-0 bottom-0 max-h-[70vh] rounded-t-2xl bg-white p-4 shadow-[0_-12px_30px_rgba(0,0,0,0.18)] animate-sheet-up">
+                <div className="flex items-center justify-between mb-2">
+                    <SectionLabel>Chose extra baggage</SectionLabel>
+                    <button onClick={onClose} className="p-2 -mr-2" aria-label="Close">
+                        <X size={16} />
+                    </button>
+                </div>
+                <div className="grid grid-cols-2 gap-3 overflow-y-auto pr-1" style={{ maxHeight: '58vh' }}>
+                    {options.map((o) => (
+                        <OptionTile
+                            key={o.id}
+                            option={o}
+                            active={o.id === selectedId}
+                            onSelect={(id) => {
+                                onSelect(id);
+                                // onClose();
+                            }}
+                            disabled={disabled}
+                        />
+                    ))}
+                </div>
+            </div>
+
+            {/* inline keyframes for the slide-up */}
+            <style jsx>{`
+        @keyframes sheet-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .animate-sheet-up { animation: sheet-up 1000ms  }
+      `}</style>
+        </div>
+    );
+};
+const ModalBody = ({
+    passengers,
+    setMobileSheetOpen,
+    activePassenger,
+    setActivePassenger,
+    clearForPassenger,
+    selectedKg,
+    selectedOption,
+    setSelectedOption,
+    options,
+}) => {
+    return (
+        <div className="
+        flex-1 overflow-y-auto md:overflow-visible
+        p-4 md:p-6
+        mt-[170px] mb-[150px] md:mt-0 md:mb-0
+    ">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
+
+                {/* Left: Passengers */}
+                <div className="bg-50 border border-[#F5F5F4] p-4 rounded-xl md:pr-2">
+                    <div className="mb-3 flex items-center justify-between">
+                        <span className="font-semibold">Passenger</span>
+                        <button
+                            onClick={clearForPassenger}
+                            className="hidden md:inline-flex items-center gap-1 text-sm font-semibold text-alert"
+                        >
+                            Clear
+                        </button>
+                    </div>
+
+                    <div className="space-y-3 md:max-h-[40vh] md:overflow-y-auto">
+                        {passengers.map((p) => (
+                            <PassengerCard
+                                key={p.id}
+                                passenger={p}
+                                active={p.id === activePassenger}
+                                onSelect={setActivePassenger}
+                                onClear={clearForPassenger}
+                                selectedKg={selectedKg}
+                                onSelectClick={() => setMobileSheetOpen(true)}
+                            />
+                        ))}
+                    </div>
+                </div>
+
+                {/* Right: Options */}
+                <div className="hidden md:block h-fit border border-[#F5F5F4] bg-50 p-4 rounded-xl">
+                    <div className="mb-3 font-semibold">Choose extra baggage</div>
+                    <div className="grid grid-cols-2 gap-3">
+                        {options.map((o) => (
+                            <OptionTile
+                                key={o.id}
+                                option={o}
+                                active={o.id === selectedOption}
+                                onSelect={setSelectedOption}
+                                disabled={
+                                    passengers.find((p) => p.id === activePassenger)?.disabled
+                                }
+                            />
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 
 /* =========================
    Main Modal
@@ -291,6 +471,38 @@ const ExtraBaggageModal = ({
             {
                 id: 'p3',
                 name: 'Mstr. Maged Saati',
+                type: 'Child',
+                hand: '7 kg hand baggage',
+                checked: '20 kg Checked baggage',
+            },
+            {
+                id: 'p4',
+                name: 'Mstr. Maged Saati',
+                type: 'Child',
+                hand: '7 kg hand baggage',
+                checked: '20 kg Checked baggage',
+            },
+            {
+                id: 'p5',
+                name: 'Mstr. Maged Saati',
+                type: 'Infant',
+                hand: '5 kg hand baggage',
+                checked: '10 kg Checked baggage',
+                note: "Extra baggage can't be added for an infant",
+                disabled: true,
+            },
+            {
+                id: 'p6',
+                name: 'Mstr. Maged Saati',
+                type: 'Infant',
+                hand: '5 kg hand baggage',
+                checked: '10 kg Checked baggage',
+                note: "Extra baggage can't be added for an infant",
+                disabled: true,
+            },
+            {
+                id: 'p7',
+                name: 'Mstr. Maged Saati',
                 type: 'Infant',
                 hand: '5 kg hand baggage',
                 checked: '10 kg Checked baggage',
@@ -312,7 +524,7 @@ const ExtraBaggageModal = ({
     const [activePassenger, setActivePassenger] = useState(passengers[0].id);
     const [selectedOption, setSelectedOption] = useState(options[0].id);
     const [applyEntireTrip, setApplyEntireTrip] = useState(false);
-
+    const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
     const selectedKg = useMemo(
         () => options.find((o) => o.id === selectedOption)?.kg,
         [options, selectedOption]
@@ -332,113 +544,64 @@ const ExtraBaggageModal = ({
     };
 
     return (
-        <div className="fixed inset-0 z-[100]">
+        <div className="fixed inset-0 z-[100]"
+        >
             {/* backdrop */}
             <div
-                className="absolute inset-0 bg-black/40"
+                className="absolute inset-0 bg-black/70"
                 onClick={onClose}
                 aria-hidden
             />
             {/* panel */}
-            <div className="absolute inset-0 overflow-y-auto">
-                <div className="mx-auto my-4 md:my-10 w-full max-w-[1100px] px-3">
-                    <div className="rounded-xl bg-white shadow-[0_14px_40px_rgba(0,0,0,0.20)]">
+            <div className="absolute inset-0 overflow-hidden">
+                <div className="mx-auto  md:my-10 w-full max-w-[1100px] md:px-3">
+                    <div className="md:rounded-xl bg-white md:shadow-[0_14px_40px_rgba(0,0,0,0.20)] h-[100vh] md:h-auto flex flex-col">
                         {/* Header */}
-                        <div className="p-4 md:p-6">
-                            <div className="flex items-start justify-between">
-                                <div className="flex items-center gap-3">
-                                    {/* mobile back */}
-                                    <button
-                                        onClick={onClose}
-                                        className="md:hidden -ml-1 mr-1 p-1 rounded hover:bg-gray-100"
-                                        aria-label="Back"
-                                    >
-                                        <CaretLeft size={18} />
-                                    </button>
-                                    <div>
-                                        <h2 className="text-[18px] md:text-[24px] font-semibold text-primary-1">
-                                            Select additional baggage
-                                        </h2>
-                                        <Subtle className="mt-1">
-                                            Avoid higher airport fees and long queues — secure your
-                                            baggage online in just a few clicks.
-                                        </Subtle>
-                                    </div>
-                                </div>
-                                <button
-                                    onClick={onClose}
-                                    className="hidden md:inline-flex p-2 rounded hover:bg-gray-100"
-                                    aria-label="Close"
-                                >
-                                    <X size={16} />
-                                </button>
-                            </div>
-
-                            {/* Leg tabs */}
-                            <LegTabs legs={legs} activeId={activeLeg} onChange={setActiveLeg} />
-                        </div>
+                        <ModalHeader
+                            onClose={onClose}
+                            legs={legs}
+                            activeLeg={activeLeg}
+                            setActiveLeg={setActiveLeg}
+                        />
 
                         {/* Body */}
                         {/* <Divider /> */}
-                        <div className="p-4 md:p-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {/* Left: Passengers */}
-                                <div>
-                                    <div className="mb-3 flex items-center justify-between">
-                                        <SectionLabel>Passenger</SectionLabel>
-                                        <button
-                                            onClick={clearForPassenger}
-                                            className="hidden md:inline-flex items-center gap-1 text-[12px] md:text-[14px] font-semibold text-alert hover:opacity-80"
-                                        >
-                                            <Trash size={16} />
-                                            Clear
-                                        </button>
-                                    </div>
-
-                                    <div className="space-y-3">
-                                        {passengers.map((p) => (
-                                            <PassengerCard
-                                                key={p.id}
-                                                passenger={p}
-                                                active={p.id === activePassenger}
-                                                onSelect={setActivePassenger}
-                                                onClear={clearForPassenger}
-                                                selectedKg={selectedKg}
-                                            />
-                                        ))}
-
-
-                                    </div>
-                                </div>
-
-                                {/* Right: Options */}
-                                <div>
-                                    <div className="mb-3">
-                                        <SectionLabel>Chosse extra baggage</SectionLabel>
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-3">
-                                        {options.map((o) => (
-                                            <OptionTile
-                                                key={o.id}
-                                                option={o}
-                                                active={o.id === selectedOption}
-                                                onSelect={setSelectedOption}
-                                                disabled={
-                                                    passengers.find((p) => p.id === activePassenger)
-                                                        ?.disabled
-                                                }
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {/* Inside ExtraBaggageModal return */}
+                        <ModalBody
+                            passengers={passengers}
+                            setMobileSheetOpen={setMobileSheetOpen}
+                            activePassenger={activePassenger}
+                            setActivePassenger={setActivePassenger}
+                            clearForPassenger={clearForPassenger}
+                            selectedKg={selectedKg}
+                            selectedOption={selectedOption}
+                            setSelectedOption={setSelectedOption}
+                            options={options}
+                        />
 
                         {/* Footer */}
-                        <ModalFooter total={total} onCancel={onClose} onContinue={onContinue} />
+                        {/* Desktop footer (inside modal card) */}
+                        <div
+                            className="
+    md:relative md:block
+    fixed bottom-0 left-0 right-0 z-50 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.1)]
+    md:shadow-none md:bg-transparent
+  "
+                        >
+                            <ModalFooter total={total} onCancel={onClose} onContinue={onContinue} />
+                        </div>
+
                     </div>
                 </div>
             </div>
+            <MobileOptionsSheet
+                open={mobileSheetOpen}
+                onClose={() => setMobileSheetOpen(false)}
+                options={options}
+                selectedId={selectedOption}
+                onSelect={setSelectedOption}
+                disabled={passengers.find((p) => p.id === activePassenger)?.disabled}
+            />
         </div>
     );
 };

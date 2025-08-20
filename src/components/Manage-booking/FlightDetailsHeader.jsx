@@ -1,7 +1,7 @@
 import { EnvelopeSimple, Printer } from "@phosphor-icons/react/dist/ssr";
 import SectionTitle from "./SectionTitle";
 
-const FlightDetailsHeader = ({isTraveleAgent}) => {
+const FlightDetailsHeader = ({ isTraveleAgent }) => {
     return (
         <div className={`w-full py-2 mt-[150px] md:mt-8  mb-[40px] ${!isTraveleAgent && 'mt-10'}`}>
             <div className="flex flex-wrap items-center justify-between md:justify-start gap-3">
@@ -15,7 +15,9 @@ const FlightDetailsHeader = ({isTraveleAgent}) => {
                 {/* Actions */}
                 <div className="flex items-center gap-3 text-sm">
                     {/* Email */}
-                    <button className="flex items-center gap-1 text-primary-1 hover:underline">
+                    <button
+                        disabled
+                        className="!cursor-not-allowed flex items-center gap-1 text-primary-500 ">
                         <EnvelopeSimple size={16} weight="regular" />
                         Email
                     </button>
@@ -24,7 +26,9 @@ const FlightDetailsHeader = ({isTraveleAgent}) => {
                     <span className="h-5 w-px bg-primary-1" />
 
                     {/* Print */}
-                    <button className="flex items-center gap-1 text-primary-1 hover:underline">
+                    <button
+                        disabled
+                        className=" !cursor-not-allowed flex items-center gap-1 text-primary-500 ">
                         <Printer size={16} weight="regular" />
                         Print
                     </button>

@@ -117,8 +117,9 @@ const MidTimeline = ({ duration, cabin, dashedLength, isMobile }) => {
 const ActionButton = ({ icon: Icon, label, action, color = "text-[13px] text-primary-1", onAction }) => (
     <button
         type="button"
-        onClick={() => onAction?.(action)}
-        className={`flex items-center font-semibold gap-2 hover:opacity-90 ${color}`}
+        disabled
+        onClick={onAction}
+        className={`!cursor-not-allowed  flex items-center font-semibold gap-2 hover:opacity-90 ${color} text-primary-500`}
     >
         <Icon size={18} /> {label}
     </button>
@@ -162,9 +163,9 @@ const SectionHeader = ({ title, onAction }) => (
 /* =========================
    Main Card
 ========================= */
-const FlightCard = ({ leg, onAction, dashedLength, isMobile }) => (
+const FlightCard = ({ leg, onAction, dashedLength, isMobile, handleClickCancel, handleClickDetails }) => (
     <section className="w-full ">
-        <SectionHeader title={leg.sectionTitle} onAction={(a) => onAction?.(leg.id, a)} />
+        <SectionHeader title={leg.sectionTitle} onAction={handleClickCancel} />
 
         <div className=" overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-[#EAEAE8]">
             <CardBanner
@@ -181,7 +182,9 @@ const FlightCard = ({ leg, onAction, dashedLength, isMobile }) => (
                 <TimeCol code={leg.right.code} time={leg.right.time} airport={leg.right.airport} align="right" />
             </div>
 
-            <div className="bg-[#F5F5F4]  px-4 py-3">
+            <div
+                onClick={() => handleClickDetails(leg)}
+                className="bg-[#F5F5F4]  px-4 py-3">
                 <FlightDetailsLink />
 
             </div>
@@ -194,7 +197,7 @@ const FlightCard = ({ leg, onAction, dashedLength, isMobile }) => (
                 label="Cancel booking"
                 action="upgrade"
                 color="text-alert text-[13px]"
-                onAction={onAction}
+                onAction={handleClickCancel}
             />
         </div>
     </section>
@@ -203,7 +206,7 @@ const FlightCard = ({ leg, onAction, dashedLength, isMobile }) => (
 /* =========================
    List Wrapper
 ========================= */
-export default function FlightItineraryList({ onAction, firstSegment, secoundSegment }) {
+export default function FlightItineraryList({ onAction, firstSegment, secoundSegment, handleClickCancel, handleClickDetails }) {
     const segmentData = (segment) => ({
         fromCity: segment?.departureCity,
         toCity: segment?.arrivalCity,
@@ -216,6 +219,7 @@ export default function FlightItineraryList({ onAction, firstSegment, secoundSeg
         arrivalTime: segment?.arrivalTime,
         departureAirPortName: segment?.departureAirPortName,
         arrivalAirPortName: segment?.arrivalAirPortName,
+        flightNumber: segment?.flightNumber
     });
 
     const firstSegmentData = segmentData(firstSegment);
@@ -297,6 +301,8 @@ export default function FlightItineraryList({ onAction, firstSegment, secoundSeg
                     key={leg.id} leg={leg} onAction={onAction}
                     dashedLength={dashedLength}
                     isMobile={isMobile}
+                    handleClickCancel={handleClickCancel}
+                    handleClickDetails={handleClickDetails}
                 />
             ))}
         </div>

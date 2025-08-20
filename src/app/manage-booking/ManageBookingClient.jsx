@@ -1,4 +1,6 @@
 'use client'
+import FlightDetailsModal from '@/components/FlightResults/FlighSelectStep/FlightDetailsModal';
+import CancelBookingModal from '@/components/Manage-booking/CancelBooking/CancelBookingModal';
 import ContactDetails from '@/components/Manage-booking/ContactDetails';
 import { ContactEditModal } from '@/components/Manage-booking/ContactEditModal';
 import ExtraBaggageModal from '@/components/Manage-booking/ExtraBaggage/ExtraBaggageModal';
@@ -27,10 +29,10 @@ const tabs = [
         id: 2,
         label: 'Contact details'
     },
-    {
-        id: 3,
-        label: 'Additional services'
-    },
+    // {
+    //     id: 3,
+    //     label: 'Additional services'
+    // },
 ];
 const contact = {
     name: 'MR.Mouayad Hawari',
@@ -44,11 +46,22 @@ const ManageBookingClient = () => {
     const { isTraveleAgent, mainImage, segments, bookingReference: pnr, contactInfo, passengers } = bookInfo || {}
     const [active, setActive] = useState(0);
     const [openExtra, setOpenExtra] = useState(false)
+    const [openCancelBook, setOpenCancelBook] = useState(false)
+    const [isShowDetailsModalOpen, setFlightDetailsOpen] = useState(false)
+    const [clickedFlight, setClickedFlight] = useState({})
 
     const handleClickBtn = (btn) => {
         if (btn === "Add extra") {
             setOpenExtra(true)
         }
+    }
+    const handleClickCancel = (btn) => {
+        setOpenCancelBook(true)
+    }
+    const handleClickDetails = (leg) => {
+        console.log('leg', leg);
+        setFlightDetailsOpen(true)
+        setClickedFlight(leg)
     }
 
 
@@ -113,36 +126,25 @@ const ManageBookingClient = () => {
     };
 
 
-    React.useEffect(() => {
-        const handleScroll = () => {
-            let current = tabs[0].id;
-            const probeY = 10; // line just under the sticky header thanks to scroll-mt
+    const flight = {
+        common_info: {
+            segments: [
+                {
+                    origin_city: clickedFlight?.banner?.fromCity,
+                    destination_city: clickedFlight?.banner?.toCity,
+                    departureDate: clickedFlight?.banner?.dateText,
+                    Duration: clickedFlight?.mid?.durationText?.split(',')[1],
+                    stops: clickedFlight?.mid?.durationText?.split(',')[0],
+                    departure_time:  clickedFlight?.left?.time,
+                    arrival_time:clickedFlight?.right?.time,
+                    origin_name:clickedFlight?.left?.airport,
+                    destination_name: clickedFlight?.right?.airport,
+                    FlightNumber: clickedFlight?.flightNumber,
+                },
+            ],
+        },
+    };
 
-            for (const t of tabs) {
-                const el =
-                    document.getElementById(`section-${t.id}`) ||
-                    document.getElementById(String(t.id));
-                if (!el) continue;
-
-                const rect = el.getBoundingClientRect();
-                if (rect.top <= probeY && rect.bottom > probeY) {
-                    current = t.id;
-                    break;
-                }
-            }
-            console.log('current', current);
-
-            setActive(current);
-        };
-
-        handleScroll();
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        window.addEventListener('resize', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-            window.removeEventListener('resize', handleScroll);
-        };
-    }, [tabs]);
 
 
 
@@ -173,8 +175,15 @@ const ManageBookingClient = () => {
                 id="section-0"
                 className="scroll-mt-[360px]  md:scroll-mt-0"
             >
-                <FlightDetailsHeader isTraveleAgent={isTraveleAgent} />
-                <FlightItineraryList firstSegment={firstSegment} secoundSegment={secoundSegment} />
+                <FlightDetailsHeader isTraveleAgent={isTraveleAgent}
+
+                />
+                <FlightItineraryList
+                    firstSegment={firstSegment} secoundSegment={secoundSegment}
+                    handleClickCancel={handleClickCancel}
+                    handleClickDetails={handleClickDetails}
+
+                />
             </div>
 
             <div id="section-1" className="scroll-mt-[360px] md:scroll-mt-0">
@@ -189,9 +198,9 @@ const ManageBookingClient = () => {
             <div id="section-2" className="scroll-mt-[360px] md:scroll-mt-0">
                 <ContactDetails onEdit={onEdit} contactInfo={contactInfo} />
             </div>
-            <div id="section-3" className="scroll-mt-[360px] md:scroll-mt-0">
+            {/* <div id="section-3" className="scroll-mt-[360px] md:scroll-mt-0">
                 <div className="py-20 text-center text-gray-500">Additional services</div>
-            </div>
+            </div> */}
         </div>
         <ContactEditModal
             isOpen={showContactModal}
@@ -206,6 +215,17 @@ const ManageBookingClient = () => {
             setFieldValue={formik.setFieldValue}
         />
         <ExtraBaggageModal open={openExtra} onClose={() => setOpenExtra(false)} />
+        <CancelBookingModal
+            open={openCancelBook}
+            onClose={() => setOpenCancelBook(false)}
+            bookingRef="NHG7Y0"
+            maskedPhone="*8066"
+        />
+        <FlightDetailsModal
+            isOpen={isShowDetailsModalOpen}
+            onClose={() => setFlightDetailsOpen(false)}
+            flight={flight}
+        />
 
     </div>
     return (

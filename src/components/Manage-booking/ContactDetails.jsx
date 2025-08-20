@@ -53,8 +53,9 @@ export default function ContactDetailsCard({
             <div className="relative rounded-xl bg-[#F5F5F4] ring-1 ring-[#EAEAE8] p-4 md:p-5">
                 {/* Edit action */}
                 <button
+                    disabled
                     onClick={onEdit}
-                    className="absolute right-3 top-[50%] translate-y-[50%] inline-flex items-center gap-1 text-primary-1 text-sm font-medium hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-1  "
+                    className="  absolute right-3 top-[50%] translate-y-[50%] inline-flex items-center gap-1 text-primary-500 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-1 !cursor-not-allowed  "
                     aria-label="Edit contact"
                 >
                     Edit <Pencil />
