@@ -8,8 +8,8 @@ import { useRouter } from 'next/navigation';
 
 import BookingBox from '@/components/Home/BookingBox'
 import { useDispatch, useSelector } from 'react-redux';
-import { setAirports, setPos } from '@/store/flightSlice';
-const TestClient = ({ flights, pos}) => {
+import { setAirports, setFormikData, setPos, setSearchParams } from '@/store/flightSlice';
+const TestClient = ({ flights, pos }) => {
     const isMobile = useIsMobile(1024);
     const router = useRouter()
     const { t } = useTranslation()
@@ -21,6 +21,8 @@ const TestClient = ({ flights, pos}) => {
 
         dispatch(setAirports(flights))
         dispatch(setPos(pos))
+        dispatch(setFormikData(null))
+        dispatch(setSearchParams(null))
     }, [])
 
     const { airPorts } = useSelector(state => state.flights)
