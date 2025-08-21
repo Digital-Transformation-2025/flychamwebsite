@@ -13,7 +13,10 @@ const TabNavigation = ({ tabs, activeTab, isMobile }) => {
     //     setActiveTab(tab)
     //   )
     // }
-    setActiveTab(tab);
+    dispatch(
+
+      setActiveTab(tab)
+    )
   };
 
   return (

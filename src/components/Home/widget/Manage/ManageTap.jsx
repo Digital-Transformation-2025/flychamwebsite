@@ -23,7 +23,7 @@ const ManageTap = () => {
     const dispatch = useDispatch()
     const router = useRouter()
     const formik = useFormik({
-        initialValues: { pnr, lastName},
+        initialValues: { pnr, lastName },
         validationSchema: Yup.object({
             pnr: Yup.string()
                 .trim()
