@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react';
 import {
     Armchair,
 } from '@phosphor-icons/react';
-import { Baby, Briefcase, ForkKnifeIcon, Seat, Suitcase, User } from '@phosphor-icons/react/dist/ssr';
+import { Baby, BabyCarriage, Briefcase, ForkKnifeIcon, Seat, Suitcase, User } from '@phosphor-icons/react/dist/ssr';
 import SectionTitle from './SectionTitle';
 import getPassengerType from '@/util/getLabelByType';
 
@@ -99,6 +99,18 @@ const PassengerCard = ({ passenger, isTraveleAgent, isReturnFlightExists, tab, s
         { title: 'Seats', value: passenger.seats.label, icon: icons.seats, btn: 'Select seats' },
         { title: 'Meals', value: passenger.meals.label, icon: icons.meals }
     ];
+    const getIcon = (type) => {
+        switch (type) {
+            case "ADT": // Adult
+                return <User size={18} />;
+            case "CHD": // Child
+                return <Baby size={18} />;
+            case "INF": // Infant
+                return <BabyCarriage size={18} />;
+            default:
+                return <User size={18} />; // fallback
+        }
+    };
 
     return (
         <div className="rounded-xl ring-1 ring-[#EAEAE8] overflow-hidden bg-white">
@@ -106,6 +118,7 @@ const PassengerCard = ({ passenger, isTraveleAgent, isReturnFlightExists, tab, s
             <div className="flex items-center gap-3 rounded-t-xl bg-primary-1 px-4 py-3 text-white">
                 {passenger.type === "Adult" && <User size={18} />}
                 {passenger.type === "Infant" && <Baby size={18} />}
+                {getIcon(passenger.type)}
                 <span className="text-[14px] font-semibold">{passenger.name}</span>
                 <Pill>{getPassengerType(passenger.type)}</Pill>
             </div>
@@ -136,14 +149,14 @@ const PassengerCard = ({ passenger, isTraveleAgent, isReturnFlightExists, tab, s
 ========================= */
 export default function PassengersInformation({ passengers, isTraveleAgent,
     firstSegment, secoundSegment, handleClickBtn }) {
-    const [tabs, setTabs] = useState({}); 
+    const [tabs, setTabs] = useState({});
 
     const isReturnFlightExists = secoundSegment && secoundSegment.departureAirport && secoundSegment.arrivalAirport;
 
     const handleTabChange = (passengerId, tabIndex) => {
         setTabs(prevTabs => ({
             ...prevTabs,
-            [passengerId]: tabIndex, 
+            [passengerId]: tabIndex,
         }));
     };
 
