@@ -5,6 +5,7 @@ import { createListPassengerService, createPaymentService, getAirports, getBySes
 const flightSlice = createSlice({
     name: 'flights',
     initialState: {
+        activeTab:'book',
         airPorts: [],
         flights: [],
         IndirectAirPort: [],
@@ -23,6 +24,9 @@ const flightSlice = createSlice({
         pnr: ''
     },
     reducers: {
+        setActiveTab: (state, action) => {
+            state.activeTab = action.payload;
+        },
         setAirports: (state, action) => {
             state.airPorts = action.payload;
         },
@@ -124,5 +128,5 @@ const flightSlice = createSlice({
     },
 });
 
-export const { setAirports, setSearchParams, setSelectedF, setSelectedPlan, setSelectedpassengers, setPos, setPnr, setFormikData } = flightSlice.actions;
+export const {setActiveTab, setAirports, setSearchParams, setSelectedF, setSelectedPlan, setSelectedpassengers, setPos, setPnr, setFormikData } = flightSlice.actions;
 export default flightSlice.reducer;

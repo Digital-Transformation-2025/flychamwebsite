@@ -1,127 +1,137 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export function useTabsScrollSpy(tabs, options = {}) {
   const {
     headerSelector = "#sticky-head",
-    offset: offsetProp,
+    offset: offsetProp,                 // pass a number to force an offset
     getSectionId = (t) => `section-${t.id}`,
-    rootRef,
+    suppressMs = 400,                   // mute spy briefly after programmatic scroll
   } = options;
 
-  const [offsetMeasured, setOffsetMeasured] = useState(160);
   const [active, setActive] = useState(tabs?.[0]?.id ?? 0);
+  const activeRef = useRef(active);
+  useEffect(() => { activeRef.current = active; }, [active]);
 
-  // Measure sticky header once if not provided
+  // Measure sticky header when it's fixed; 0 when static
+  const measuredOffsetRef = useRef(160);
+  const getOffset = () => {
+    if (offsetProp != null) return offsetProp;
+    const el = document.querySelector(headerSelector);
+    if (!el) return measuredOffsetRef.current;
+    const pos = window.getComputedStyle(el).position;
+    return pos === "fixed" ? (el.offsetHeight || measuredOffsetRef.current) : 0;
+  };
+
   useEffect(() => {
     if (offsetProp != null) return;
     const el = document.querySelector(headerSelector);
-    if (el) setOffsetMeasured(el.offsetHeight || 160);
+    if (el) measuredOffsetRef.current = el.offsetHeight || 160;
+
+    const onResize = () => {
+      const el2 = document.querySelector(headerSelector);
+      if (el2) measuredOffsetRef.current = el2.offsetHeight || 160;
+    };
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => window.removeEventListener("resize", onResize);
   }, [headerSelector, offsetProp]);
 
-  const getCurrentOffset = () => {
-    if (offsetProp != null) return offsetProp;
-    const el = document.querySelector(headerSelector);
-    if (!el) return offsetMeasured;
-    const pos = window.getComputedStyle(el).position;
-    return pos === "fixed" ? (el.offsetHeight || offsetMeasured) : 0;
-  };
-
-  const sectionIds = useMemo(() => tabs.map(getSectionId), [tabs, getSectionId]);
-  const sectionToTabId = useMemo(() => {
-    const map = {};
-    tabs.forEach((t) => { map[getSectionId(t)] = t.id; });
-    return map;
-  }, [tabs, getSectionId]);
-
-  // Keep active valid if tabs array changes
+  // Keep active valid if tabs change
   useEffect(() => {
-    if (!tabs.some((t) => t.id === active)) {
+    if (!tabs.some((t) => t.id === activeRef.current)) {
       setActive(tabs?.[0]?.id ?? 0);
     }
-  }, [tabs, active]);
+  }, [tabs]);
 
-  // Observe sections to update active when user scrolls manually
+  const sectionIds = useMemo(() => tabs.map(getSectionId), [tabs, getSectionId]);
+
+  // Manual scroll → highlight
+  const suppressUntilRef = useRef(0);
   useEffect(() => {
     if (!sectionIds.length) return;
 
-    const root = rootRef?.current || null;
-    const makeMargin = () => `-${getCurrentOffset()}px 0px -60% 0px`;
-    let io = new IntersectionObserver(
-      (entries) => {
-        let best = null;
-        for (const e of entries) {
-          if (!e.isIntersecting) continue;
-          if (!best || e.intersectionRatio > best.intersectionRatio) best = e;
-        }
-        if (best) {
-          const id = sectionToTabId[best.target.id];
-          if (id != null && id !== active) setActive(id);
-          return;
-        }
-        const off = getCurrentOffset();
-        let current = null;
-        for (const sid of sectionIds) {
+    const computeCurrent = () => {
+      const off = getOffset();
+
+      // 1) Best “passed the line” section (last whose top <= offset)
+      let passedId = null;
+      for (let i = 0; i < sectionIds.length; i++) {
+        const sid = sectionIds[i];
+        const el = document.getElementById(sid);
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top - off;
+        if (top <= 1) passedId = sid;
+        else break;
+      }
+
+      // 2) If none passed, choose the closest upcoming section (smallest positive distance)
+      let fallbackId = sectionIds[0]; // default to first
+      if (!passedId) {
+        let bestDist = Infinity;
+        for (let i = 0; i < sectionIds.length; i++) {
+          const sid = sectionIds[i];
           const el = document.getElementById(sid);
           if (!el) continue;
-          const rect = el.getBoundingClientRect();
-          if (rect.top - off < 1) current = sectionToTabId[sid];
-          else break;
+          const dist = el.getBoundingClientRect().top - off;
+          if (dist >= 0 && dist < bestDist) {
+            bestDist = dist;
+            fallbackId = sid;
+          }
         }
-        if (current != null && current !== active) setActive(current);
-      },
-      { root, rootMargin: makeMargin(), threshold: [0, 0.1, 0.25, 0.5, 0.75, 1] }
-    );
+      }
 
-    const els = sectionIds.map((sid) => document.getElementById(sid)).filter(Boolean);
-    els.forEach((el) => io.observe(el));
-
-    // Recreate IO if header height changes (e.g., responsive)
-    const onResize = () => {
-      io.disconnect();
-      io = new IntersectionObserver(
-        io.takeRecords ? io.takeRecords.bind(io) : () => { },
-        { root, rootMargin: makeMargin(), threshold: [0, 0.1, 0.25, 0.5, 0.75, 1] }
-      );
-      els.forEach((el) => io.observe(el));
+      const targetId = passedId || fallbackId;
+      const tab = tabs.find((t) => getSectionId(t) === targetId);
+      if (tab && tab.id !== activeRef.current) setActive(tab.id);
     };
-    window.addEventListener("resize", onResize);
+
+    let raf = null;
+    const onScroll = () => {
+      console.log('scrolling');
+      
+      // Ignore while we’re animating a programmatic scroll
+      if (Date.now() < suppressUntilRef.current) return;
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(computeCurrent);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    // run once so first tab is highlighted initially
+    computeCurrent();
 
     return () => {
-      window.removeEventListener("resize", onResize);
-      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      if (raf) cancelAnimationFrame(raf);
     };
-  }, [sectionIds.join("|"), rootRef, active]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sectionIds.join("|"), tabs.length]);
 
-  // Smooth scroll with one-shot scroll-margin (robust on iOS)
-  const scrollToSectionId = (sectionId) => {
-    const el = document.getElementById(sectionId);
-    if (!el) return;
-    const off = getCurrentOffset();
-
-    const prev = el.style.scrollMarginTop;
-    el.style.scrollMarginTop = `${off + 8}px`; // small buffer
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-    // restore shortly after animation begins
-    setTimeout(() => { el.style.scrollMarginTop = prev; }, 400);
-  };
-
-  // Accept id, tab object, or index; also optional refs for horizontal tabs strip
+  // Click tab → smooth scroll (respect offset), keep tab visible in tabs strip
   const onChangeTab = (tabOrIdOrIndex, index, tabsContainerRef, itemRefs) => {
-    let tab =
+    const tab =
       typeof tabOrIdOrIndex === "object" && tabOrIdOrIndex
         ? tabOrIdOrIndex
-        : tabs.find((t, i) =>
-          String(t.id) === String(tabOrIdOrIndex) || i === tabOrIdOrIndex
+        : tabs.find(
+          (t, i) =>
+            String(t.id) === String(tabOrIdOrIndex) || i === tabOrIdOrIndex
         );
+
     if (!tab) return;
 
     setActive(tab.id);
     const sectionId = getSectionId(tab);
-    requestAnimationFrame(() => scrollToSectionId(sectionId));
+    const el = document.getElementById(sectionId);
+    if (!el) return;
 
-    // keep clicked tab visible if strip is scrollable
+    // temporarily add scroll-margin-top so it lands below the sticky header
+    const prev = el.style.scrollMarginTop;
+    el.style.scrollMarginTop = `${getOffset() + 8}px`;
+    suppressUntilRef.current = Date.now() + suppressMs; // mute spy briefly
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(() => (el.style.scrollMarginTop = prev), 400);
+
+    // keep clicked tab visible horizontally (if strip is scrollable)
     const c = tabsContainerRef?.current;
     const it = itemRefs?.current?.[index];
     if (c && it) {
@@ -134,6 +144,7 @@ export function useTabsScrollSpy(tabs, options = {}) {
       }
     }
   };
+  console.log('active', active);
 
   return { active, onChangeTab };
 }

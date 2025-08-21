@@ -39,7 +39,7 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
     }, [])
 
 
-    const { airPorts, formikData } = useSelector(state => state.flights)
+    const { airPorts, formikData, activeTab } = useSelector(state => state.flights)
 
     const [cities, setCities] = useState([])
 
@@ -79,7 +79,6 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
 
 
 
-    const [activeTab, setActiveTab] = useState("book");
     const [showDesktopModal, setDesktopShowModal] = useState(false);
     const [showMobileModal, setShowMobileModal] = useState(false);
     const [minMonth, setMinMonth] = useState(new Date());
@@ -441,7 +440,6 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
                 <TabNavigation
                     tabs={tabs}
                     activeTab={activeTab}
-                    setActiveTab={setActiveTab}
                     isMobile={isMobile}
                     formik={formik}
 
@@ -499,7 +497,6 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
                 <TabNavigation
                     tabs={tabs}
                     activeTab={activeTab}
-                    setActiveTab={setActiveTab}
                     isMobile={false}
                     formik={formik}
                 />

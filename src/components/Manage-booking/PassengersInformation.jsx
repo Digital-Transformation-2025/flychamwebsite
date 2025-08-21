@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
     Armchair,
 } from '@phosphor-icons/react';
@@ -73,7 +73,7 @@ const SmallButton = ({ children, handleClickBtn }) => (
 const TabButton = ({ leg, isActive, onClick }) => (
     <button
         onClick={onClick}
-        className={`p-3 text-center border-b ${isActive ? 'bg-[#F0F5F8]' : 'bg-white'} border-[#EAEAE8]`}
+        className={`p-3 text-center border-b ${isActive ? 'bg-100' : 'bg-white'} border-[#EAEAE8]`}
     >
         <div className={`${isActive ? 'text-primary-1' : 'text-[#8A8A87]'} font-semibold`}>
             {leg.from} → {leg.to}
@@ -136,18 +136,27 @@ const PassengerCard = ({ passenger, isTraveleAgent, isReturnFlightExists, tab, s
 ========================= */
 export default function PassengersInformation({ passengers, isTraveleAgent,
     firstSegment, secoundSegment, handleClickBtn }) {
-    const [tabs, setTabs] = useState({}); // Store active tab per passenger by ID
+    const [tabs, setTabs] = useState({}); 
 
     const isReturnFlightExists = secoundSegment && secoundSegment.departureAirport && secoundSegment.arrivalAirport;
 
     const handleTabChange = (passengerId, tabIndex) => {
         setTabs(prevTabs => ({
             ...prevTabs,
-            [passengerId]: tabIndex, // Set active tab for the specific passenger
+            [passengerId]: tabIndex, 
         }));
     };
 
-    const passengersInfo = passengers.map((p, index) => {
+    //  Sort passengers once using useMemo
+    const sortedPassengers = useMemo(() => {
+        if (!Array.isArray(passengers)) return [];
+        const order = { ADT: 1, CHD: 2, INF: 3 };
+        return [...passengers].sort(
+            (a, b) => (order[a.passengerType] || 99) - (order[b.passengerType] || 99)
+        );
+    }, [passengers]);
+
+    const passengersInfo = sortedPassengers.map((p, index) => {
         const ancillary = p.ancillary || []; // Ensure ancillary exists
 
         return {

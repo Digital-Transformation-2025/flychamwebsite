@@ -10,10 +10,11 @@ import ModalDescription from "./ModalDescription";
 import { useDispatch, useSelector } from "react-redux";
 import { searchBookService } from "@/store/Services/manageBookingServices";
 import { useRouter } from "next/navigation";
+import { setPnrParams } from "@/store/manageSlice";
 
 const ManageTap = () => {
-    const { isLoading } = useSelector((s) => s.manageBook)
-
+    const { isLoading, pnrParams } = useSelector((s) => s.manageBook)
+    const { pnr, lastName } = pnrParams
     const [modalOpen, setModalOpen] = useState(false);
     const [alert, setAlert] = useState({
         title: '',
@@ -22,25 +23,26 @@ const ManageTap = () => {
     const dispatch = useDispatch()
     const router = useRouter()
     const formik = useFormik({
-        initialValues: { pnr: "", lastName: "" },
+        initialValues: { pnr, lastName},
         validationSchema: Yup.object({
             pnr: Yup.string()
                 .trim()
                 .max(6, "*PNR must be 6 characters or less")
                 .required("*please enter your Reservation number"),
             lastName: Yup.string()
-                .matches(/^[A-Za-z]+$/, 'Last name must contain only English letters (A–Z)')
+                .matches(/^[A-Za-z]+(?: [A-Za-z]+)*$/, 'Last name must contain only English letters')
                 .required('Last name is required'),
+
         }),
         onSubmit: ({ pnr, lastName }) => {
             const data = { lastName, PNR: pnr };
             dispatch(searchBookService(data))
                 .then(({ payload }) => {
                     const { data: bookData, status } = payload || {};
-                    console.log('payload', payload);
 
                     if (status === 200 && Object.keys(bookData).length > 0) {
                         router.push("/manage-booking");
+                        dispatch(setPnrParams({ pnr, lastName }))
                     } else {
                         const { alert } = payload || {};
                         const { title, description } = alert || {};

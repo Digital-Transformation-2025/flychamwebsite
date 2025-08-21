@@ -16,7 +16,7 @@ import { useTabsScrollSpy } from '@/hooks/useTabsScrollSpy';
 // import { useScrollSpy } from '@/hooks/useScrollSpyTabs';
 import { contactSchemaInManage } from '@/util/validatonSchemas';
 import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux';
 const tabs = [
     {
@@ -44,6 +44,8 @@ const contact = {
     altMobile: '+963 935679806',
 };
 const ManageBookingClient = () => {
+    const containerRef = useRef(null);
+
     const { isLoading, bookInfo } = useSelector((s) => s.manageBook)
     const { isTraveleAgent, mainImage, segments, bookingReference: pnr, contactInfo, passengers } = bookInfo || {}
     const filteredTabs = isTraveleAgent
@@ -130,7 +132,7 @@ const ManageBookingClient = () => {
 
 
     const Loading = <LottieComponent />
-    const contet = <div className=''>
+    const contet = <div className='pb-10'>
         <div
             id="sticky-head"
 
@@ -147,7 +149,9 @@ const ManageBookingClient = () => {
             <Tabs tabs={filteredTabs} active={active} onChange={onChangeTab} />
         </div>
 
-        <div className="max-w-[90%] md:max-w-[70%] mx-auto space-y-8 pt-[220px] md:pt-0">
+        <div
+            ref={containerRef}
+            className="max-w-[90%] md:max-w-[70%] mx-auto space-y-8 pt-[220px] md:pt-0">
             {isTraveleAgent &&
                 <TravelAgencyAlert />
             }
