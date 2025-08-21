@@ -27,7 +27,7 @@ const ManageTap = () => {
         validationSchema: Yup.object({
             pnr: Yup.string()
                 .trim()
-                .max(6, "*PNR must be 6 characters or less")
+                .min(6, "*PNR must be 6 characters")
                 .required("*please enter your Reservation number"),
             lastName: Yup.string()
                 .matches(/^[A-Za-z]+(?: [A-Za-z]+)*$/, 'Last name must contain only English letters')
