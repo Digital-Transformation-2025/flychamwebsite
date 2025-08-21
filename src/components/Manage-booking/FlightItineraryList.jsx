@@ -35,7 +35,7 @@ const FlightDetailsLink = () => (
    Banner
 ========================= */
 const CardBanner = ({ from, to, dateText, chip, rightNote, isMobile }) => (
-    <div className="flex items-center lg:items-start  flex-col lg:flex-row justify-between gap-3 rounded-t-lg bg-primary-1 px-4 py-3 text-white">
+    <div className="flex items-center lg:items-center  flex-col lg:flex-row justify-between gap-3 rounded-t-lg bg-primary-1 px-4 py-3 text-white">
         <div className="flex flex-col lg:flex-row  flex-wrap  w-full items-start lg:items-end gap-2">
             <div className='flex items-center justify-start gap-2'>
                 <span className='font-bold text-sm lg:text-2xl'>
@@ -47,14 +47,14 @@ const CardBanner = ({ from, to, dateText, chip, rightNote, isMobile }) => (
                     {to}
                 </span>
             </div>
-            <span className="text-xs lg:text-[16px] ">.{dateText}</span>
+            {/* <span className="text-xs lg:text-[16px] ">{dateText}</span> */}
             {/* {chip && <Pill text={chip.text} bg={chip.bg} fg={chip.fg} />} */}
         </div>
-        {rightNote && (
+        {dateText && (
             <div className="items-center gap-2 text-[13px] hidden lg:flex">
                 <Clock size={16} weight='bold' />
-                <span className="underline font-semibold whitespace-nowrap">
-                    {rightNote.text}
+                <span className=" font-semibold whitespace-nowrap">
+                    {dateText}
                 </span>
             </div>
         )}
