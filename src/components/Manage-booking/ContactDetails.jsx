@@ -9,21 +9,15 @@ import SectionTitle from './SectionTitle';
  * - Mobile: stacked vertically
  */
 export default function ContactDetailsCard({
-    contact = {
-        name: 'MR.Mouayad Hawari',
-        type: 'Primary',
-        email: 'moaidhawari@gmail.com',
-        mobile: '+963 935679806',
-    },
     onEdit,
     contactInfo
 }) {
-    const { title, firstName, lastName, telephone, mobile, email, countryCode } = contactInfo || {}
+    const { title, firstName, lastName, telephone, mobile, email, countryCodeTele } = contactInfo || {}
 
     // Define fields as an array and render with .map()
     const fields = [
         { label: 'Passenger name', value: `${title}.${firstName} ${lastName}` },
-        { label: 'Type', value: contact.type },
+        { label: 'Type', value: 'Primary' },
         {
             label: 'E-mail',
             value: (
@@ -35,8 +29,8 @@ export default function ContactDetailsCard({
         {
             label: 'Mobile number',
             value: (
-                <a href={`tel:${countryCode} ${mobile}`} className="hover:underline">
-                    {countryCode} {mobile}
+                <a href={`tel:${countryCodeTele} ${mobile}`} className="hover:underline">
+                   +{countryCodeTele} {mobile}
                 </a>
             ),
         },
@@ -53,13 +47,14 @@ export default function ContactDetailsCard({
             <div className="relative rounded-xl bg-[#F5F5F4] ring-1 ring-[#EAEAE8] p-4 md:p-5">
                 {/* Edit action */}
                 <button
-                    disabled
+                    type="button"
                     onClick={onEdit}
-                    className="  absolute right-3 top-[50%] translate-y-[50%] inline-flex items-center gap-1 text-primary-500 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-1 !cursor-not-allowed  "
+                    className="absolute right-3 top-2 lg:top-1/2 lg:-translate-y-1/2 inline-flex items-center gap-1 text-primary-1 text-sm lg:text-[16px] font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-1 focus-visible:ring-offset-2"
                     aria-label="Edit contact"
                 >
-                    Edit <Pencil />
+                    Edit <Pencil className="size-4" />
                 </button>
+
 
                 {/* Horizontal boxes built from array */}
                 <div className="block">
@@ -69,8 +64,8 @@ export default function ContactDetailsCard({
                                 key={f.label}
                                 className="rounded-lg  "
                             >
-                                <div className="text-sm leading-none text-[#8A8A87] mb-2">{f.label}</div>
-                                <div className="text-sm text-primary-1 font-medium truncate">{f.value}</div>
+                                <div className="text-[12px] lg:text-sm leading-none text-[#8A8A87] mb-2">{f.label}</div>
+                                <div className="text-[14px] lg:text-sm text-black  lg:text-primary-1 font-medium truncate">{f.value}</div>
                             </div>
                         ))}
                     </div>

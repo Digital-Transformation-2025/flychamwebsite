@@ -32,7 +32,8 @@ const Panner = ({
                     className="object-cover" // Ensure the image covers the container
                 />
                 {/* Dark gradient overlay for readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50  to-black/10" />
+                {/* <div className="absolute inset-0 bg-gradient-to-r from-black/70  to-black/10" /> */}
+                <div className="absolute inset-0 bg-black/50" />
             </div>
 
             {/* Content overlay */}

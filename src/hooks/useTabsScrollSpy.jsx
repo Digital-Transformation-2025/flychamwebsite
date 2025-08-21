@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-export function useTabsScrollSpy(tabs, options = {}) {
+export function useTabsScrollSpy(tabs = [], options = {}) {
   const {
     headerSelector = "#sticky-head",
-    offset: offsetProp,                 // pass a number to force an offset
+    offset: offsetProp = null,          // force a fixed offset if provided
     getSectionId = (t) => `section-${t.id}`,
     suppressMs = 400,                   // mute spy briefly after programmatic scroll
   } = options;
@@ -14,28 +14,29 @@ export function useTabsScrollSpy(tabs, options = {}) {
   const activeRef = useRef(active);
   useEffect(() => { activeRef.current = active; }, [active]);
 
-  // Measure sticky header when it's fixed; 0 when static
-  const measuredOffsetRef = useRef(160);
-  const getOffset = () => {
-    if (offsetProp != null) return offsetProp;
+  // Measure sticky header (height when fixed; 0 when static) unless forced by prop
+  const [offsetPx, setOffsetPx] = useState(0);
+  const measureOffset = useCallback(() => {
+    if (offsetProp != null) {
+      setOffsetPx(offsetProp);
+      return;
+    }
     const el = document.querySelector(headerSelector);
-    if (!el) return measuredOffsetRef.current;
-    const pos = window.getComputedStyle(el).position;
-    return pos === "fixed" ? (el.offsetHeight || measuredOffsetRef.current) : 0;
-  };
+    if (!el) { setOffsetPx(0); return; }
+    const pos = getComputedStyle(el).position;
+    setOffsetPx(pos === "fixed" ? (el.offsetHeight || 160) : 0);
+  }, [headerSelector, offsetProp]);
 
   useEffect(() => {
-    if (offsetProp != null) return;
-    const el = document.querySelector(headerSelector);
-    if (el) measuredOffsetRef.current = el.offsetHeight || 160;
-
-    const onResize = () => {
-      const el2 = document.querySelector(headerSelector);
-      if (el2) measuredOffsetRef.current = el2.offsetHeight || 160;
-    };
+    measureOffset();
+    const onResize = () => measureOffset();
     window.addEventListener("resize", onResize, { passive: true });
-    return () => window.removeEventListener("resize", onResize);
-  }, [headerSelector, offsetProp]);
+    window.addEventListener("orientationchange", onResize, { passive: true });
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
+    };
+  }, [measureOffset]);
 
   // Keep active valid if tabs change
   useEffect(() => {
@@ -46,76 +47,110 @@ export function useTabsScrollSpy(tabs, options = {}) {
 
   const sectionIds = useMemo(() => tabs.map(getSectionId), [tabs, getSectionId]);
 
-  // Manual scroll → highlight
+  // Compute which section is current (used by IO + scroll fallback)
   const suppressUntilRef = useRef(0);
-  useEffect(() => {
+  const computeCurrent = useCallback(() => {
     if (!sectionIds.length) return;
 
-    const computeCurrent = () => {
-      const off = getOffset();
+    const off = offsetPx;
 
-      // 1) Best “passed the line” section (last whose top <= offset)
-      let passedId = null;
+    // 1) Best “passed the line” section (last whose top <= offset)
+    let passedId = null;
+    for (let i = 0; i < sectionIds.length; i++) {
+      const sid = sectionIds[i];
+      const el = document.getElementById(sid);
+      if (!el) continue;
+      const top = el.getBoundingClientRect().top - off;
+      if (top <= 1) passedId = sid;
+      else break;
+    }
+
+    // 2) If none passed, choose the closest upcoming section
+    let fallbackId = sectionIds[0];
+    if (!passedId) {
+      let bestDist = Infinity;
       for (let i = 0; i < sectionIds.length; i++) {
         const sid = sectionIds[i];
         const el = document.getElementById(sid);
         if (!el) continue;
-        const top = el.getBoundingClientRect().top - off;
-        if (top <= 1) passedId = sid;
-        else break;
-      }
-
-      // 2) If none passed, choose the closest upcoming section (smallest positive distance)
-      let fallbackId = sectionIds[0]; // default to first
-      if (!passedId) {
-        let bestDist = Infinity;
-        for (let i = 0; i < sectionIds.length; i++) {
-          const sid = sectionIds[i];
-          const el = document.getElementById(sid);
-          if (!el) continue;
-          const dist = el.getBoundingClientRect().top - off;
-          if (dist >= 0 && dist < bestDist) {
-            bestDist = dist;
-            fallbackId = sid;
-          }
+        const dist = el.getBoundingClientRect().top - off;
+        if (dist >= 0 && dist < bestDist) {
+          bestDist = dist;
+          fallbackId = sid;
         }
       }
+    }
 
-      const targetId = passedId || fallbackId;
-      const tab = tabs.find((t) => getSectionId(t) === targetId);
-      if (tab && tab.id !== activeRef.current) setActive(tab.id);
-    };
+    const targetId = passedId || fallbackId;
+    const tab = tabs.find((t) => getSectionId(t) === targetId);
+    if (tab && tab.id !== activeRef.current) setActive(tab.id);
+  }, [sectionIds, tabs, getSectionId, offsetPx]);
+
+  // IntersectionObserver (primary) + initial sync
+  useEffect(() => {
+    if (!sectionIds.length) return;
+
+    const elements = sectionIds
+      .map((sid) => document.getElementById(sid))
+      .filter(Boolean);
 
     let raf = null;
-    const onScroll = () => {
-      console.log('scrolling');
-      
-      // Ignore while we’re animating a programmatic scroll
+
+    const onIntersect = () => {
       if (Date.now() < suppressUntilRef.current) return;
       if (raf) cancelAnimationFrame(raf);
       raf = requestAnimationFrame(computeCurrent);
     };
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    // run once so first tab is highlighted initially
-    computeCurrent();
+    if (typeof IntersectionObserver !== "undefined" && elements.length) {
+      const io = new IntersectionObserver(onIntersect, {
+        root: null,
+        // Move the "observation line" below the sticky header
+        rootMargin: `-${Math.max(0, offsetPx)}px 0px -60% 0px`,
+        threshold: [0, 0.01, 0.5, 1],
+      });
+      elements.forEach((el) => io.observe(el));
 
+      // Initial sync
+      computeCurrent();
+
+      return () => {
+        io.disconnect();
+        if (raf) cancelAnimationFrame(raf);
+      };
+    } else {
+      // Fallback: run once if we can't observe yet
+      requestAnimationFrame(computeCurrent);
+      return () => { if (raf) cancelAnimationFrame(raf); };
+    }
+  }, [sectionIds.join("|"), offsetPx, computeCurrent]);
+
+  // Lightweight scroll fallback (helps at page bottom / rare IO misses)
+  useEffect(() => {
+    let raf = null;
+    const onScroll = () => {
+      console.log('scrolling >>>>');
+      
+      if (Date.now() < suppressUntilRef.current) return;
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(computeCurrent);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sectionIds.join("|"), tabs.length]);
+  }, [computeCurrent]);
 
   // Click tab → smooth scroll (respect offset), keep tab visible in tabs strip
-  const onChangeTab = (tabOrIdOrIndex, index, tabsContainerRef, itemRefs) => {
+  const onChangeTab = useCallback((tabOrIdOrIndex, index, tabsContainerRef, itemRefs) => {
     const tab =
       typeof tabOrIdOrIndex === "object" && tabOrIdOrIndex
         ? tabOrIdOrIndex
         : tabs.find(
-          (t, i) =>
-            String(t.id) === String(tabOrIdOrIndex) || i === tabOrIdOrIndex
-        );
+            (t, i) =>
+              String(t.id) === String(tabOrIdOrIndex) || i === tabOrIdOrIndex
+          );
 
     if (!tab) return;
 
@@ -126,10 +161,10 @@ export function useTabsScrollSpy(tabs, options = {}) {
 
     // temporarily add scroll-margin-top so it lands below the sticky header
     const prev = el.style.scrollMarginTop;
-    el.style.scrollMarginTop = `${getOffset() + 8}px`;
+    el.style.scrollMarginTop = `${offsetPx + 40}px`;
     suppressUntilRef.current = Date.now() + suppressMs; // mute spy briefly
     el.scrollIntoView({ behavior: "smooth", block: "start" });
-    setTimeout(() => (el.style.scrollMarginTop = prev), 400);
+    setTimeout(() => (el.style.scrollMarginTop = prev), Math.max(300, suppressMs));
 
     // keep clicked tab visible horizontally (if strip is scrollable)
     const c = tabsContainerRef?.current;
@@ -143,8 +178,7 @@ export function useTabsScrollSpy(tabs, options = {}) {
         c.scrollTo({ left: c.scrollLeft + (ir.right - cr.right) + 20, behavior: "smooth" });
       }
     }
-  };
-  console.log('active', active);
+  }, [tabs, getSectionId, offsetPx, suppressMs]);
 
   return { active, onChangeTab };
 }

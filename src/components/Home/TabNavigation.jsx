@@ -8,12 +8,12 @@ const TabNavigation = ({ tabs, activeTab, isMobile }) => {
   const pathname = usePathname();
   const dispatch = useDispatch()
   const handleTabClick = (tab) => {
-    if (pathname === '/test123') {
-      dispatch(
-        setActiveTab(tab)
-      )
-    }
-    // setActiveTab(tab);
+    // if (pathname === '/test123') {
+    //   dispatch(
+    //     setActiveTab(tab)
+    //   )
+    // }
+    setActiveTab(tab);
   };
 
   return (

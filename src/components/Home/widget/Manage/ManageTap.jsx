@@ -78,7 +78,7 @@ const ManageTap = () => {
             <div className="h-[8px]"></div>
             <form onSubmit={formik.handleSubmit} className="w-full max-w-5xl mx-auto">
                 {/* inputs row */}
-                <div className="flex flex-col lg:flex-row gap-6 items-stretch">
+                <div className="flex flex-col md:flex-row gap-6 items-stretch">
                     <FloatingInput
                         name="pnr"
                         label="Reservation number (PNR)"

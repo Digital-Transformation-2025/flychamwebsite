@@ -38,13 +38,13 @@ const BookingNotFoundModal = ({ open, onClose, title, description, isBtn }) => {
                                 <button
                                     aria-label="Close"
                                     onClick={onClose}
-                                    className="absolute right-4 top-4 text-[#8A8A87] hover:text-[#5F5F5C] transition"
+                                    className="absolute right-4 top-4 text-800 hover:text-[#5F5F5C] transition"
                                 >
                                     <X size={16} weight="bold" />
                                 </button>
 
                                 {/* Content spacing matches reference: p-6 md:p-7 */}
-                                <div className="p-6 md:p-7">
+                                <div className="p-6 md:p-7 md:pb-10">
                                     {/* Title row */}
                                     <div className="flex items-start gap-3">
                                         {/* red dot */}
@@ -54,12 +54,12 @@ const BookingNotFoundModal = ({ open, onClose, title, description, isBtn }) => {
                                         {/* title + text */}
                                         <div className="flex-1">
                                             {title &&
-                                                <Dialog.Title className="font-medium text-[16px] leading-5 text-800">
+                                                <Dialog.Title className="font-medium text-[16px] lg:text-[18px] leading-5 text-800">
                                                     {title}
                                                 </Dialog.Title>
                                             }
                                             {description &&
-                                                <Dialog.Description className="mt-2 text-[18px] leading-6 text-[#5F5F5C]">
+                                                <Dialog.Description className="mt-2 text-[14px] lg:text-[16px] leading-6 text-[#5F5F5C]">
 
                                                     {description}
                                                 </Dialog.Description>

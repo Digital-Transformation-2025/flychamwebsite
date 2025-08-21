@@ -12,11 +12,12 @@ import PassengersInformation from '@/components/Manage-booking/PassengersInforma
 import Tabs from '@/components/Manage-booking/Tabs'
 import TravelAgencyAlert from '@/components/Manage-booking/TravelAgencyAlert';
 import LottieComponent from '@/components/Ui/LottieComponent';
+import { useStickyHeaderHeight } from '@/hooks/useStickyHeaderHeight';
 import { useTabsScrollSpy } from '@/hooks/useTabsScrollSpy';
 // import { useScrollSpy } from '@/hooks/useScrollSpyTabs';
 import { contactSchemaInManage } from '@/util/validatonSchemas';
 import { useFormik } from 'formik';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux';
 const tabs = [
     {
@@ -52,10 +53,16 @@ const ManageBookingClient = () => {
         ? tabs.filter((t) => t.id !== 2)
         : tabs;
 
+    // Measure the sticky wrapper (Header+Panner+Tabs) height when fixed
+    const stickyH = useStickyHeaderHeight("#sticky-head");
 
+    const getSectionId = useCallback((t) => `section-${t.id}`, []);
+
+    // Tell the spy to use the same offset so manual scroll highlights correctly
     const { active, onChangeTab } = useTabsScrollSpy(filteredTabs, {
         headerSelector: "#sticky-head",
-        getSectionId: (t) => `section-${t.id}`,
+        getSectionId,
+        offset: stickyH, // <— single source of truth
     });
 
     console.log('active', active);
@@ -132,7 +139,7 @@ const ManageBookingClient = () => {
 
 
     const Loading = <LottieComponent />
-    const contet = <div className='pb-10'>
+    const contet = <div className='pb-10 '>
         <div
             id="sticky-head"
 

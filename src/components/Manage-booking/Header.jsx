@@ -10,10 +10,10 @@ const Header = () => {
         router.push('/')
     }
     return (
-        <header className="w-full bg-[#F5F5F4] py-4 px-2 flex justify-start items-center">
+        <header className="w-full bg-[#F5F5F4] py-4  flex justify-start items-center">
             <div
                 onClick={onclickLogo}
-                className="cursor-pointer w-[174px] flex justify-center items-center">
+                className="cursor-pointer w-[174px] flex justify-start items-center">
                 <Image
                     src={logoblue}
                     alt="FlyCham Logo"

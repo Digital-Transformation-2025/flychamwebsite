@@ -44,7 +44,7 @@ const samplePassengers = [
 
 
 const Pill = ({ children }) => (
-    <span className=" text-[12px] font-medium text-white/90">({children})</span>
+    <span className=" text-[12px]  text-white/90">({children})</span>
 );
 
 const InfoLabel = ({ title, icon, value }) => (
@@ -70,21 +70,67 @@ const SmallButton = ({ children, handleClickBtn }) => (
 /* =========================
    Passenger Card
 ========================= */
-const TabButton = ({ leg, isActive, onClick }) => (
-    <button
-        onClick={onClick}
-        className={`p-3 text-center border-b ${isActive ? 'bg-100' : 'bg-white'} border-[#EAEAE8]`}
-    >
-        <div className={`${isActive ? 'text-primary-1' : 'text-[#8A8A87]'} font-semibold`}>
-            {leg.from} → {leg.to}
-        </div>
-        <div className={`text-xs ${isActive ? 'text-primary-1' : 'text-[#8A8A87]'} mt-1`}>
-            {leg.flight}
-        </div>
-    </button>
-);
+// New: sliding underline tabs for the passenger legs
+const LegTabs = ({ legs, activeIndex, onChangeIndex, isRoundTrip }) => {
+    const count = Math.max(1, legs.length);
+    const widthPct = 100 / count;
 
-const PassengerCard = ({ passenger, isTraveleAgent, isReturnFlightExists, tab, setTab, handleClickBtn }) => {
+    return (
+        <div
+            className="relative grid border-b border-[#EAEAE8] overflow-hidden"
+            style={{ gridTemplateColumns: `repeat(${count}, minmax(0, 1fr))` }}
+        >
+            {/* Sliding gray background */}
+
+            < span
+                className="absolute top-0 left-0 h-full bg-gray-100 transition-transform duration-300 ease-out"
+                style={{
+                    width: `${widthPct}%`,
+                    transform: `translateX(${activeIndex * 100}%)`,
+                }}
+            />
+
+            {legs.map((leg, i) => {
+                const isActive = i === activeIndex;
+                console.log('leg', leg);
+
+                return (
+                    <button
+                        key={leg.id || i}
+                        onClick={() => onChangeIndex(i)}
+                        className="relative z-10 p-3 text-center bg-transparent"
+                    >
+                        <div
+                            className={`${isActive ? 'text-primary-1' : 'text-[#8A8A87]'} font-semibold`}
+                        >
+                            {leg.from} → {leg.to}
+                        </div>
+                        <div
+                            className={`text-xs font-semibold mt-1 ${isActive ? 'text-primary-1' : 'text-[#8A8A87]'
+                                }`}
+                        >
+                            {leg.flight}
+                        </div>
+                    </button>
+                );
+            })}
+            {/* Sliding underline */}
+            {isRoundTrip &&
+                < span
+                    className="pointer-events-none absolute bottom-0 left-0 h-[3px] rounded-full bg-primary-1 transition-transform duration-300 ease-out"
+                    style={{
+                        width: `${widthPct}%`,
+                        transform: `translateX(${activeIndex * 100}%)`,
+                    }}
+                />
+            }
+
+        </div>
+    );
+};
+
+
+const PassengerCard = ({ passenger, isTraveleAgent, isReturnFlightExists, tab, setTab, handleClickBtn, isRoundTrip }) => {
 
     const icons = {
         hand: Briefcase,
@@ -124,11 +170,7 @@ const PassengerCard = ({ passenger, isTraveleAgent, isReturnFlightExists, tab, s
             </div>
 
             {/* Tabs */}
-            <div className={`grid grid-cols-${isReturnFlightExists ? 2 : 1}`}>
-                {passenger.legs.map((leg, i) => (
-                    <TabButton key={i} leg={leg} isActive={tab === i} onClick={() => setTab(i)} />
-                ))}
-            </div>
+            <LegTabs legs={passenger.legs} activeIndex={tab} onChangeIndex={setTab} isRoundTrip={isRoundTrip} />
 
             {/* Info */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 px-6 py-5 bg-white">
@@ -203,6 +245,7 @@ export default function PassengersInformation({ passengers, isTraveleAgent,
                         tab={tabs[p.id] || 0} // Default to first tab if no tab is set
                         setTab={(tabIndex) => handleTabChange(p.id, tabIndex)}
                         handleClickBtn={handleClickBtn}
+                        isRoundTrip={Boolean(secoundSegment)}
 
                     />
                 ))}

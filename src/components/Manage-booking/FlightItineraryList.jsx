@@ -34,20 +34,20 @@ const FlightDetailsLink = () => (
 /* =========================
    Banner
 ========================= */
-const CardBanner = ({ from, to, dateText, chip, rightNote }) => (
+const CardBanner = ({ from, to, dateText, chip, rightNote, isMobile }) => (
     <div className="flex items-center lg:items-start  flex-col lg:flex-row justify-between gap-3 rounded-t-lg bg-primary-1 px-4 py-3 text-white">
-        <div className="flex flex-col lg:flex-row  flex-wrap  w-full items-start lg:items-center gap-2">
+        <div className="flex flex-col lg:flex-row  flex-wrap  w-full items-start lg:items-end gap-2">
             <div className='flex items-center justify-start gap-2'>
-                <span className='font-bold text-2xl'>
+                <span className='font-bold text-sm lg:text-2xl'>
                     {from}
                 </span>
-                <ArrowRight size={24} />
-                <span className='font-bold text-2xl'>
+                <ArrowRight size={isMobile ? 14 : 24} />
+                <span className='font-bold  text-sm lg:text-2xl'>
 
                     {to}
                 </span>
             </div>
-            <span className="text-[13px] ">.{dateText}</span>
+            <span className="text-xs lg:text-[16px] ">.{dateText}</span>
             {/* {chip && <Pill text={chip.text} bg={chip.bg} fg={chip.fg} />} */}
         </div>
         {rightNote && (
@@ -67,10 +67,10 @@ const CardBanner = ({ from, to, dateText, chip, rightNote }) => (
 ========================= */
 const TimeCol = ({ code, time, airport, align = 'left' }) => {
     return (
-        <div className={`flex w-full flex-col-reverse xl:flex-col justify-center items-start lg:items-center lg:text-center  gap-1`}>
-            <div className="text-600 text-xs sm:text-sm xl:text-xl  tracking-wide">{code}</div>
-            <div className="text-[#282826] text-md sm:text-2xl xl:text-3xl  leading-none">{time}</div>
-            <div className="text-sm  text-600 font-medium hidden xl:block">{airport}</div>
+        <div className={`flex w-full flex-col-reverse xl:flex-col justify-center items-center lg:items-center lg:text-center  gap-1`}>
+            <div className="text-600 text-xs  md:text-xs sm:text-sm xl:text-lg text-center  tracking-wide font-normal">{code}</div>
+            <div className="text-800 text-xl  md:text-2xl xl:text-3xl font-light leading-none">{time}</div>
+            <div className="text-sm   text-600 font-medium hidden xl:block">{airport}</div>
         </div>
     );
 };
@@ -79,7 +79,7 @@ const Dots = ({ side, dashedLength }) => (
         {Array.from({ length: dashedLength }).map((_, i) => (
             <span
                 key={`${side}-${i}`}
-                className="w-[6px] h-[3px] bg-primary-1 "
+                className="w-[3px] lg:w-[4px] h-[2px] lg:h-[2px] bg-primary-1 "
             />
         ))}
     </div>
@@ -91,10 +91,10 @@ const MidTimeline = ({ duration, cabin, dashedLength, isMobile }) => {
 
     return (
         <div className="flex w-full flex-col  items-center gap-3">
-            <div className="text-[16px] text-600">{duration}</div>
+            <div className="text-[12px] sm:text-sm text-600">{duration}</div>
 
             {/* timeline */}
-            <div className="flex w-full max-w-[560px] justify-center items-center gap-3">
+            <div className="flex w-full max-w-[560px] justify-center items-center gap-1 md:gap-3">
                 <Dot filled />
                 <Dots side="left" dashedLength={dashedLength} />
 
@@ -106,7 +106,7 @@ const MidTimeline = ({ duration, cabin, dashedLength, isMobile }) => {
                 <Dot filled={false} />
             </div>
 
-            <div className="text-[13px] font-semibold text-primary-1">{cabin}</div>
+            <div className="text-[12px] lg:text-sm font-semibold text-primary-1">{`${cabin} class`}</div>
         </div>
     );
 }
@@ -174,6 +174,7 @@ const FlightCard = ({ leg, onAction, dashedLength, isMobile, handleClickCancel, 
                 dateText={leg.banner.dateText}
                 chip={leg.banner.chip}
                 rightNote={leg.banner.rightNote}
+                isMobile={isMobile}
             />
 
             <div className=" px-4 py-5 flex  gap-6 bg-[#F5F5F4]   md:items-center">
@@ -184,22 +185,22 @@ const FlightCard = ({ leg, onAction, dashedLength, isMobile, handleClickCancel, 
 
             <div
                 onClick={() => handleClickDetails(leg)}
-                className="bg-[#F5F5F4]  px-4 py-3">
+                className="flex items-center justify-between bg-[#F5F5F4]  px-4 py-3">
                 <FlightDetailsLink />
+                <div className='block md:hidden my-4'>
 
+                    <ActionButton
+                        icon={XCircle}
+                        label="Cancel booking"
+                        action="upgrade"
+                        color="text-alert text-[13px]"
+                        onAction={handleClickCancel}
+                    />
+                </div>
             </div>
 
         </div>
-        <div className='block md:hidden my-4'>
 
-            <ActionButton
-                icon={XCircle}
-                label="Cancel booking"
-                action="upgrade"
-                color="text-alert text-[13px]"
-                onAction={handleClickCancel}
-            />
-        </div>
     </section>
 );
 
@@ -207,6 +208,7 @@ const FlightCard = ({ leg, onAction, dashedLength, isMobile, handleClickCancel, 
    List Wrapper
 ========================= */
 export default function FlightItineraryList({ onAction, firstSegment, secoundSegment, handleClickCancel, handleClickDetails }) {
+    const isMobile = useIsMobile()
     const segmentData = (segment) => ({
         fromCity: segment?.departureCity,
         toCity: segment?.arrivalCity,
@@ -267,7 +269,6 @@ export default function FlightItineraryList({ onAction, firstSegment, secoundSeg
     ];
 
     const [dashedLength, setDashedLength] = useState(20);
-    const isMobile = useIsMobile();
 
     useEffect(() => {
         const breakpoints = [
@@ -277,13 +278,13 @@ export default function FlightItineraryList({ onAction, firstSegment, secoundSeg
             [1280, 12],
             [1100, 14],
             [900, 12],
-            [800, 11],
-            [700, 11],
-            [600, 11],
-            [500, 4],
-            [400, 3],
-            [350, 2],
-            [300, 1],
+            [800, 12],
+            [700, 12],
+            [600, 18],
+            [500, 10],
+            [400, 8],
+            [350, 4],
+            [300, 3],
             [0, 2], // default
         ];
 
