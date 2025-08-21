@@ -3,7 +3,7 @@ import SectionTitle from "./SectionTitle";
 
 const FlightDetailsHeader = ({ isTraveleAgent }) => {
     return (
-        <div className={`w-full py-2 mt-[150px] md:mt-8  mb-[40px] ${isTraveleAgent && '!mt-10'}`}>
+        <div className={`w-full py-2 mt-[30px] md:mt-8  mb-[40px] ${isTraveleAgent && '!mt-10'}`}>
             <div className="flex flex-wrap items-center justify-between md:justify-start gap-3">
 
                 {/* Title */}

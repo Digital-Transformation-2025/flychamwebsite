@@ -11,8 +11,8 @@ const Tabs = ({ tabs, active = 0, onChange }) => {
   // Convert active (id or index) -> index
   const getActiveIndex = () => {
     const byId = tabs.findIndex((t) => String(t.id) === String(active));
-    if (byId !== -1) return byId;          // active is an id
-    const asNum = Number(active);          // fallback: treat as index
+    if (byId !== -1) return byId;
+    const asNum = Number(active);
     return Number.isInteger(asNum) && tabs[asNum] ? asNum : 0;
   };
   const activeIndex = getActiveIndex();
@@ -24,9 +24,28 @@ const Tabs = ({ tabs, active = 0, onChange }) => {
     const cr = c.getBoundingClientRect();
     const er = el.getBoundingClientRect();
     setUnderline({
-      left: (er.left - cr.left) + c.scrollLeft, // account for horizontal scroll
+      left: (er.left - cr.left) + c.scrollLeft,
       width: er.width,
     });
+  };
+
+  // NEW: center active tab in the strip
+  const centerActive = (behavior = 'smooth') => {
+    const c = containerRef.current;
+    const el = itemRefs.current[activeIndex];
+    if (!c || !el) return;
+
+    const cr = c.getBoundingClientRect();
+    const er = el.getBoundingClientRect();
+
+    // How far we need to move so the tab's center = container's center
+    const delta = (er.left - cr.left) - ((cr.width - er.width) / 2);
+    const target = c.scrollLeft + delta;
+
+    const max = Math.max(0, c.scrollWidth - c.clientWidth);
+    const clamped = Math.min(max, Math.max(0, target));
+
+    c.scrollTo({ left: clamped, behavior });
   };
 
   useLayoutEffect(() => {
@@ -34,7 +53,7 @@ const Tabs = ({ tabs, active = 0, onChange }) => {
   }, [activeIndex, tabs.length]);
 
   useEffect(() => {
-    const onResize = () => measure();
+    const onResize = () => { measure(); centerActive('auto'); };
     const onScroll = () => measure();
 
     window.addEventListener('resize', onResize, { passive: true });
@@ -42,14 +61,20 @@ const Tabs = ({ tabs, active = 0, onChange }) => {
     const c = containerRef.current;
     c?.addEventListener('scroll', onScroll, { passive: true });
 
-    // fonts can change widths after render
-    document?.fonts?.ready?.then(measure).catch(() => { });
+    document?.fonts?.ready?.then(() => { measure(); centerActive('auto'); }).catch(() => {});
 
     return () => {
       window.removeEventListener('resize', onResize);
       window.removeEventListener('orientationchange', onResize);
       c?.removeEventListener('scroll', onScroll);
     };
+  }, [activeIndex]);
+
+  // NEW: when active changes (via scroll spy or click), center it
+  useEffect(() => {
+    // Use rAF so layout is correct before scrolling
+    const id = requestAnimationFrame(() => centerActive('smooth'));
+    return () => cancelAnimationFrame(id);
   }, [activeIndex]);
 
   return (
@@ -69,13 +94,13 @@ const Tabs = ({ tabs, active = 0, onChange }) => {
                   type="button"
                   role="tab"
                   aria-selected={isActive}
-                  onClick={() => onChange?.(tab.id, i, containerRef, itemRefs)}  
-                  className={`whitespace-nowrap py-4 text-sm transition-colors ${isActive ? 'text-primary-1 font-medium' : 'text-[#8A8A87]'
-                    }`}
+                  onClick={() => onChange?.(tab.id, i, containerRef, itemRefs)}
+                  className={`whitespace-nowrap py-4 text-sm transition-colors ${
+                    isActive ? 'text-primary-1 font-medium' : 'text-[#8A8A87]'
+                  }`}
                 >
                   {tab.label}
                 </button>
-
               </li>
             );
           })}

@@ -139,7 +139,7 @@ const ManageBookingClient = () => {
 
 
     const Loading = <LottieComponent />
-    const contet = <div className='pb-10 '>
+    const contet = <div className='pb-20 '>
         <div
             id="sticky-head"
 
@@ -158,14 +158,15 @@ const ManageBookingClient = () => {
 
         <div
             ref={containerRef}
-            className="max-w-[90%] md:max-w-[70%] mx-auto space-y-8 pt-[220px] md:pt-0">
+        className="max-w-[90%] md:max-w-[70%] mx-auto space-y-8 "
+
+            style={{ paddingTop: stickyH }}
+        >
             {isTraveleAgent &&
                 <TravelAgencyAlert />
             }
-            <div
-                id="section-0"
-                className="scroll-mt-[360px]  md:scroll-mt-0"
-            >
+            <div id="section-0" style={{ scrollMarginTop: stickyH }}>
+
                 <FlightDetailsHeader isTraveleAgent={isTraveleAgent}
 
                 />
@@ -177,7 +178,7 @@ const ManageBookingClient = () => {
                 />
             </div>
 
-            <div id="section-1" className="scroll-mt-[360px] md:scroll-mt-0">
+            <div id="section-1" style={{ scrollMarginTop: stickyH }}>
                 <PassengersInformation
                     passengers={passengers}
                     isTraveleAgent={isTraveleAgent}
@@ -187,7 +188,7 @@ const ManageBookingClient = () => {
                 />
             </div>
             {!isTraveleAgent &&
-                <div id="section-2" className="scroll-mt-[360px] md:scroll-mt-0">
+                <div id="section-2" style={{ scrollMarginTop: stickyH }} className='mb-50'>
                     <ContactDetails onEdit={onEdit} contactInfo={contactInfo} />
                 </div>
             }
