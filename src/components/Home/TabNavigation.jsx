@@ -13,10 +13,14 @@ const TabNavigation = ({ tabs, activeTab, isMobile }) => {
     //     setActiveTab(tab)
     //   )
     // }
-    dispatch(
+    if (tab !== 'flight status') {
 
-      setActiveTab(tab)
-    )
+      dispatch(
+
+        setActiveTab(tab)
+      )
+    }
+
   };
 
   return (
