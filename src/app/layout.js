@@ -19,8 +19,18 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: 'Fly Cham',
   description: 'fly cham ',
+
+  // icons: {
+  //   icon: '/tabicon.svg',
+  // },
   icons: {
-    icon: '/tabicon.svg',
+    icon: [
+      { url: '/tabicon.ico', sizes: 'any' },  // Universal tabicon
+      { url: '/tabicon-16x16.png', type: 'image/png', sizes: '16x16' },
+      { url: '/tabicon-32x32.png', type: 'image/png', sizes: '32x32' },
+    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],  // Apple icon
+    other: [{ rel: 'mask-icon', url: '/safari-pinned-tab.svg', color: '#0B4572' }],
   },
 };
 

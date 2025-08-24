@@ -6,7 +6,7 @@ const TravelAgencyAlert = () => {
     const iconSize = isMobile ? 20 : 18; // bigger icon on mobile
 
     return (
-        <div className="w-full bg-secondary-100  px-4 py-3 mb-8 mt-30 sm:mt-40 md:mt-10 lg:mt-8 rounded-md">
+        <div className="w-full bg-secondary-100  px-4 py-3 mb-8 mt-10 sm:mt-40 md:mt-10 lg:mt-8 rounded-md">
             <div className="flex items-start gap-3">
                 {/* Icon */}
                 <div className="flex-shrink-0 flex items-start justify-center   rounded-full">

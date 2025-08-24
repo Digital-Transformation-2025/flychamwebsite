@@ -52,7 +52,7 @@ const InfoLabel = ({ title, icon, value }) => (
         <div className="text-[13px] text-500">{title}</div>
         <div className="flex items-center gap-2">
             {icon}
-            <span className="text-[14px] text-primary-1">{value}</span>
+            <span className="text-[14px] font-medium text-primary-1">{value}</span>
         </div>
     </div>
 );
