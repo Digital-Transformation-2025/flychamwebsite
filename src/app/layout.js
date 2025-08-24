@@ -22,8 +22,14 @@ export const metadata = {
   description: 'fly cham ',
 
   icons: {
-    // icon: '/tabicon.svg',
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },   // ICO fallback
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },   // 16x16 PNG
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },   // 32x32 PNG
+      { url: '/tabicon.svg', type: 'image/svg+xml' },  // SVG format
+    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],  // Apple icon
+    other: [{ rel: 'mask-icon', url: '/safari-pinned-tab.svg', color: '#0B4572' }],
   },
 
 };
