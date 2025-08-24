@@ -1,5 +1,6 @@
 import apiClient from '@/lib/apiClient';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 const sliceName = 'airPorts';
 // ===================================== GET AIR PORTS ==============================================
@@ -25,7 +26,7 @@ export const getFlightsService = createAsyncThunk(
     async (data, thunkAPI) => {
         try {
 
-            const response = await apiClient.post(`/api2/GetFlightsWithPrice/?filters=language==en`, data);
+            const response = await axios.post(`http://devsrv01:8121/GetFlightsWithPrice/?filters=language==en`, data);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(
