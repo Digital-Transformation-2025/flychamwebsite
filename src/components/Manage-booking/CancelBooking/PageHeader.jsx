@@ -4,7 +4,7 @@ const PageHeader = ({ bookingRef }) => (
             Cancel Booking & Refund
         </h1>
         <div className="text-xs sm:text-sm md:text-base text-600">
-            Booking reservation: <span className="font-bold">{bookingRef}</span>
+            <span className="font-medium">       Booking reservation:</span> <span className="font-bold">{bookingRef}</span>
         </div>
     </div>
 );

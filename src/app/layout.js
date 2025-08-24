@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: 'Fly Cham',
-  description: 'fly cham ',
+  description: 'Fly Cham - Choose Excellence',
 
   icons: {
     icon: [

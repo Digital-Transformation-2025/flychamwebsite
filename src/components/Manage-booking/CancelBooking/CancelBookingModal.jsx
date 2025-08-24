@@ -1,11 +1,9 @@
 'use client';
 import React, { useEffect, useMemo, useState } from 'react';
 import PageHeader from './PageHeader';
-import PolicyCard from './PolicyCard';
-import VerificationRequestCard from './VerificationRequestCard';
-import VerificationCodeCard from './VerificationCodeCard';
-import TopChrome from './TopChrome';
-import MutedButton from './MutedButton';
+import CancelHeader from './CancelHeader';
+import StepOne from './StepOne/StepOne';
+import StepTwo from './StepTwo/StepTwo';
 
 /* =========================
    Full-page Modal (responsive)
@@ -19,7 +17,7 @@ export default function CancelBookingModal({
     if (!open) return null;
 
     // stage: "request" (before sending) → "verify" (after clicking Send the code)
-    const [stage, setStage] = useState('request');
+    const [stage, setStage] = useState(1);
     const [code, setCode] = useState('');
     const [timeLeft, setTimeLeft] = useState(180); // 3 minutes
 
@@ -42,43 +40,27 @@ export default function CancelBookingModal({
     const handleVerify = () => onClose?.();
 
     const handleClickBack = () => {
-        if (stage === 'request') {
-            onClose()
-        } else {
-            setStage('request')
-        }
+        onClose()
     }
 
+
+
+
+
     return (
-        <div className="fixed inset-0 z-[100] bg-white overflow-y-auto">
-            {/* <TopChrome onClose={onClose} /> */}
+        <>
 
-            <main className="w-full max-w-7xl mx-auto px-4 sm:px-5 md:px-6 pb-24 sm:pb-20">
-                <PageHeader bookingRef={bookingRef} />
-                <PolicyCard />
+            <div className="fixed inset-0 z-[100] bg-white overflow-y-auto">
+                <CancelHeader />
 
-                {stage === 'request' ? (
-                    <VerificationRequestCard maskedPhone={maskedPhone} onSend={handleSendCode} />
-                ) : (
-                    <VerificationCodeCard
-                        code={code}
-                        setCode={setCode}
-                        timeLeftLabel={mmss}
-                        onEmailResend={() => handleResend()}
-                        onSmsResend={() => handleResend()}
-                        onVerify={handleVerify}
-                    />
-                )}
-                <div className="my-4">
+                <main className="w-full max-w-7xl mx-auto px-4 sm:px-5 md:px-6 pb-24 sm:pb-20">
+                    <PageHeader bookingRef={bookingRef} />
+                    <StepOne handleClickBack={handleClickBack} />
+                    <StepTwo />
 
-                    <MutedButton onClick={handleClickBack} className="!border-[#054E72] text-primary-1">
-                        {stage === 'request' ? 'Cancel' : 'Back'}
-
-                    </MutedButton>
-                </div>
-
-            </main>
-        </div>
+                </main>
+            </div >
+        </>
     );
 }
 

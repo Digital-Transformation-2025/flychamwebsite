@@ -18,6 +18,7 @@ import { searchBookService } from '@/store/Services/manageBookingServices';
 // import { useScrollSpy } from '@/hooks/useScrollSpyTabs';
 import { contactSchemaInManage } from '@/util/validatonSchemas';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 const tabs = [
@@ -47,6 +48,7 @@ const contact = {
 };
 const ManageBookingClient = () => {
     const containerRef = useRef(null);
+    const router = useRouter()
 
     const { isLoading, bookInfo, pnrParams } = useSelector((s) => s.manageBook)
     const { isTraveleAgent, mainImage, segments, bookingReference: pnr, contactInfo, passengers } = bookInfo || {}
@@ -138,7 +140,11 @@ const ManageBookingClient = () => {
     useEffect(() => {
         if (!Boolean(bookInfo)) {
             const data = { lastName: pnrParams.lastName, PNR: pnrParams.pnr };
-            dispatch(searchBookService(data))
+            dispatch(searchBookService(data)).then((action) => {
+                if (searchBookService.rejected.match(action)) {
+                    router.push("/")
+                }
+            })
         }
     }, [])
 
@@ -146,89 +152,97 @@ const ManageBookingClient = () => {
 
 
     const Loading = <LottieComponent />
-    const contet = <div className='pb-20 '>
-        <div
-            id="sticky-head"
+    const contet =
+        bookInfo && (
 
-            className="fixed top-0 left-0 right-0 z-50 bg-white md:static md:z-auto"
-        >
-            <Header />
-            <Panner
-                mainImage={mainImage}
-                origin={origin}
-                destination={destination}
-                pnr={pnr}
-                dateLabel={dateLabel}
-            />
-            <Tabs tabs={filteredTabs} active={active} onChange={onChangeTab} />
-        </div>
 
-        <div
-            ref={containerRef}
-            className="max-w-[90%] md:max-w-[70%] mx-auto space-y-8 "
 
-            style={{ paddingTop: stickyH }}
-        >
-            {isTraveleAgent &&
-                <TravelAgencyAlert />
-            }
-            <div id="section-0" style={{ scrollMarginTop: stickyH }}>
 
-                <FlightDetailsHeader isTraveleAgent={isTraveleAgent}
 
-                />
-                <FlightItineraryList
-                    firstSegment={firstSegment} secoundSegment={secoundSegment}
-                    handleClickCancel={handleClickCancel}
-                    handleClickDetails={handleClickDetails}
+            <div className='pb-20 '>
+                <div
+                    id="sticky-head"
 
-                />
-            </div>
-
-            <div id="section-1" style={{ scrollMarginTop: stickyH }}>
-                <PassengersInformation
-                    passengers={passengers}
-                    isTraveleAgent={isTraveleAgent}
-                    firstSegment={firstSegment}
-                    secoundSegment={secoundSegment}
-                    handleClickBtn={handleClickBtn}
-                />
-            </div>
-            {!isTraveleAgent &&
-                <div id="section-2" style={{ scrollMarginTop: stickyH }} className='mb-50'>
-                    <ContactDetails onEdit={onEdit} contactInfo={contactInfo} />
+                    className="fixed top-0 left-0 right-0 z-50 bg-white md:static md:z-auto"
+                >
+                    <Header />
+                    <Panner
+                        mainImage={mainImage}
+                        origin={origin}
+                        destination={destination}
+                        pnr={pnr}
+                        dateLabel={dateLabel}
+                    />
+                    <Tabs tabs={filteredTabs} active={active} onChange={onChangeTab} />
                 </div>
-            }
-            {/* <div id="section-3" className="scroll-mt-[360px] md:scroll-mt-0">
+
+                <div
+                    ref={containerRef}
+                    className="max-w-[90%] md:max-w-[70%] mx-auto space-y-8 "
+
+                    style={{ paddingTop: stickyH }}
+                >
+                    {isTraveleAgent &&
+                        <TravelAgencyAlert />
+                    }
+                    <div id="section-0" style={{ scrollMarginTop: stickyH }}>
+
+                        <FlightDetailsHeader isTraveleAgent={isTraveleAgent}
+
+                        />
+                        <FlightItineraryList
+                            firstSegment={firstSegment} secoundSegment={secoundSegment}
+                            handleClickCancel={handleClickCancel}
+                            handleClickDetails={handleClickDetails}
+
+                        />
+                    </div>
+
+                    <div id="section-1" style={{ scrollMarginTop: stickyH }}>
+                        <PassengersInformation
+                            passengers={passengers}
+                            isTraveleAgent={isTraveleAgent}
+                            firstSegment={firstSegment}
+                            secoundSegment={secoundSegment}
+                            handleClickBtn={handleClickBtn}
+                        />
+                    </div>
+                    {!isTraveleAgent &&
+                        <div id="section-2" style={{ scrollMarginTop: stickyH }} className='mb-50'>
+                            <ContactDetails onEdit={onEdit} contactInfo={contactInfo} />
+                        </div>
+                    }
+                    {/* <div id="section-3" className="scroll-mt-[360px] md:scroll-mt-0">
                 <div className="py-20 text-center text-gray-500">Additional services</div>
             </div> */}
-        </div>
-        <ContactEditModal
-            isOpen={showContactModal}
-            onClose={() => setShowContactModal(false)}
-            contact={contact}
-            onSave={(payload) => console.log('✅ Save payload:', payload)}
-            errors={formik.errors}
-            touched={formik.touched}
-            handleSubmit={formik.handleSubmit}
-            values={formik.values}
-            handleChange={formik.handleChange}
-            setFieldValue={formik.setFieldValue}
-        />
-        <ExtraBaggageModal open={openExtra} onClose={() => setOpenExtra(false)} />
-        <CancelBookingModal
-            open={openCancelBook}
-            onClose={() => setOpenCancelBook(false)}
-            bookingRef="NHG7Y0"
-            maskedPhone="*8066"
-        />
-        <FlightDetailsModal
-            isOpen={isShowDetailsModalOpen}
-            onClose={() => setFlightDetailsOpen(false)}
-            flight={flight}
-        />
+                </div>
+                <ContactEditModal
+                    isOpen={showContactModal}
+                    onClose={() => setShowContactModal(false)}
+                    contact={contact}
+                    onSave={(payload) => console.log('✅ Save payload:', payload)}
+                    errors={formik.errors}
+                    touched={formik.touched}
+                    handleSubmit={formik.handleSubmit}
+                    values={formik.values}
+                    handleChange={formik.handleChange}
+                    setFieldValue={formik.setFieldValue}
+                />
+                <ExtraBaggageModal open={openExtra} onClose={() => setOpenExtra(false)} />
+                <CancelBookingModal
+                    open={openCancelBook}
+                    onClose={() => setOpenCancelBook(false)}
+                    bookingRef="NHG7Y0"
+                    maskedPhone="*8066"
+                />
+                <FlightDetailsModal
+                    isOpen={isShowDetailsModalOpen}
+                    onClose={() => setFlightDetailsOpen(false)}
+                    flight={flight}
+                />
 
-    </div>
+            </div>)
+
     return (
         isLoading ? Loading : contet
     )
