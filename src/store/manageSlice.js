@@ -13,6 +13,9 @@ const manageSlice = createSlice({
         setPnrParams: (state, action) => {
             state.pnrParams = action.payload;
         },
+        setBookInfo: (state, action) => {
+            state.bookInfo = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -31,5 +34,5 @@ const manageSlice = createSlice({
     },
 });
 
-export const { setPnrParams } = manageSlice.actions;
+export const { setPnrParams, setBookInfo } = manageSlice.actions;
 export default manageSlice.reducer;

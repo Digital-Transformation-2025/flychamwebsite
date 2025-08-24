@@ -36,13 +36,14 @@ const ManageTap = () => {
         }),
         onSubmit: ({ pnr, lastName }) => {
             const data = { lastName, PNR: pnr };
+            dispatch(setPnrParams({ pnr, lastName }))
             dispatch(searchBookService(data))
                 .then(({ payload }) => {
                     const { data: bookData, status } = payload || {};
 
                     if (status === 200 && Object.keys(bookData).length > 0) {
                         router.push("/manage-booking");
-                        dispatch(setPnrParams({ pnr, lastName }))
+
                     } else {
                         const { alert } = payload || {};
                         const { title, description } = alert || {};

@@ -5,6 +5,7 @@ import 'react-day-picker/style.css';
 import ClientLayoutWrapper from './ClientLayoutWrapper';
 import { Toaster } from 'sonner';
 import Script from 'next/script';
+import Head from 'next/head';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -20,18 +21,11 @@ export const metadata = {
   title: 'Fly Cham',
   description: 'fly cham ',
 
-  // icons: {
-  //   icon: '/tabicon.svg',
-  // },
   icons: {
-    icon: [
-      { url: '/tabicon.ico', sizes: 'any' },  // Universal tabicon
-      { url: '/tabicon-16x16.png', type: 'image/png', sizes: '16x16' },
-      { url: '/tabicon-32x32.png', type: 'image/png', sizes: '32x32' },
-    ],
-    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],  // Apple icon
-    other: [{ rel: 'mask-icon', url: '/safari-pinned-tab.svg', color: '#0B4572' }],
+    // icon: '/tabicon.svg',
+    icon: '/favicon.ico',
   },
+
 };
 
 export default function RootLayout({ children }) {
@@ -43,6 +37,10 @@ export default function RootLayout({ children }) {
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
+        <Head>
+          <link rel="icon" href="/favicon.ico" />
+          <link rel="preload" href="/favicon.ico" as="image" />
+        </Head>
 
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <style>{`

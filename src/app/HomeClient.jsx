@@ -18,6 +18,7 @@ import ImportantAlert from '@/components/Ui/Alert'
 import BookingBox from '@/components/Home/BookingBox'
 import { useDispatch, useSelector } from 'react-redux'
 import { setFormikData, setSearchParams } from '@/store/flightSlice'
+import { setBookInfo } from '@/store/manageSlice'
 const HomeClient = ({ flights, pos }) => {
   const dispatch = useDispatch()
   const isMobile = useIsMobile(1024);
@@ -32,6 +33,7 @@ const HomeClient = ({ flights, pos }) => {
 
       dispatch(setFormikData(null))
       dispatch(setSearchParams(null))
+      dispatch(setBookInfo(null))
   }, [])
   return (
     <div className="transition-all duration-700">

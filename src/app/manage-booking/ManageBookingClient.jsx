@@ -14,11 +14,12 @@ import TravelAgencyAlert from '@/components/Manage-booking/TravelAgencyAlert';
 import LottieComponent from '@/components/Ui/LottieComponent';
 import { useStickyHeaderHeight } from '@/hooks/useStickyHeaderHeight';
 import { useTabsScrollSpy } from '@/hooks/useTabsScrollSpy';
+import { searchBookService } from '@/store/Services/manageBookingServices';
 // import { useScrollSpy } from '@/hooks/useScrollSpyTabs';
 import { contactSchemaInManage } from '@/util/validatonSchemas';
 import { useFormik } from 'formik';
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 const tabs = [
     {
         id: 0,
@@ -47,7 +48,7 @@ const contact = {
 const ManageBookingClient = () => {
     const containerRef = useRef(null);
 
-    const { isLoading, bookInfo } = useSelector((s) => s.manageBook)
+    const { isLoading, bookInfo, pnrParams } = useSelector((s) => s.manageBook)
     const { isTraveleAgent, mainImage, segments, bookingReference: pnr, contactInfo, passengers } = bookInfo || {}
     const filteredTabs = isTraveleAgent
         ? tabs.filter((t) => t.id !== 2)
@@ -65,7 +66,6 @@ const ManageBookingClient = () => {
         offset: stickyH, // <— single source of truth
     });
 
-    console.log('active', active);
 
     const [openExtra, setOpenExtra] = useState(false)
     const [openCancelBook, setOpenCancelBook] = useState(false)
@@ -133,7 +133,14 @@ const ManageBookingClient = () => {
             ],
         },
     };
+    const dispatch = useDispatch()
 
+    useEffect(() => {
+        if (!Boolean(bookInfo)) {
+            const data = { lastName: pnrParams.lastName, PNR: pnrParams.pnr };
+            dispatch(searchBookService(data))
+        }
+    }, [])
 
 
 
@@ -158,7 +165,7 @@ const ManageBookingClient = () => {
 
         <div
             ref={containerRef}
-        className="max-w-[90%] md:max-w-[70%] mx-auto space-y-8 "
+            className="max-w-[90%] md:max-w-[70%] mx-auto space-y-8 "
 
             style={{ paddingTop: stickyH }}
         >
