@@ -2,6 +2,7 @@
 import DestinationCards from '@/components/Home/DestinationSlider'
 import Hero from '@/components/Home/Hero'
 import AboutFlyChamSection from '@/components/Home/OurCompanyCard'
+import ContactSection from '@/components/Home/ContactSection'
 import useIsMobile from '@/hooks/useIsMobile'
 import React, { useEffect } from 'react'
 // import { useRouter } from 'next/navigation';
@@ -87,16 +88,17 @@ const HomeClient = ({ flights, pos }) => {
           </div> */}
 
           </div>
-        </div>
-      {/* <div className='my-2'>
-              <Help />
-            </div> */}
+          </div>
+        <ContactSection />
+        {/* <div className='my-2'>
+                <Help />
+              </div> */}
 
 
 
-      {/* <BottomMobileMenu navItems={navItems} /> */}
-    </div>
-  )
-}
+        {/* <BottomMobileMenu navItems={navItems} /> */}
+      </div>
+    )
+  }
 
-export default HomeClient
+  export default HomeClient
