@@ -1,10 +1,10 @@
 const PageHeader = ({ bookingRef }) => (
     <div className="mt-6 mb-4 flex flex-col md:flex-row md:items-start md:justify-between gap-2">
-        <h1 className="text-[22px] sm:text-[24px] md:text-[28px] font-semibold text-[#1D1B20]">
+        <h1 className="text-[22px] sm:text-[24px] md:text-3xl font-semibold text-[#1D1B20]">
             Cancel Booking & Refund
         </h1>
-        <div className="text-xs sm:text-sm md:text-base text-600">
-            <span className="font-medium">       Booking reservation:</span> <span className="font-bold">{bookingRef}</span>
+        <div className="  text-600">
+            <span className="font-medium text-[14px] md:text-lg">       Booking reservation:</span> <span className="font-bold text-[16px] md:text-lg">{bookingRef}</span>
         </div>
     </div>
 );

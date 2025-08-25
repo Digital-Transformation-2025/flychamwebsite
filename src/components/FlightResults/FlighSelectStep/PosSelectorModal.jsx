@@ -7,6 +7,7 @@ import ae from "@/assets/images/flags/ae.png"
 import iq from "@/assets/images/flags/iq.png"
 import kw from "@/assets/images/flags/kw.png"
 import om from "@/assets/images/flags/om.png"
+import tr from "@/assets/images/flags/tr.png"
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import useFormattedFlightTimes from '@/hooks/useFormattedFlightTimes';
@@ -17,7 +18,8 @@ const getFlag = (posCode) => {
         SYD: sy,     // Syria - USD
         SYP: sy,     // Syria - SYP
         UAE: ae,     // Emirates
-        MCT: om      // Muscat (Oman)
+        MCT: om,      // Muscat (Oman)
+        TUR: tr      // Muscat (Oman)
     };
 
     return map[posCode] || sy;
@@ -70,7 +72,7 @@ const PosSelectorModal = ({ isOpen, setIsOpen, handleSelectPos }) => {
 
                             {/* Currency List */}
                             <div className="space-y-1">
-                                {pos?.items?.filter((i)=>i.id!==7)?.map(({ id, posTranslations, posCode,currencyCode }) => {
+                                {pos?.items?.filter((i) => i.id !== 7)?.map(({ id, posTranslations, posCode, currencyCode }) => {
                                     const name = posTranslations?.[0]?.name || posCode;
 
                                     return (

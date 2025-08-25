@@ -1,106 +1,75 @@
-import React, { useState } from 'react';
-
-// Step Component
-const Step = ({ currentStep }) => (
-    <div className="flex items-center justify-between w-full mb-4">
-        <div className="w-full bg-gray-200 rounded-full h-2">
-            <div
-                className="bg-primary-1 h-2 rounded-full"
-                style={{ width: `${(currentStep / 4) * 100}%` }}
-            ></div>
-        </div>
-        <div className="text-sm text-gray-600">Step {currentStep} of 4</div>
-    </div>
-);
+import CustomCheckbox from '@/components/Ui/CustomCheckbox';
+import React from 'react';
 
 // Card Component
-const FlightCard = ({ flight, selected, onChange }) => (
+const PassengerCard = ({ passenger, selected, onChange }) => (
     <div
-        className={`flex justify-between items-center p-4 border rounded-lg shadow-sm ${selected ? 'border-primary-1 bg-primary-50' : 'border-gray-300'
-            }`}
+
+        className={`flex items-center justify-between p-4 mb-4 border rounded-lg cursor-pointer shadow-sm ${selected ? 'border-[#054E72]' : 'border-[#E5E5E3]'} bg-white`}
     >
-        <div className="flex flex-col">
-            <div className="font-medium">{flight.from} → {flight.to}</div>
-            <div className="text-sm text-gray-500">{flight.date}</div>
+        <div className="flex items-center">
+            <CustomCheckbox
+                checked={selected}
+                onChange={() => onChange(passenger)}
+                label=""
+            />
+            <div className="flex flex-col">
+                <div className={`${selected ? 'text-[#054E72]' : 'text-[#333333]'} text-lg font-semibold`}>
+                    {passenger.name}
+                </div>
+
+            </div>
         </div>
-        <input
-            type="checkbox"
-            checked={selected}
-            onChange={() => onChange(flight)}
-            className="form-checkbox"
-        />
     </div>
 );
 
-// Button Component
-const Button = ({ onClick, children, className }) => (
-    <button
-        onClick={onClick}
-        className={`py-2 px-6 rounded-lg text-white bg-primary-1 hover:bg-primary-2 ${className}`}
-    >
-        {children}
-    </button>
-);
+
 
 // Select Component
 const SelectAllCheckbox = ({ selectedAll, onChange }) => (
-    <div className="flex items-center space-x-2 mb-4">
-        <input
-            type="checkbox"
+    <div className="flex items-center justify-start space-x-2 mb-4 px-8">
+        <CustomCheckbox
             checked={selectedAll}
             onChange={onChange}
-            className="form-checkbox"
+            label="Select all"
         />
-        <span className="text-sm text-gray-600">Select all</span>
     </div>
 );
 
 // Main StepTwo Component
-const StepTwo = () => {
-    const [selectedFlights, setSelectedFlights] = useState([]);
-    const [selectedAll, setSelectedAll] = useState(false);
+const StepTwo = ({ passengers, setFieldValue, values }) => {
+    // Check if all passengers are selected
+    const selectedAll = passengers.length === values.selectedpassengers.length;
 
-    const flights = [
-        { from: 'Damascus (DAM)', to: 'Dubai (DXB)', date: 'Thu, 10 Jul 2025' },
-        { from: 'Dubai (DXB)', to: 'Damascus (DAM)', date: 'Thu, 31 Jul 2025' },
-    ];
+    const handleSelectpassenger = (passenger) => {
+        const isSelected = values.selectedpassengers.some((f) => f.id === passenger.id);
+        const newSelectedpassengers = isSelected
+            ? values.selectedpassengers.filter((f) => f.id !== passenger.id)
+            : [...values.selectedpassengers, passenger];
 
-    const handleSelectFlight = (flight) => {
-        const isSelected = selectedFlights.includes(flight);
-        if (isSelected) {
-            setSelectedFlights(selectedFlights.filter((f) => f !== flight));
-        } else {
-            setSelectedFlights([...selectedFlights, flight]);
-        }
+        setFieldValue('selectedpassengers', newSelectedpassengers);
     };
 
     const handleSelectAll = () => {
-        setSelectedAll(!selectedAll);
-        if (!selectedAll) {
-            setSelectedFlights(flights);
-        } else {
-            setSelectedFlights([]);
-        }
+        const newSelectedpassengers = selectedAll ? [] : passengers;
+        setFieldValue('selectedpassengers', newSelectedpassengers);
     };
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
-            <Step currentStep={2} />
-            <h2 className="text-xl font-semibold mb-6">Select flight to cancel</h2>
+        <div>
+            <div className="flex w-full items-center justify-between my-14">
+                <h2 className="text-lg md:text-xl font-medium">Select passenger to cancel</h2>
+            </div>
             <SelectAllCheckbox selectedAll={selectedAll} onChange={handleSelectAll} />
-            {flights.map((flight, index) => (
-                <FlightCard
-                    key={index}
-                    flight={flight}
-                    selected={selectedFlights.includes(flight)}
-                    onChange={handleSelectFlight}
-                />
-            ))}
-            <div className="flex justify-between mt-6">
-                <Button onClick={() => alert('Go Back')} className="bg-gray-300 hover:bg-gray-400">
-                    Back
-                </Button>
-                <Button onClick={() => alert('Next')}>Next</Button>
+            <div className="bg-50 p-8 border border-[#F5F5F4] rounded-lg shadow-sm">
+                {passengers.map((passenger) => (
+                    <PassengerCard
+                        key={passenger.id}
+                        passenger={passenger}
+                        selected={values.selectedpassengers.some((f) => f.id === passenger.id)}
+                        onChange={handleSelectpassenger}
+                    />
+                ))}
             </div>
         </div>
     );

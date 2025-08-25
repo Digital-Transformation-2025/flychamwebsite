@@ -117,9 +117,9 @@ const MidTimeline = ({ duration, cabin, dashedLength, isMobile }) => {
 const ActionButton = ({ icon: Icon, label, action, color = "text-[13px] text-primary-1", onAction }) => (
     <button
         type="button"
-        disabled
+        // disabled
         onClick={onAction}
-        className={`!cursor-not-allowed  flex items-center font-semibold gap-2 hover:opacity-90 ${color} text-primary-500`}
+        className={`  flex items-center font-semibold gap-2 hover:opacity-90 ${color} text-primary-500`}
     >
         <Icon size={18} /> {label}
     </button>
