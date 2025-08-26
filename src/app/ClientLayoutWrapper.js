@@ -42,7 +42,7 @@ export default function ClientLayoutWrapper({ children }) {
   const [isOpen, setIsOpen] = useState(true)
   // const { isModifySearch } = useSelector((state) => state.flights)
   // ====================== INSPECTOR ====================== 
-  // useBlockInspect()
+  useBlockInspect()
   // ====================== INSPECTOR ====================== 
 
   const pathname = usePathname()
@@ -118,6 +118,8 @@ export default function ClientLayoutWrapper({ children }) {
     '/manage-booking',
   ];
 
+  const isDynamicHomePage = pathname.startsWith('/c/');
+  console.log('isDynamicHomePage', isDynamicHomePage);
 
 
 
@@ -129,9 +131,8 @@ export default function ClientLayoutWrapper({ children }) {
       <GTMScript />
       <GA4Script />
 
-      {pathname !== '/booking-confirm' &&
-        <CampaignScript />
-      }
+      {isDynamicHomePage && <CampaignScript />}
+
       <noscript>
         <iframe
           src="https://www.googletagmanager.com/ns.html?id=GTM-TKHJ4V8W"
