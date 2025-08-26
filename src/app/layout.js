@@ -23,7 +23,7 @@ export const metadata = {
 
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.ico', sizes: '48x48' },
       { url: '/favicon-16x16.png', type: 'image/png', sizes: '16x16' },
       { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
       { url: '/favicon-48x48.png', type: 'image/png', sizes: '48x48' },
@@ -33,7 +33,7 @@ export const metadata = {
       { url: '/icon.svg', type: 'image/svg+xml' }, // optional
     ],
     apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
-    // other: [{ rel: 'mask-icon', url: '/safari-pinned-tab.svg', color: '#0B4572' }],
+    other: [{ rel: 'mask-icon', url: '/safari-pinned-tab.svg', color: '#0B4572' }],
   },
   manifest: '/site.webmanifest',
 };
