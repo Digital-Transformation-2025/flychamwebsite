@@ -14,6 +14,7 @@ import StepTwo from './StepTwo/StepTwo';
 import StepThree from './StepThree/StepThree';
 import StepFour from './StepFour/StepFour';
 import ConfirmCancelBookingModal from './ConfirmCancelBookingModal';
+import CancellationConfirmed from './Confirmed/Confirmed';
 
 /* =========================
    Full-page Modal (responsive)
@@ -100,7 +101,7 @@ export default function CancelBookingModal({
 
             <div className="fixed inset-0 z-[100] bg-white flex flex-col md:block min-h-screen  overflow-auto">
                 {/* ✅ Header (fixed on mobile, normal on desktop) */}
-
+                {/* <CancellationConfirmed /> */}
                 <div className="sticky top-0 z-10 bg-white md:static md:top-auto md:z-auto">
                     <CancelHeader />
                     <main className=" overflow-y-auto w-full max-w-7xl mx-auto px-4 sm:px-5 md:px-6 ">
@@ -111,7 +112,7 @@ export default function CancelBookingModal({
                     </main>
                 </div>
 
-                {/* ✅ Scrollable content (only on mobile) */}
+
                 <main className=" overflow-y-auto w-full max-w-7xl mx-auto px-4 flex-1 ">
                     {currentStep === 0 &&
                         <Info />
@@ -155,7 +156,6 @@ export default function CancelBookingModal({
 
                     <span className='h-[1px] w-full bg-200 block'></span>
                 </main>
-                {/* ✅ Footer (fixed on mobile, normal on desktop) */}
                 <div className="sticky bottom-0 z-10 bg-white md:static md:bottom-auto md:z-auto">
                     <CancelFooter
                         handleClickButton={handleClickButton}

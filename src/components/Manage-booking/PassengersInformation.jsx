@@ -61,7 +61,7 @@ const SmallButton = ({ children, handleClickBtn }) => (
     <button
         disabled
         onClick={() => handleClickBtn(children)}
-        className= "!cursor-not-allowed mt-2 inline-flex items-center justify-center rounded-md bg-secondary-500 px-4 py-1.5 text-[12px] font-semibold text-white "
+        className= "cursor-not-allowed mt-2 inline-flex items-center justify-center rounded-md bg-secondary-500 px-4 py-1.5 text-[12px] font-semibold text-white "
     >
         {children}
     </button>
