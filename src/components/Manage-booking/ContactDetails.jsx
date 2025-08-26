@@ -48,8 +48,8 @@ export default function ContactDetailsCard({
                 {/* Edit action */}
                 <button
                     type="button"
-                    onClick={onEdit}
-                    className="absolute right-3 top-2 lg:top-1/2 lg:-translate-y-1/2 inline-flex items-center gap-1 text-primary-1 text-sm lg:text-[16px] font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-1 focus-visible:ring-offset-2"
+                    // onClick={onEdit}
+                    className="!cursor-not-allowed absolute right-3 top-2 lg:top-1/2 lg:-translate-y-1/2 inline-flex items-center gap-1 text-primary-1 text-sm lg:text-[16px] font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-1 focus-visible:ring-offset-2"
                     aria-label="Edit contact"
                 >
                     Edit <Pencil className="size-4" />

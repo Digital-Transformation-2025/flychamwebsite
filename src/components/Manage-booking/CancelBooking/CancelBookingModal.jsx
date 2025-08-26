@@ -13,6 +13,7 @@ import { useFormik } from 'formik';
 import StepTwo from './StepTwo/StepTwo';
 import StepThree from './StepThree/StepThree';
 import StepFour from './StepFour/StepFour';
+import ConfirmCancelBookingModal from './ConfirmCancelBookingModal';
 
 /* =========================
    Full-page Modal (responsive)
@@ -30,6 +31,7 @@ export default function CancelBookingModal({
     const [code, setCode] = useState('');
     const [timeLeft, setTimeLeft] = useState(180); // 3 minutes
     const [currentStep, setcurrentStep] = useState(0)
+    const [isOpen, setIsOpen] = useState(false);
 
     // start / reset timer when stage switches to verify
     useEffect(() => {
@@ -55,7 +57,10 @@ export default function CancelBookingModal({
     }
 
     const handleClickButton = () => {
-        setcurrentStep(prev => prev + 1)
+        console.log(';', currentStep);
+
+        currentStep > 3 ? setIsOpen(true) :
+            setcurrentStep(prev => prev + 1)
     }
 
     const formik = useFormik({
@@ -148,8 +153,8 @@ export default function CancelBookingModal({
                         />
                     }
 
+                    <span className='h-[1px] w-full bg-200 block'></span>
                 </main>
-
                 {/* ✅ Footer (fixed on mobile, normal on desktop) */}
                 <div className="sticky bottom-0 z-10 bg-white md:static md:bottom-auto md:z-auto">
                     <CancelFooter
@@ -159,6 +164,14 @@ export default function CancelBookingModal({
                     />
                 </div>
             </div>
+            <ConfirmCancelBookingModal
+                isOpen={isOpen}
+                onClose={() => setIsOpen(false)}
+                onConfirm={() => {
+                    alert("Booking cancelled!");
+                    setIsOpen(false);
+                }}
+            />
 
         </>
     );

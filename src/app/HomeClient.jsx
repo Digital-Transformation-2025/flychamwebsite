@@ -89,7 +89,7 @@ const HomeClient = ({ flights, pos }) => {
 
           </div>
           </div>
-        <ContactSection />
+        {/* <ContactSection /> */}
         {/* <div className='my-2'>
                 <Help />
               </div> */}

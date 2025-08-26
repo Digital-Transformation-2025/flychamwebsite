@@ -26,6 +26,8 @@
   --primary-700: #26485B;
   --primary-800: #13364B;
   --primary-900: #00253C;
+  --primary-btn: #3D3B35;
+
   /* Secondary */
   --secondary-1: #BAA981;
   --secondary-100: #F9F4E6;
@@ -44,7 +46,6 @@
   --text-700: #3E3E3B;
   --text-800: #282826;
   --text-900: #1B1F23;
-  --text-btn: #3D3B35;
   /* Background */
   --bg-50: #FDFDFC;
   --bg-100: #F5F5F4;
@@ -142,6 +143,9 @@ body button {
 
 .text-primary-900 {
   color: var(--primary-900);
+}
+.text-btn {
+  color: var(--primary-btn);
 }
 
 /* Secondary */

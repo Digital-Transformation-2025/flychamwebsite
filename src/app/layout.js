@@ -33,7 +33,7 @@ export const metadata = {
       { url: '/icon.svg', type: 'image/svg+xml' }, // optional
     ],
     apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
-    other: [{ rel: 'mask-icon', url: '/safari-pinned-tab.svg', color: '#0B4572' }],
+    // other: [{ rel: 'mask-icon', url: '/safari-pinned-tab.svg', color: '#0B4572' }],
   },
   manifest: '/site.webmanifest',
 };

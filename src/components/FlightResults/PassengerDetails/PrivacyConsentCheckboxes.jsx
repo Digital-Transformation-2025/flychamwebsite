@@ -22,7 +22,7 @@ const PrivacyConsentCheckboxes = ({ accept, recive, setFieldValue, errors, touch
       <CustomCheckbox
         checked={recive}
         onChange={() => setFieldValue('recive', !recive)}
-        label="I’d like to receive exclusive offers, travel inspiration, and the latest news from FlyCham. I understand I can unsubscribe at any time."
+        label="I’d like to receive exclusive offers, travel inspiration, and the latest news from Fly Cham. I understand I can unsubscribe at any time."
       />
     </div>
   );
