@@ -29,7 +29,10 @@ import ModalFooter from "./widget/ModalFooter";
 import InfoBoxes from "./widget/InfoBoxes";
 import ManageTap from "./widget/Manage/ManageTap";
 const tabs = ["book", "manage", "flight status"];
-const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onCloseMidifySearch, setSelectedFlight }) => {
+const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onCloseMidifySearch,
+     setSelectedFlight ,
+    showDesktopModal,setDesktopShowModal,setShowMobileModal,showMobileModal
+    }) => {
     const isMobile = useIsMobile()
     const dispatch = useDispatch()
     const router = useRouter()
@@ -79,8 +82,6 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
 
 
 
-    const [showDesktopModal, setDesktopShowModal] = useState(false);
-    const [showMobileModal, setShowMobileModal] = useState(false);
     const [minMonth, setMinMonth] = useState(new Date());
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [sourceSearch, setSourceSearch] = useState("");
