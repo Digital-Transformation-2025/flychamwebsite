@@ -1,7 +1,7 @@
 'use client'
 import React from 'react';
 
-const CustomCheckbox = ({ checked, onChange, label, error }) => {
+const CustomCheckbox = ({ checked, onChange, label, error, labelColor = "#1A1A1A" }) => {
 
     return (
 
@@ -37,7 +37,7 @@ const CustomCheckbox = ({ checked, onChange, label, error }) => {
             />
 
             {/* Label text */}
-            <span className="text-[#1A1A1A] text-sm leading-snug">{label}</span>
+            <span className={`text-${labelColor} text-sm leading-snug`}>{label}</span>
         </label>
     );
 }

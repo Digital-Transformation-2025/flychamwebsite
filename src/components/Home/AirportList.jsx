@@ -2,6 +2,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import CustomCheckbox from '../Ui/CustomCheckbox';
+import newImg from '../../assets/images/new.png'; // ✅ renamed
+import { motion } from 'framer-motion';
+
 
 const AirportList = ({ search, setSearch, type, values, setFieldValue, isMobile, sliderRef, getCitiesArray, setOpenAirPortsDropdown, isResultsPage }) => {
   const { airPorts } = useSelector(state => state.flights);
@@ -79,11 +82,30 @@ const AirportList = ({ search, setSearch, type, values, setFieldValue, isMobile,
                 className={`flex items-center justify-between border-b border-gray-300 p-3 transition-colors duration-150 hover:bg-[#F5F5F4] cursor-pointer ${values[type] === iataCode ? 'bg-[#E5E5E3]' : ''
                   }`}
               >
-                <div>
-                  <p className="text-start text-sm font-semibold text-gray-800">{airPortName}</p>
-                  <p className= " text-start text-xs text-gray-500 my-1 md:my-0">{`${country} ${city}`}</p>
+                <div className='flex items-center gap-4'>
+                  <div className=''>
+
+                    <p className="text-start text-sm font-semibold text-gray-800">{airPortName}</p>
+
+                    <p className=" text-start text-xs text-gray-500 my-1 md:my-0">{`${country} ${city}`}</p>
+                  </div>
+{/*                   
+                  <motion.img
+                    src={newImg.src}
+                    alt="New badge"
+                    width={40}
+                    height={40}
+                    initial={{ rotate: 0 }}
+                    whileInView={{ rotate: -20 }}
+                    viewport={{ once: true }}            // ensure it runs only once
+                    transition={{ duration: 1.5, ease: 'easeOut' }}
+                  /> */}
                 </div>
-                <div className="bg-main w-14 text-center  text-white text-xs p-2 rounded-md font-semibold">{iataCode}</div>
+
+                <div className='flex items-center justify-center gap-3'>
+                  {/* <img src={newImg.src} width={40} height={40} className="motion-safe:animate-spin-once" /> */}
+                  <div className="bg-main w-14 text-center  text-white text-xs p-2 rounded-md font-semibold">{iataCode}</div>
+                </div>
               </div>
             );
           })}

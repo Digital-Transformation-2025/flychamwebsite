@@ -37,15 +37,15 @@ export default function ConfirmCancelBookingModal({ isOpen, onClose, onConfirm }
                                 as="h3"
                                 className=""
                             >
-                                <div className="flex flex-col md:flex-row items-center gap-2 mb-6 md:mb-0">
+                                <div className="flex flex-col md:flex-row items-center gap-2 mb-4 md:mb-2">
 
                                     <Warning weight="fill" className="text-secondary-1" size={36} />
-                                    <span className="text-xl md:text-2xl font-semibold text-700">
+                                    <span className="text-xl md:text-2xl font-semibold text-700 text-start lg:!text-center">
                                         Are you sure you want to cancel this booking?
                                     </span>
                                 </div>
                             </Dialog.Title>
-                            <Dialog.Description className="mt-2 mb-16 text-sm md:text-lg font-medium text-700 text-center md:text-start">
+                            <Dialog.Description className=" mb-10 text-sm md:text-lg font-medium text-700 text-center md:text-start">
                                 Once you confirm the cancellation, your booking will no longer
                                 be available. Refund will be processed in{" "}
                                 <span className="font-semibold">20</span> working days

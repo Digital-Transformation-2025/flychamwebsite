@@ -131,7 +131,7 @@ export default function ClientLayoutWrapper({ children }) {
       <GTMScript />
       <GA4Script />
 
-      {isDynamicHomePage && <CampaignScript />}
+      {/* {isDynamicHomePage && <CampaignScript />} */}
 
       <noscript>
         <iframe

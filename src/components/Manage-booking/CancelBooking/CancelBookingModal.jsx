@@ -15,6 +15,7 @@ import StepThree from './StepThree/StepThree';
 import StepFour from './StepFour/StepFour';
 import ConfirmCancelBookingModal from './ConfirmCancelBookingModal';
 import CancellationConfirmed from './Confirmed/Confirmed';
+import RefundStatus from './RefundStatus/RefundStatus';
 
 /* =========================
    Full-page Modal (responsive)
@@ -29,7 +30,6 @@ export default function CancelBookingModal({
 
     // stage: "request" (before sending) → "verify" (after clicking Send the code)
     const [stage, setStage] = useState(1);
-    const [code, setCode] = useState('');
     const [timeLeft, setTimeLeft] = useState(180); // 3 minutes
     const [currentStep, setcurrentStep] = useState(0)
     const [isOpen, setIsOpen] = useState(false);
@@ -53,15 +53,32 @@ export default function CancelBookingModal({
     const handleVerify = () => onClose?.();
 
     const handleClickBack = () => {
-        currentStep > 1 ? setcurrentStep((prev) => prev - 1) : onClose()
+        switch (currentStep) {
+            case 0:
+            case 5:
+            case 6:
+                return onClose();
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                return setcurrentStep(prev => prev - 1);
+        }
 
     }
 
     const handleClickButton = () => {
-        console.log(';', currentStep);
-
-        currentStep > 3 ? setIsOpen(true) :
-            setcurrentStep(prev => prev + 1)
+        switch (currentStep) {
+            case 0:
+            case 1:
+                return setcurrentStep(prev => prev + 1);
+            case 2:
+                return setIsOpen(true);
+            case 3:
+                return setcurrentStep(prev => prev + 1);
+            case 4:
+                return onClose();
+        }
     }
 
     const formik = useFormik({
@@ -70,7 +87,11 @@ export default function CancelBookingModal({
             maskedPhone,
             selectedFlights: [],
             selectedpassengers: [],
-            cancelReason: {}
+            cancelReason: '',
+            underStandCheck: false,
+            isVerified: true,
+            code: '',
+            last4: ''
         },
         onSubmit: (values) => {
             console.log('Form submitted', values);
@@ -96,71 +117,109 @@ export default function CancelBookingModal({
         { id: 2, name: 'dddd', },
     ];
 
+    let steps = <>
+        <div className="sticky top-0 z-10 bg-white md:static md:top-auto md:z-auto">
+            <CancelHeader />
+            <main className=" overflow-y-auto w-full max-w-7xl mx-auto px-4 sm:px-5 md:px-6 ">
+                <PageHeader bookingRef={bookingRef} />
+                {(currentStep !== 0) &&
+                    <Step currentStep={currentStep} />
+                }
+            </main>
+        </div>
+
+
+        <main className=" overflow-y-auto w-full max-w-7xl mx-auto px-4 flex-1 ">
+            {currentStep === 0 &&
+                <Info />
+            }
+            {/* {currentStep === 1 &&
+                <StepOne
+                    flights={flights}
+                    setFieldValue={formik.setFieldValue}
+                    errors={formik.errors}
+                    touched={formik.touched}
+                    values={formik.values}
+                />
+            }
+            {currentStep === 2 &&
+                <StepTwo
+                    passengers={passengers}
+                    setFieldValue={formik.setFieldValue}
+                    errors={formik.errors}
+                    touched={formik.touched}
+                    values={formik.values}
+                />
+            } */}
+            {/* Checks */}
+            {currentStep === 1 &&
+                <StepThree
+                    cancellationOptions={cancellationOptions}
+                    setFieldValue={formik.setFieldValue}
+                    errors={formik.errors}
+                    touched={formik.touched}
+                    values={formik.values}
+                />
+            }
+
+            {/* Summary */}
+            {currentStep === 2 &&
+                <StepFour
+                    cancellationOptions={cancellationOptions}
+                    setFieldValue={formik.setFieldValue}
+                    errors={formik.errors}
+                    touched={formik.touched}
+                    values={formik.values}
+                />
+            }
+            {currentStep === 2 &&
+                <span className='h-[1px] w-full bg-200 block'></span>
+            }
+        </main>
+    </>
+
+    const renderSteps = () => {
+        switch (currentStep) {
+            case 0:
+            case 1:
+            case 2:
+                return steps;
+            case 3:
+                return (
+                    <>
+                        <CancelHeader />
+                        <CancellationConfirmed />
+                    </>
+                );
+            case 4:
+                return (
+                    <>
+                        <RefundStatus />
+                    </>
+                );
+            default:
+                return null;
+        }
+    };
+
+
     return (
         <>
 
             <div className="fixed inset-0 z-[100] bg-white flex flex-col md:block min-h-screen  overflow-auto">
                 {/* ✅ Header (fixed on mobile, normal on desktop) */}
-                <CancellationConfirmed />
-                {/* <div className="sticky top-0 z-10 bg-white md:static md:top-auto md:z-auto">
-                    <CancelHeader />
-                    <main className=" overflow-y-auto w-full max-w-7xl mx-auto px-4 sm:px-5 md:px-6 ">
-                        <PageHeader bookingRef={bookingRef} />
-                        {currentStep !== 0 &&
-                            <Step currentStep={currentStep} />
-                        }
-                    </main>
-                </div>
+                {/* <CancellationConfirmed /> */}
+                {/* <RefundStatus /> */}
 
 
-                <main className=" overflow-y-auto w-full max-w-7xl mx-auto px-4 flex-1 ">
-                    {currentStep === 0 &&
-                        <Info />
-                    }
-                    {currentStep === 1 &&
-                        <StepOne
-                            flights={flights}
-                            setFieldValue={formik.setFieldValue}
-                            errors={formik.errors}
-                            touched={formik.touched}
-                            values={formik.values}
-                        />
-                    }
-                    {currentStep === 2 &&
-                        <StepTwo
-                            passengers={passengers}
-                            setFieldValue={formik.setFieldValue}
-                            errors={formik.errors}
-                            touched={formik.touched}
-                            values={formik.values}
-                        />
-                    }
-                    {currentStep === 3 &&
-                        <StepThree
-                            cancellationOptions={cancellationOptions}
-                            setFieldValue={formik.setFieldValue}
-                            errors={formik.errors}
-                            touched={formik.touched}
-                            values={formik.values}
-                        />
-                    }
-                    {currentStep === 4 &&
-                        <StepFour
-                            cancellationOptions={cancellationOptions}
-                            setFieldValue={formik.setFieldValue}
-                            errors={formik.errors}
-                            touched={formik.touched}
-                            values={formik.values}
-                        />
-                    }
 
-                    <span className='h-[1px] w-full bg-200 block'></span>
-                </main> */}
+                {renderSteps()}
                 <div className="sticky bottom-0 z-10 bg-white md:static md:bottom-auto md:z-auto">
                     <CancelFooter
                         handleClickButton={handleClickButton}
                         handleClickBack={handleClickBack}
                         currentStep={currentStep}
+                        values={formik.values}
                     />
                 </div>
             </div>
@@ -168,7 +227,7 @@ export default function CancelBookingModal({
                 isOpen={isOpen}
                 onClose={() => setIsOpen(false)}
                 onConfirm={() => {
-                    alert("Booking cancelled!");
+                    setcurrentStep(3)
                     setIsOpen(false);
                 }}
             />

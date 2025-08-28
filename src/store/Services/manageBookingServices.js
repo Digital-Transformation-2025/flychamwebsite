@@ -17,3 +17,18 @@ export const searchBookService = createAsyncThunk(
         }
     }
 );
+// ===================================== PRINT PDF ==============================================
+export const printBookService = createAsyncThunk(
+    `${sliceName}/printBookService`,
+    async (data, thunkAPI) => {
+        try {
+
+            const response = await apiClient.post(`/api/booking/ManageBooking/Print/Print?language=en`, data);
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(
+                error.response?.data?.message || error.message || 'Something went wrong'
+            );
+        }
+    }
+);

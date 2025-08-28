@@ -1,11 +1,12 @@
 // store/slices/flightSlice.js
 import { createSlice } from '@reduxjs/toolkit';
-import { searchBookService } from './Services/manageBookingServices';
+import { printBookService, searchBookService } from './Services/manageBookingServices';
 
 const manageSlice = createSlice({
     name: 'manage',
     initialState: {
         isLoading: false,
+        isLoadingPrint: false,
         bookInfo: {},
         pnrParams: { lastName: '', pnr: '' },
     },
@@ -29,6 +30,16 @@ const manageSlice = createSlice({
             })
             .addCase(searchBookService.rejected, (state, action) => {
                 state.isLoading = false;
+            })
+            // ======================== PRINT PDF ==================================
+            .addCase(printBookService.pending, (state) => {
+                state.isLoadingPrint = true;
+            })
+            .addCase(printBookService.fulfilled, (state, action) => {
+                state.isLoadingPrint = false;
+            })
+            .addCase(printBookService.rejected, (state, action) => {
+                state.isLoadingPrint = false;
             })
 
     },

@@ -15,7 +15,9 @@ const StepBtns = ({ activeStep, setActiveStep, handleSubmit }) => {
                 onClick={() => {
                     setActiveStep((prev) => prev - 1)
                 }}
-                className="group w-full md:w-auto px-6 py-3 border border-[var(--primary-1)] text-[var(--primary-1)] hover:bg-[var(--primary-1)] hover:text-white font-semibold rounded-md inline-flex items-center justify-center gap-2 transition-all duration-200"
+                className="group w-full md:w-auto px-6 py-3 border border-[var(--primary-1)] text-[var(--primary-1)] hover:bg-[var(--primary-1)] hover:text-white font-semibold rounded-md
+                 inline-flex
+                 items-center justify-center gap-2 transition-all duration-200"
 
             >
                 <CaretLeft

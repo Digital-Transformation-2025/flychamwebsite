@@ -583,3 +583,5 @@ input[type="number"] {
   scrollbar-width: none;
 }
 
+@keyframes spin-once { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+.animate-spin-once { animation: spin-once .6s ease-out 1; }

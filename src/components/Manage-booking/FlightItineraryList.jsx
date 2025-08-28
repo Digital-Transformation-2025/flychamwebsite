@@ -119,7 +119,8 @@ const ActionButton = ({ icon: Icon, label, action, color = "text-[13px] text-pri
         type="button"
         disabled
         onClick={onAction}
-        className={`!cursor-not-allowed  flex items-center font-semibold gap-2 hover:opacity-90 ${color} text-primary-500`}
+        className={`
+            !cursor-not-allowed  flex items-center font-semibold gap-2 hover:opacity-90 ${color} text-primary-500`}
     >
         <Icon size={18} /> {label}
     </button>
