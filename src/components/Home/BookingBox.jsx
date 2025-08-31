@@ -31,7 +31,7 @@ import ManageTap from "./widget/Manage/ManageTap";
 const tabs = ["book", "manage", "flight status"];
 const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onCloseMidifySearch,
      setSelectedFlight ,
-    showDesktopModal,setDesktopShowModal,setShowMobileModal,showMobileModal
+   setShowMobileModal,showMobileModal
     }) => {
     const isMobile = useIsMobile()
     const dispatch = useDispatch()
@@ -41,6 +41,7 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
         dispatch(setPos(pos))
     }, [])
 
+  const [showDesktopModal, setDesktopShowModal] = useState(false);
 
     const { airPorts, formikData, activeTab } = useSelector(state => state.flights)
 
@@ -493,7 +494,7 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
     );
     const DesktopView = () => (
 
-        <div id="search-widget" className={`bg-white rounded-2xl shadow-md p-6 w-full max-w-5xl mx-auto mt-[-130px] relative z-20 ${!isResultsPage && 'h-[291px]'}`}>
+        <div id="search-widget" className={`bg-white rounded-2xl shadow-md p-6 w-full max-w-6xl mx-auto mt-[-130px] relative z-20 ${!isResultsPage && 'h-[380x]'}`}>
             {!isResultsPage &&
                 <TabNavigation
                     tabs={tabs}

@@ -43,7 +43,7 @@ const Hero = ({
         <div
             style={{
                 position: 'relative',
-                width: '100%',
+                // width: '100%',
                 height: isMobile ? '200px' : '600px',
                 overflow: 'hidden',
             }}
@@ -79,8 +79,10 @@ const Hero = ({
 
             {/* Text Overlay (left/top on LTR, right/top on RTL) */}
             <div
-                className={`absolute z-10 ${isArabic ? 'right-10' : 'left-10'} top-6 sm:${isArabic ? 'right-10' : 'left-10'} sm:top-10 lg:${isArabic ? 'right-14' : 'left-14'} lg:top-28 text-white`}
-                style={{ maxWidth: isMobile ? '85vw' : '42rem' }}
+                className={`absolute z-10 ${isArabic ? 'right-10' : 'left-10'} top-6 sm:${isArabic ? 'right-10' : 'left-10'} sm:top-10 lg:${isArabic ? 'right-14' : 'left-14'} lg:top-28 text-white
+                w-full mx-auto
+                `}
+            // style={{ maxWidth: isMobile ? '85vw' : '42rem' }}
             >
                 {/* kicker */}
                 <p className="text-sm sm:text-3xl font-semibold drop-shadow-md leading-tight">
@@ -102,7 +104,7 @@ const Hero = ({
                     <button
                         type="button"
                         onClick={onCtaClick}
-                        className="hidden md:block rounded-md px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold text-black"
+                        className="hidden  rounded-md px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold text-black"
                         style={{ backgroundColor: '#d2c5a3' }}
                     >
                         {ctaLabel}

@@ -25,7 +25,6 @@ const HomeClient = ({ flights, pos }) => {
   const dispatch = useDispatch()
   const isMobile = useIsMobile(1024);
   const isMob = useIsMobile();
-  const [showDesktopModal, setDesktopShowModal] = useState(false);
   const [showMobileModal, setShowMobileModal] = useState(false);
 
   const router = useRouter()
@@ -41,27 +40,28 @@ const HomeClient = ({ flights, pos }) => {
     dispatch(setSearchParams(null))
     dispatch(setBookInfo(null))
   }, [])
-  const onCtaClick = () => {
-    if (isMob) {
-      setShowMobileModal(true)
-    } else {
+  // const onCtaClick = () => {
+  //   if (isMob) {
+  //     setShowMobileModal(true)
+  //   } else {
 
-    }
-    setDesktopShowModal(true)
-  }
+  //   }
+  //   setDesktopShowModal(true)
+  // }
   return (
     <div className="transition-all duration-700">
 
       {/* <ImportantAlert /> */}
-      <Hero onCtaClick={onCtaClick}
+      <Hero onCtaClick={()=>{}}
         setShowMobileModal={setShowMobileModal} showMobileModal={showMobileModal}
-        showDesktopModal={showDesktopModal} setDesktopShowModal={setDesktopShowModal} slides={slides} title={t('sliderTitle')} subTitle={t('sliderDesc')} isNavigationBtns />
+    slides={slides} title={t('sliderTitle')} subTitle={t('sliderDesc')} isNavigationBtns />
 
-      <div className="w-[90%] md:w-[70%] mx-auto">
+      <div className="w-[90%] md:w-[80%] mx-auto">
 
         {/* <FlightSearch isHome /> */}
 
-        <BookingBox setShowMobileModal={setShowMobileModal} showMobileModal={showMobileModal} pos={pos} flights={flights} showDesktopModal={showDesktopModal} setDesktopShowModal={setDesktopShowModal} />
+        <BookingBox setShowMobileModal={setShowMobileModal} showMobileModal={showMobileModal} pos={pos}
+          flights={flights}  />
       </div>
 
 
