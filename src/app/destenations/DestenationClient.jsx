@@ -15,7 +15,7 @@ import uaeImage from '@/assets/images/Destenations/uae.webp';
 import iraqImage from '@/assets/images/Destenations/iraq.webp';
 import oman from '@/assets/images/Destenations/oman.webp';
 import syria from '@/assets/images/Destenations/syria.webp';
-import turkey from '@/assets/images/Destenations/turkey.webp';
+import turkeyImg from '@/assets/images/Destenations/turkey2.png';
 import kuwait from '@/assets/images/Destenations/kuwait.webp';
 import { useTranslation } from 'react-i18next';
 import useIsArabic from '@/hooks/useIsArabic';
@@ -59,6 +59,22 @@ const DestenationClient = ({ flights, pos }) => {
     const { t } = useTranslation()
     const isArabic = useIsArabic()
     const destinations = [
+        {
+            country: t('Turkey'),
+            background: turkeyImg,
+            cities: [
+                {
+                    name: t('Istanbul'),
+                    description: t('Travel to Istanbul, where East meets West — explore Hagia Sophia, cruise the Bosphorus, and wander lively bazaars and historic neighborhoods.'),
+                },
+                {
+                    name: t('Mercin'),
+                    description: t('Travel to Mersin, a vibrant Mediterranean port city known for its beautiful beaches, ancient sites like Kızkalesi, and lively seaside promenades.'),
+                },
+
+
+            ],
+        },
         {
             country: t('destinations.uae.country'),
             background: uaeImage,
