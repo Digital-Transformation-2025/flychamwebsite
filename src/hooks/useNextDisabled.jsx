@@ -28,7 +28,6 @@ export default function useNavDisabled(searchParams) {
         // Disable if current date is before today
         setIsPrevDisabled(originalDate <= todayUTC);
     }, [searchParams?.date, searchParams?.date_return]);
-    console.log('isPrevDisabled', isPrevDisabled);
 
     return { isNextDisabled, isPrevDisabled };
 }

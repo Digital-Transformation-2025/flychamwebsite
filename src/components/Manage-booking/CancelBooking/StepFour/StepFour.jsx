@@ -9,9 +9,8 @@ import SummaryTable from './SummaryTable';
 import useModal from '@/hooks/useModal';
 import Modal from '@/components/Ui/Modal';
 
-const StepFour = ({ cancellationOptions, setFieldValue, values }) => {
+const StepFour = ({  setFieldValue, values }) => {
     const { open, show, hide } = useModal();
-    console.log('show', show);
 
     const { underStandCheck, last4 } = values
     const inputRef = useRef(null);

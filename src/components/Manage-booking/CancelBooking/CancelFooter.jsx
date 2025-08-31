@@ -4,8 +4,6 @@ import { CaretLeft, CaretRight } from '@phosphor-icons/react/dist/ssr';
 
 const CancelFooter = ({ handleClickBack, currentStep, handleClickButton, values }) => {
     const { cancelReason, isVerified, underStandCheck } = values
-    console.log('underStandCheck', underStandCheck);
-    console.log('isVerified', isVerified);
 
     const getNextBtnLabel = () => {
         switch (currentStep) {
@@ -37,7 +35,6 @@ const CancelFooter = ({ handleClickBack, currentStep, handleClickButton, values 
                 return null;
         }
     }
-    console.log('isNextDisabled', isNextDisabled());
 
     return (
 

@@ -32,3 +32,18 @@ export const printBookService = createAsyncThunk(
         }
     }
 );
+// ===================================== GET RULES ==============================================
+export const getRefundRulesService = createAsyncThunk(
+    `${sliceName}/getRefundRulesService`,
+    async (_, thunkAPI) => {
+        try {
+
+            const response = await apiClient.get(`/api/ManageBooking/CancelAndRefundRule`);
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(
+                error.response?.data?.message || error.message || 'Something went wrong'
+            );
+        }
+    }
+);

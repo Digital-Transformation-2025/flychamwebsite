@@ -8,7 +8,6 @@ import Divider from './Divider';
 
 
 const FlightDetailsModal = ({ flight, isOpen, onClose }) => {
-    console.log('flight', flight);
 
     const { stops, } = useFormattedFlightTimes(flight);
     return (

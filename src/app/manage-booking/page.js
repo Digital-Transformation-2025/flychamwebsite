@@ -1,10 +1,21 @@
 import React from 'react'
 import ManageBookingClient from './ManageBookingClient'
-
-const page = () => {
+import { fetchFromAPI } from '@/lib/api';
+export async function getRules() {
+    return await fetchFromAPI(`/api/ManageBooking/CancelAndRefundRule`)
+}
+export async function getReasons() {
+    return await fetchFromAPI(`/api/ManageBooking/CancelReason`)
+}
+export default async function ManagePage() {
+    const rulesData = await getRules()
+    const reasonsData = await getReasons()
+    const rules = rulesData.result.items
+    const reasons = reasonsData.result.items
     return (
-        <div><ManageBookingClient /></div>
+        <ManageBookingClient
+            rules={rules}
+            reasons={reasons}
+        />
     )
 }
-
-export default page

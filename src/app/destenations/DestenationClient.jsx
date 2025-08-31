@@ -58,8 +58,6 @@ const PrevArrow = ({ onClick }) => (
 const DestenationClient = ({ flights, pos }) => {
     const { t } = useTranslation()
     const isArabic = useIsArabic()
-    const router = useRouter()
-    const isMobile = useIsMobile()
     const destinations = [
         {
             country: t('destinations.uae.country'),

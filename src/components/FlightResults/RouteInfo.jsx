@@ -10,7 +10,6 @@ const RouteInfo = ({ isMobileHeader }) => {
 
     const { destination, origin, date, flighttype } = useFlightRouteDetails()
     const iconColor = isMobileHeader ? ' text-primary-1' : 'text-400'
-    console.log('destinationdestination.iataCode', destination);
 
     return (
         <section className="">

@@ -29,10 +29,10 @@ import ModalFooter from "./widget/ModalFooter";
 import InfoBoxes from "./widget/InfoBoxes";
 import ManageTap from "./widget/Manage/ManageTap";
 const tabs = ["book", "manage", "flight status"];
-const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onCloseMidifySearch,
-     setSelectedFlight ,
-   setShowMobileModal,showMobileModal
-    }) => {
+const BookingBox = ({ flights, pos, isResultsPage = false, handleResetToFirstStep = () => { }, onCloseMidifySearch = () => { },
+    setSelectedFlight = () => { },
+    setShowMobileModal = () => { }, showMobileModal=false
+}) => {
     const isMobile = useIsMobile()
     const dispatch = useDispatch()
     const router = useRouter()
@@ -41,7 +41,7 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
         dispatch(setPos(pos))
     }, [])
 
-  const [showDesktopModal, setDesktopShowModal] = useState(false);
+    const [showDesktopModal, setDesktopShowModal] = useState(false);
 
     const { airPorts, formikData, activeTab } = useSelector(state => state.flights)
 
@@ -177,8 +177,6 @@ const BookingBox = ({ flights, pos, isResultsPage, handleResetToFirstStep, onClo
 
 
     });
-    console.log('formik', formik.values);
-
 
     const getCityString = (val, type) => {
         const city = airPorts?.items?.find(c => c.id === val);

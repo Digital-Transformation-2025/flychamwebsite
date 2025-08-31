@@ -42,7 +42,7 @@ export default function ClientLayoutWrapper({ children }) {
   const [isOpen, setIsOpen] = useState(true)
   // const { isModifySearch } = useSelector((state) => state.flights)
   // ====================== INSPECTOR ====================== 
-  useBlockInspect()
+  // useBlockInspect()
   // ====================== INSPECTOR ====================== 
 
   const pathname = usePathname()
@@ -119,7 +119,6 @@ export default function ClientLayoutWrapper({ children }) {
   ];
 
   const isDynamicHomePage = pathname.startsWith('/c/');
-  console.log('isDynamicHomePage', isDynamicHomePage);
 
 
 

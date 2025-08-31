@@ -14,6 +14,7 @@ import TravelAgencyAlert from '@/components/Manage-booking/TravelAgencyAlert';
 import LottieComponent from '@/components/Ui/LottieComponent';
 import { useStickyHeaderHeight } from '@/hooks/useStickyHeaderHeight';
 import { useTabsScrollSpy } from '@/hooks/useTabsScrollSpy';
+import { setReasons, setRules } from '@/store/manageSlice';
 import { searchBookService } from '@/store/Services/manageBookingServices';
 // import { useScrollSpy } from '@/hooks/useScrollSpyTabs';
 import { contactSchemaInManage } from '@/util/validatonSchemas';
@@ -46,7 +47,7 @@ const contact = {
     mobile: '+963 935679806',
     altMobile: '+963 935679806',
 };
-const ManageBookingClient = () => {
+const ManageBookingClient = ({ rules, reasons }) => {
     const containerRef = useRef(null);
     const router = useRouter()
 
@@ -65,7 +66,7 @@ const ManageBookingClient = () => {
     const { active, onChangeTab } = useTabsScrollSpy(filteredTabs, {
         headerSelector: "#sticky-head",
         getSectionId,
-        offset: stickyH, // <— single source of truth
+        offset: stickyH, 
     });
 
 
@@ -147,6 +148,11 @@ const ManageBookingClient = () => {
             })
         }
     }, [])
+
+    useEffect(() => {
+        dispatch(setRules(rules))
+        dispatch(setReasons(reasons))
+    }, [rules, reasons])
 
 
 
@@ -232,8 +238,7 @@ const ManageBookingClient = () => {
                 <CancelBookingModal
                     open={openCancelBook}
                     onClose={() => setOpenCancelBook(false)}
-                    bookingRef="NHG7Y0"
-                    maskedPhone="*8066"
+                    email={contactInfo?.email}
                 />
                 <FlightDetailsModal
                     isOpen={isShowDetailsModalOpen}

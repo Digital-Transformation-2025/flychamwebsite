@@ -12,14 +12,7 @@ const useFetchFlights = (setLocalLoading, setIsPageLoaded) => {
 
     useEffect(() => {
         const { origin_id, destination_id, date } = searchParams || {};
-        console.log('origin_id', origin_id);
-        console.log('destination_id', destination_id);
-        console.log('date', date);
 
-        // if (!origin_id || !destination_id || !date) {
-        //     router.push("/");
-        //     return;
-        // }
 
         // ✅ Show loader only on first load
         if (isFirstLoad.current) {

@@ -92,8 +92,6 @@ const LegTabs = ({ legs, activeIndex, onChangeIndex, isRoundTrip }) => {
 
             {legs.map((leg, i) => {
                 const isActive = i === activeIndex;
-                console.log('leg', leg);
-
                 return (
                     <button
                         key={leg.id || i}
