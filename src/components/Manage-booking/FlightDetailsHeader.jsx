@@ -4,13 +4,24 @@ import SectionTitle from "./SectionTitle";
 import { useDispatch } from "react-redux";
 import { printBookService } from "@/store/Services/manageBookingServices";
 
-const FlightDetailsHeader = ({ isTraveleAgent, onSendEmail }) => {
+const FlightDetailsHeader = ({ isTraveleAgent, onSendEmail, contactEmail }) => {
+    const EMAIL_RE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
+
+    // Remove dangerous/control chars, spaces, angle brackets, quotes, backticks, etc.
+    const sanitizeEmail = (raw) =>
+        raw
+            .normalize("NFKC")
+            .replace(/[\u0000-\u001F\u007F<>{}()[\]"'`\\|;:]/g, "")
+            .replace(/\s+/g, "")
+            .slice(0, 254)
+
+
     const dispatch = useDispatch();
     const [emailFocused, setEmailFocused] = useState(false);
 
 
     const [openEmailBox, setOpenEmailBox] = useState(false);
-    const [email, setEmail] = useState("");
+    const [email, setEmail] = useState(sanitizeEmail(contactEmail || ""));
 
     const btnRef = useRef(null);
     const popRef = useRef(null);
@@ -21,14 +32,16 @@ const FlightDetailsHeader = ({ isTraveleAgent, onSendEmail }) => {
     const [panelWidth, setPanelWidth] = useState(520);
     const [caretLeft, setCaretLeft] = useState(24);
 
-    const isValidEmail = /\S+@\S+\.\S+/.test(email);
+    const isValidEmail = EMAIL_RE.test(email);
 
     const handleSend = (e) => {
         e?.preventDefault();
-        if (!isValidEmail) return;
-        onSendEmail?.(email);
+        const cleaned = sanitizeEmail(email);
+        if (!EMAIL_RE.test(cleaned)) return; // optionally show an error toast
+        onSendEmail?.(cleaned);
         setOpenEmailBox(false);
     };
+
 
     const handlePrint = () => dispatch(printBookService());
 
@@ -143,7 +156,7 @@ const FlightDetailsHeader = ({ isTraveleAgent, onSendEmail }) => {
                         // 3) Input focus handlers (add to the email <input>)
                         onFocus={() => setEmailFocused(true)}
                         onBlur={() => setEmailFocused(false)}
-                        className={`flex items-center gap-1 transition px-2 py-1 rounded-sm underline !cursor-not-allowed
+                        className={`flex items-center gap-1 transition px-2 py-1 rounded-sm underline  cursor-not-allowed
                       ${openEmailBox || emailFocused
                                 ? 'bg-[#A6CFE0]/20 text-primary-1   '
                                 : 'text-primary-500 hover:bg-[#A6CFE0]/20 hover:text-primary-1 hover:underline'}`}
@@ -175,7 +188,7 @@ const FlightDetailsHeader = ({ isTraveleAgent, onSendEmail }) => {
                     className=" fixed z-2  md:max-w-md"
                     style={{ top: panelTop, left: panelLeft, width: panelWidth }}
                 >
-                    <div className="        relative bg-50 border border-[#F5F5F4] rounded-xs p-3 w-full
+                    <div className="        relative bg-50 border border-[#F5F5F4] rounded-sm p-3 w-full
       [filter:drop-shadow(0_8px_24px_rgba(0,0,0,0.12))_drop-shadow(0_2px_8px_rgba(0,0,0,0.08))]
 ">
                         {/* Caret under Email label */}
@@ -195,10 +208,25 @@ const FlightDetailsHeader = ({ isTraveleAgent, onSendEmail }) => {
                                 autoFocus
                                 inputMode="email"
                                 autoComplete="email"
+                                autoCapitalize="none"
+                                autoCorrect="off"
+                                spellCheck={false}
+                                maxLength={254}
+                                pattern={EMAIL_RE.source}
+                                title="Enter a valid email address"
                                 placeholder="name@example.com"
                                 value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="w-full sm:flex-1 h-11 sm:h-12 rounded-xs border-1 border-gray-300 px-4 text-[16px] sm:text-[18px] leading-none outline-none focus:border-primary-1 focus:ring-1 "
+                                onChange={(e) => setEmail(sanitizeEmail(e.target.value))}
+                                onPaste={(e) => {
+                                    e.preventDefault();
+                                    const text = (e.clipboardData || window.clipboardData).getData("text");
+                                    setEmail(sanitizeEmail(text));
+                                }}
+                                onKeyDown={(e) => {
+                                    if (/[<>{}()[\]"'`\\|;:\s]/.test(e.key)) e.preventDefault();
+                                }}
+
+                                className="w-full sm:flex-1 h-11 sm:h-12 rounded-xs border-1 border-gray-300 px-4 text-primary-1 font-medium  text-[16px] sm:text-sm leading-none outline-none focus:border-primary-1 focus:ring-1 "
                             />
                             <button
                                 type="submit"

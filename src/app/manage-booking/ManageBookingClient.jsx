@@ -66,7 +66,7 @@ const ManageBookingClient = ({ rules, reasons }) => {
     const { active, onChangeTab } = useTabsScrollSpy(filteredTabs, {
         headerSelector: "#sticky-head",
         getSectionId,
-        offset: stickyH, 
+        offset: stickyH,
     });
 
 
@@ -194,7 +194,7 @@ const ManageBookingClient = ({ rules, reasons }) => {
                     <div id="section-0" style={{ scrollMarginTop: stickyH }}>
 
                         <FlightDetailsHeader isTraveleAgent={isTraveleAgent}
-
+                            contactEmail={contactInfo.email}
                         />
                         <FlightItineraryList
                             firstSegment={firstSegment} secoundSegment={secoundSegment}

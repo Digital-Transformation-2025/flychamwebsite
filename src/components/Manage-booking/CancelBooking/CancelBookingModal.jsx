@@ -22,7 +22,7 @@ import PolicyCard from './Info/PolicyCard';
 ========================= */
 export default function CancelBookingModal({
     open,
-    onClose, email
+    onClose
 }) {
     if (!open) return null;
 

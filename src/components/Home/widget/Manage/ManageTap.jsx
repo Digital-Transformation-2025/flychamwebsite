@@ -59,24 +59,27 @@ const ManageTap = () => {
     const handlePNRChange = (e) => {
         const value = e.target.value.toUpperCase().slice(0, 6);
         formik.setFieldValue("pnr", value);
+        dispatch(setPnrParams({ pnr: value, lastName }))
     };
 
     // Force uppercase for last name
     const handleLastNameChange = (e) => {
         const englishOnly = e.target.value
-            .replace(/[^A-Za-z\s]/g, '')   // only letters + spaces
-            .replace(/\s+/g, ' ')          // collapse multiple spaces
-            .trimStart()                   // optional: prevent leading space
+            .replace(/[^A-Za-z\s]/g, '')
+            .replace(/\s+/g, ' ')
+            .trimStart()
             .toUpperCase();
         formik.setFieldValue('lastName', englishOnly);
+        dispatch(setPnrParams({ pnr, lastName :englishOnly}))
+
     };
 
 
     const canSearch = (!!formik.values.pnr && !!formik.values.lastName)
 
     return (
-        <>
-            <div className="h-[8px]"></div>
+        <div className="h-auto  md:h-[180px]">
+            <div className="h-[30px]"></div>
             <form onSubmit={formik.handleSubmit} className="w-full max-w-5xl mx-auto">
                 {/* inputs row */}
                 <div className="flex flex-col md:flex-row gap-6 items-stretch">
@@ -113,7 +116,7 @@ const ManageTap = () => {
                 description={alert?.description}
                 isBtn
             />
-        </>
+        </div>
     );
 };
 

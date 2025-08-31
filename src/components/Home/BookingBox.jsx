@@ -31,7 +31,7 @@ import ManageTap from "./widget/Manage/ManageTap";
 const tabs = ["book", "manage", "flight status"];
 const BookingBox = ({ flights, pos, isResultsPage = false, handleResetToFirstStep = () => { }, onCloseMidifySearch = () => { },
     setSelectedFlight = () => { },
-    setShowMobileModal = () => { }, showMobileModal=false
+    setShowMobileModal = () => { }, showMobileModal = false
 }) => {
     const isMobile = useIsMobile()
     const dispatch = useDispatch()
@@ -505,7 +505,7 @@ const BookingBox = ({ flights, pos, isResultsPage = false, handleResetToFirstSte
                 <ManageTap />
             }
             {activeTab === "book" &&
-                <>
+                <div className="h-[180px]">
 
                     {isResultsPage && (
                         <ModalTitle onCloseMidifySearch={onCloseMidifySearch} />
@@ -631,7 +631,7 @@ const BookingBox = ({ flights, pos, isResultsPage = false, handleResetToFirstSte
                         submitted={submitted}
                     />
 
-                </>
+                </div>
             }
 
         </div>
