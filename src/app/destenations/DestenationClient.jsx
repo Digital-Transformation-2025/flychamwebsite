@@ -138,7 +138,7 @@ const DestenationClient = ({ flights, pos }) => {
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 3000, // wait 3s before next slide
-        pauseOnHover: false,
+        pauseOnHover: true,
         arrows: false,
     };
 
