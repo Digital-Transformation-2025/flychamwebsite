@@ -505,7 +505,7 @@ const BookingBox = ({ flights, pos, isResultsPage = false, handleResetToFirstSte
                 <ManageTap />
             }
             {activeTab === "book" &&
-                <div className="h-[180px]">
+                <div className={`${!isResultsPage &&'h-[180px]'}`}>
 
                     {isResultsPage && (
                         <ModalTitle onCloseMidifySearch={onCloseMidifySearch} />
