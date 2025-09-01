@@ -9,19 +9,16 @@ let lastValidatedPhone = '';
 let lastPhoneValidationResult = null;
 let lastValidatedEmail = '';
 let lastEmailValidationResult = null;
-const nameRegexTr = /^[A-Za-zÇĞİıÖöŞşÜüçğ\s'-]+$/u;
 
 export const passengerSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
     firstName: Yup.string()
         .required('First name is required')
-        .transform(v => v?.normalize('NFC')) 
-        .matches(nameRegexTr, 'Only English/Turkish letters, spaces, hyphens, and apostrophes are allowed'),
+        .matches(/^[A-Za-z\s]+$/, 'Only English letters are allowed'),
 
     lastName: Yup.string()
         .required('Last name is required')
-        .transform(v => v?.normalize('NFC'))
-        .matches(nameRegexTr, 'Only English/Turkish letters, spaces, hyphens, and apostrophes are allowed'),
+        .matches(/^[A-Za-z\s]+$/, 'Only English letters are allowed'),
 
     dateOfBirth: Yup.date()
         .required('Date of birth is required')
