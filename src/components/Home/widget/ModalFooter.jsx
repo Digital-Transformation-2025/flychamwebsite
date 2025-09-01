@@ -26,7 +26,7 @@ const ModalFooter = ({ values, setFieldValue, handleSubmit }) => {
                     disabled={isDisabled}
                     className=
                     {
-                        `cursor-pointer px-6 py-2 rounded-md text-sm font-medium transition-opacity duration-200  
+                        `cursor-pointer px-8 py-4 rounded-md text-[16px] font-medium transition-opacity duration-200  
                       ${isDisabled
                             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                             : 'bg-[#BAA981] text-white cursor-pointer hover:bg-[#a89773]'

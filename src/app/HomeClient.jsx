@@ -52,20 +52,21 @@ const HomeClient = ({ flights, pos }) => {
     <div className="transition-all duration-700">
 
       {/* <ImportantAlert /> */}
-      <Hero onCtaClick={()=>{}}
-        setShowMobileModal={setShowMobileModal} showMobileModal={showMobileModal}
-    slides={slides} title={t('sliderTitle')} subTitle={t('sliderDesc')} isNavigationBtns />
 
-      <div className="w-[90%] md:w-[80%] mx-auto">
+      <Hero onCtaClick={() => { }}
+        setShowMobileModal={setShowMobileModal} showMobileModal={showMobileModal}
+        slides={slides} title={t('sliderTitle')} subTitle={t('sliderDesc')} isNavigationBtns />
+
+      <div className="w-full  md:max-w-7xl mx-auto px-4 ">
 
         {/* <FlightSearch isHome /> */}
 
         <BookingBox setShowMobileModal={setShowMobileModal} showMobileModal={showMobileModal} pos={pos}
-          flights={flights}  />
+          flights={flights} />
       </div>
 
 
-      <div className='w-[90%] mx-auto px-2'>
+      <div className='w-full  md:max-w-7xl mx-auto  px-4'>
 
 
         <div className="mt-20 mb-20 w-[100%] justify-self-center">

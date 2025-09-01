@@ -95,7 +95,7 @@ const Footer = () => {
 
     return (
         <div className=" relative  bg-main text-white">
-            <footer className=" w-[90%] px-2  mx-auto pt-4 pb-20 md:py-12">
+            <footer className=" w-full  md:max-w-7xl mx-auto px-4    pt-4 pb-20 md:py-12">
                 {/* CTA */}
                 {/* <div className=" hidden  xl:flex  flex-wrap justify-between items-center gap-6  pb-8">
                     <div className='flex items-start gap-8'>

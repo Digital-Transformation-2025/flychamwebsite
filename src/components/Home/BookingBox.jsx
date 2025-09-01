@@ -492,7 +492,7 @@ const BookingBox = ({ flights, pos, isResultsPage = false, handleResetToFirstSte
     );
     const DesktopView = () => (
 
-        <div id="search-widget" className={`bg-white rounded-2xl shadow-md p-6 w-full max-w-6xl mx-auto mt-[-130px] relative z-20 ${!isResultsPage && 'h-[380x]'}`}>
+        <div id="search-widget" className={`bg-white rounded-2xl shadow-md p-6 w-full mt-[-130px] relative z-20 ${!isResultsPage && 'h-[380x]'}`}>
             {!isResultsPage &&
                 <TabNavigation
                     tabs={tabs}
