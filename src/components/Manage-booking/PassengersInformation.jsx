@@ -230,10 +230,10 @@ export default function PassengersInformation({ passengers, isTraveleAgent,
     });
 
     return (
-        <section className="w-full mx-auto">
+        <section className="w-full mx-auto ">
             <SectionTitle >Passengers information</SectionTitle>
 
-            <div className="mt-4 flex flex-col gap-8">
+            <div className="mt-4 flex flex-col gap-8 max-w-8xl">
                 {passengersInfo.map((p) => (
                     <PassengerCard
                         key={p.id}

@@ -435,7 +435,7 @@ const BookingBox = ({ flights, pos, isResultsPage = false, handleResetToFirstSte
 
 
     const MobileView = () => (
-        <div id="search-widget" className={`${isResultsPage && 'rounded-sm bg-white p-6'}   w-full`}>
+        <div id="search-widget" className={`${isResultsPage && 'rounded-sm bg-white p-6 h-[100vh]'}   w-full`}>
             {!isResultsPage &&
                 <TabNavigation
                     tabs={tabs}
