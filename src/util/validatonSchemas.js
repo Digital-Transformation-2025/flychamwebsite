@@ -10,19 +10,12 @@ let lastPhoneValidationResult = null;
 let lastValidatedEmail = '';
 let lastEmailValidationResult = null;
 const nameRegexTr = /^[A-Za-zÇĞİıÖöŞşÜüçğ\s'-]+$/u;
-const unicodeEmailRegex = new RegExp(
-    "^" +
-    "[\\p{L}\\p{M}\\p{N}_%+\\-'.]+(?:\\.[\\p{L}\\p{M}\\p{N}_%+\\-'.]+)*" + // local part
-    "@" +
-    "(?:[\\p{L}\\p{M}\\p{N}](?:[\\p{L}\\p{M}\\p{N}\\-]{0,61}[\\p{L}\\p{M}\\p{N}])?\\.)+" + // domain labels
-    "[\\p{L}\\p{M}\\p{N}]{2,}" + // TLD
-    "$", "u"
-);
+
 export const passengerSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
     firstName: Yup.string()
         .required('First name is required')
-        .transform(v => v?.normalize('NFC'))
+        .transform(v => v?.normalize('NFC')) 
         .matches(nameRegexTr, 'Only English/Turkish letters, spaces, hyphens, and apostrophes are allowed'),
 
     lastName: Yup.string()
@@ -129,14 +122,13 @@ export const passengerSchema = Yup.object().shape({
 });
 
 export const contactSchema = Yup.object().shape({
-
     email: Yup.string()
         .required('Email is required')
-        .transform((v) => v ? v.trim().normalize('NFC') : v)
-        .test('is-valid-format', 'Invalid email format', (value) => !!value && unicodeEmailRegex.test(value))
-
-
-
+        .test('is-valid-format', 'Invalid email format', function (value) {
+            if (!value) return false;
+            const strictEmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+            return strictEmailRegex.test(value);
+        })
         .test('validate-email-via-api', 'This email address is invalid.', async function (value) {
             if (!value) return false;
 
