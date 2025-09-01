@@ -58,8 +58,7 @@ const PassengerDetails = ({ activeStep, setActiveStep, selectedFlight, selectedT
                                 setFieldValue={formik.setFieldValue}
                                 validateField={formik.validateField}
                                 handleChange={formik.handleChange}
-                                errors={formik.errors.contact
-                                }
+                                errors={formik.errors.contact}
                                 touched={formik.touched.contact}
 
                             />

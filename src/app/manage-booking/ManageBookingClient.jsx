@@ -1,6 +1,7 @@
 'use client'
 import FlightDetailsModal from '@/components/FlightResults/FlighSelectStep/FlightDetailsModal';
 import CancelBookingModal from '@/components/Manage-booking/CancelBooking/CancelBookingModal';
+import ContactDetailsCardSkeleton from '@/components/Manage-booking/Contact/ContactDetailsCardSkeleton';
 import ContactDetails from '@/components/Manage-booking/ContactDetails';
 import { ContactEditModal } from '@/components/Manage-booking/ContactEditModal';
 import ExtraBaggageModal from '@/components/Manage-booking/ExtraBaggage/ExtraBaggageModal';
@@ -15,12 +16,12 @@ import LottieComponent from '@/components/Ui/LottieComponent';
 import { useStickyHeaderHeight } from '@/hooks/useStickyHeaderHeight';
 import { useTabsScrollSpy } from '@/hooks/useTabsScrollSpy';
 import { setReasons, setRules } from '@/store/manageSlice';
-import { searchBookService } from '@/store/Services/manageBookingServices';
+import { editContactService, searchBookService } from '@/store/Services/manageBookingServices';
 // import { useScrollSpy } from '@/hooks/useScrollSpyTabs';
 import { contactSchemaInManage } from '@/util/validatonSchemas';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 const tabs = [
     {
@@ -40,22 +41,33 @@ const tabs = [
     //     label: 'Additional services'
     // },
 ];
-const contact = {
-    name: 'MR.Mouayad Hawari',
-    type: 'Primary',
-    email: 'moaidhawari@gmail.com',
-    mobile: '+963 935679806',
-    altMobile: '+963 935679806',
-};
+
 const ManageBookingClient = ({ rules, reasons }) => {
     const containerRef = useRef(null);
     const router = useRouter()
+    const dispatch = useDispatch()
 
     const { isLoading, bookInfo, pnrParams } = useSelector((s) => s.manageBook)
-    const { isTraveleAgent, mainImage, segments, bookingReference: pnr, contactInfo, passengers } = bookInfo || {}
+    const { isTraveleAgent, mainImage, segments, bookingReference: pnr, contactInfo, passengers, sessionId } = bookInfo || {}
+    const { title, firstName, lastName, email, countryCodeMobile, countryCodeTele, mobile, telephone } = contactInfo || {}
+    const [isFirstRender, setIsFirstRender] = useState(true)
+    useEffect(() => {
+        setIsFirstRender(false)
+    }, [])
     const filteredTabs = isTraveleAgent
+
         ? tabs.filter((t) => t.id !== 2)
         : tabs;
+    const contact = useMemo(() => ({
+        name: `${title}. ${firstName}${lastName}`,
+        type: 'Primary',
+        email,
+        phone: telephone || '',
+        altPhone: mobile,
+        phoneCountryCode: countryCodeTele,
+        altPhoneCountryCode: countryCodeMobile,
+    }), [title, firstName, lastName, email, telephone, mobile, countryCodeTele, countryCodeMobile]);
+    // then initialValues: { contact: memoContact }
 
     // Measure the sticky wrapper (Header+Panner+Tabs) height when fixed
     const stickyH = useStickyHeaderHeight("#sticky-head");
@@ -101,18 +113,32 @@ const ManageBookingClient = ({ rules, reasons }) => {
     }
     const formik = useFormik({
         enableReinitialize: true,
-        initialValues: {
-            countryCode: contact.countryCode,
-            mobile: contact.mobile,
-            altCounryCode: contact.altCounryCode,
-            altMobile: contact.altMobile,
-            email: contact.email,
-        },
-        validationSchema: contactSchemaInManage,
+        initialValues: { contact },
+        // validationSchema: contactSchemaInManage,
         onSubmit: async (values) => {
-            // call your API here if needed
-            // await api.updateContact(values)
-            setShowContactModal(false);
+            const { email, phone, altPhone, phoneCountryCode, altPhoneCountryCode } = values.contact || {}
+            const data = {
+                SessionId: sessionId,
+                IsDelete: false,
+                contact: {
+                    Email: email,
+                    Mobile: {
+                        Country: altPhoneCountryCode,
+                        Number: altPhone
+                    },
+                    Phone: {
+                        Country: phoneCountryCode,
+                        Number: phone
+                    }
+                }
+            }
+            dispatch(editContactService(data)).then((action) => {
+                if (editContactService.fulfilled.match(action)) {
+                    getPnrData()
+                    setShowContactModal(false);
+                }
+            });
+
         },
     });
 
@@ -136,16 +162,19 @@ const ManageBookingClient = ({ rules, reasons }) => {
             ],
         },
     };
-    const dispatch = useDispatch()
+
+    const getPnrData = () => {
+        const data = { lastName: pnrParams.lastName, PNR: pnrParams.pnr };
+        dispatch(searchBookService(data)).then((action) => {
+            if (searchBookService.rejected.match(action)) {
+                router.push("/")
+            }
+        })
+    }
 
     useEffect(() => {
         if (!Boolean(bookInfo)) {
-            const data = { lastName: pnrParams.lastName, PNR: pnrParams.pnr };
-            dispatch(searchBookService(data)).then((action) => {
-                if (searchBookService.rejected.match(action)) {
-                    router.push("/")
-                }
-            })
+            getPnrData()
         }
     }, [])
 
@@ -160,11 +189,6 @@ const ManageBookingClient = ({ rules, reasons }) => {
     const Loading = <LottieComponent />
     const contet =
         bookInfo && (
-
-
-
-
-
             <div className='pb-20 '>
                 <div
                     id="sticky-head"
@@ -215,7 +239,7 @@ const ManageBookingClient = ({ rules, reasons }) => {
                     </div>
                     {!isTraveleAgent &&
                         <div id="section-2" style={{ scrollMarginTop: stickyH }} className='mb-50'>
-                            <ContactDetails onEdit={onEdit} contactInfo={contactInfo} />
+                            {!isLoading ? <ContactDetails onEdit={onEdit} contactInfo={contactInfo} /> : <ContactDetailsCardSkeleton />}
                         </div>
                     }
                     {/* <div id="section-3" className="scroll-mt-[360px] md:scroll-mt-0">
@@ -230,7 +254,7 @@ const ManageBookingClient = ({ rules, reasons }) => {
                     errors={formik.errors}
                     touched={formik.touched}
                     handleSubmit={formik.handleSubmit}
-                    values={formik.values}
+                    formikValues={formik.values}
                     handleChange={formik.handleChange}
                     setFieldValue={formik.setFieldValue}
                 />
@@ -249,7 +273,7 @@ const ManageBookingClient = ({ rules, reasons }) => {
             </div>)
 
     return (
-        isLoading ? Loading : contet
+        (isLoading && isFirstRender) ? Loading : contet
     )
 }
 

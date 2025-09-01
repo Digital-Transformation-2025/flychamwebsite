@@ -1,6 +1,6 @@
 // store/slices/flightSlice.js
 import { createSlice } from '@reduxjs/toolkit';
-import { getRefundRulesService, printBookService, searchBookService } from './Services/manageBookingServices';
+import { editContactService, getRefundRulesService, printBookService, searchBookService } from './Services/manageBookingServices';
 
 const manageSlice = createSlice({
     name: 'manage',
@@ -12,6 +12,7 @@ const manageSlice = createSlice({
         isLoadingRules: false,
         rules: [],
         reasons: [],
+        isLoadingEditContact: false,
     },
     reducers: {
         setPnrParams: (state, action) => {
@@ -35,7 +36,7 @@ const manageSlice = createSlice({
             })
             .addCase(searchBookService.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.bookInfo = action.payload.data
+                state.bookInfo = action.payload.result.data
             })
             .addCase(searchBookService.rejected, (state, action) => {
                 state.isLoading = false;
@@ -61,9 +62,19 @@ const manageSlice = createSlice({
             .addCase(getRefundRulesService.rejected, (state, action) => {
                 state.isLoadingRules = false;
             })
+            // ===================================== EDIT CONTACT ==============================================
+            .addCase(editContactService.pending, (state) => {
+                state.isLoadingEditContact = true;
+            })
+            .addCase(editContactService.fulfilled, (state, action) => {
+                state.isLoadingEditContact = false;
+            })
+            .addCase(editContactService.rejected, (state, action) => {
+                state.isLoadingEditContact = false;
+            })
 
     },
 });
 
-export const { setPnrParams, setBookInfo,setRules ,setReasons} = manageSlice.actions;
+export const { setPnrParams, setBookInfo, setRules, setReasons } = manageSlice.actions;
 export default manageSlice.reducer;

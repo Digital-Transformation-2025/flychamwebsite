@@ -85,9 +85,9 @@ const AirportList = ({ search, setSearch, type, values, setFieldValue, isMobile,
                 <div className='flex items-center gap-4'>
                   <div className=''>
 
-                    <p className="text-start text-sm font-semibold text-gray-800">{airPortName}</p>
+                    <p className="text-start text-sm font-semibold text-gray-800">{`${city}, ${country} `}</p>
 
-                    <p className=" text-start text-xs text-gray-500 my-1 md:my-0">{`${country} ${city}`}</p>
+                    <p className=" text-start text-xs text-gray-500 my-1 md:my-0">{airPortName}</p>
                   </div>
 {/*                   
                   <motion.img

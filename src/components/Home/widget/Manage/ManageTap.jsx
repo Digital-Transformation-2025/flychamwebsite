@@ -39,14 +39,13 @@ const ManageTap = () => {
             dispatch(setPnrParams({ pnr, lastName }))
             dispatch(searchBookService(data))
                 .then(({ payload }) => {
-                    const { data: bookData, status } = payload || {};
+                    const { result, statusCode } = payload || {};
 
-                    if (status === 200 && Object.keys(bookData).length > 0) {
+                    if (statusCode === 200 && Object.keys(result.data).length > 0) {
                         router.push("/manage-booking");
 
                     } else {
-                        const { alert } = payload || {};
-                        const { title, description } = alert || {};
+                        const { title, description } =  result.alert  || {};
                         setAlert({ title: title || "Server Error", description: description || "Something went wrong on our side. Please try again later." })
                         setModalOpen(true);
                     }

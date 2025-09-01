@@ -12,9 +12,9 @@ export default function AddAltNumber({ onClickAlternative, isAlternativeInfo }) 
         {isAlternativeInfo ? (
           <motion.span
             key="minus"
-            initial={{ opacity: 0, rotate: -90 }}
-            animate={{ opacity: 1, rotate: 0 }}
-            exit={{ opacity: 0, rotate: 90 }}
+            initial={{  rotate: -90 }}
+            animate={{  rotate: 0 }}
+            exit={{  rotate: 90 }}
             transition={{ duration: 0.2 }}
           >
             <MinusCircle size={20} weight="bold" className="text-primary-1" />
@@ -22,9 +22,9 @@ export default function AddAltNumber({ onClickAlternative, isAlternativeInfo }) 
         ) : (
           <motion.span
             key="plus"
-            initial={{ opacity: 0, rotate: 90 }}
-            animate={{ opacity: 1, rotate: 0 }}
-            exit={{ opacity: 0, rotate: -90 }}
+            initial={{  rotate: 90 }}
+            animate={{  rotate: 0 }}
+            exit={{  rotate: -90 }}
             transition={{ duration: 0.2 }}
           >
             <PlusCircle size={20} weight="bold" className="text-primary-1" />

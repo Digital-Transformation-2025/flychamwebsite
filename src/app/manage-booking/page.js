@@ -2,10 +2,10 @@ import React from 'react'
 import ManageBookingClient from './ManageBookingClient'
 import { fetchFromAPI } from '@/lib/api';
 export async function getRules() {
-    return await fetchFromAPI(`/api/ManageBooking/CancelAndRefundRule`)
+    return await fetchFromAPI(`/api/managebooking/CancelAndRefundRule`)
 }
 export async function getReasons() {
-    return await fetchFromAPI(`/api/ManageBooking/CancelReason`)
+    return await fetchFromAPI(`/api/managebooking/CancelReason`)
 }
 export default async function ManagePage() {
     const rulesData = await getRules()

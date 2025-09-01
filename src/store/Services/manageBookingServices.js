@@ -8,7 +8,7 @@ export const searchBookService = createAsyncThunk(
     async (data, thunkAPI) => {
         try {
 
-            const response = await apiClient.post(`/api/booking/InquirePNR/ManageBooking?language=en`, data);
+            const response = await apiClient.post(`/api/managebooking/InquirePNR/GetMainInfo?language=en`, data);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(
@@ -38,7 +38,22 @@ export const getRefundRulesService = createAsyncThunk(
     async (_, thunkAPI) => {
         try {
 
-            const response = await apiClient.get(`/api/ManageBooking/CancelAndRefundRule`);
+            const response = await apiClient.get(`/api/managebooking/CancelAndRefundRule`);
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(
+                error.response?.data?.message || error.message || 'Something went wrong'
+            );
+        }
+    }
+);
+// ===================================== EDIT CONTACT ==============================================
+export const editContactService = createAsyncThunk(
+    `${sliceName}/editContactService`,
+    async (data, thunkAPI) => {
+        try {
+
+            const response = await apiClient.post(`/api/managebooking/EditContactInfo/EditContactInfo`, data)
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(

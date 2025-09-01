@@ -209,7 +209,7 @@ const Footer = () => {
                     </div>
                 </div>
                 <Image
-            src={!isArabic ? sidebarar : footerPattern}
+                    src={!isArabic ? sidebarar : footerPattern}
                     alt="Background Pattern"
                     className={
                         ` hidden md:block
