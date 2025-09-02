@@ -1,6 +1,6 @@
 // store/slices/flightSlice.js
 import { createSlice } from '@reduxjs/toolkit';
-import { editContactService, getRefundRulesService, printBookService, searchBookService } from './Services/manageBookingServices';
+import { editContactService, getRefundRulesService, printBookService, searchBookService, verifyCardService } from './Services/manageBookingServices';
 
 const manageSlice = createSlice({
     name: 'manage',
@@ -13,6 +13,7 @@ const manageSlice = createSlice({
         rules: [],
         reasons: [],
         isLoadingEditContact: false,
+        isLoadingVerifyCard: false,
     },
     reducers: {
         setPnrParams: (state, action) => {
@@ -72,7 +73,16 @@ const manageSlice = createSlice({
             .addCase(editContactService.rejected, (state, action) => {
                 state.isLoadingEditContact = false;
             })
-
+            // ===================================== VERIFY CARD ==============================================
+            .addCase(verifyCardService.pending, (state) => {
+                state.isLoadingVerifyCard = true;
+            })
+            .addCase(verifyCardService.fulfilled, (state, action) => {
+                state.isLoadingVerifyCard = false;
+            })
+            .addCase(verifyCardService.rejected, (state, action) => {
+                state.isLoadingVerifyCard = false;
+            })
     },
 });
 

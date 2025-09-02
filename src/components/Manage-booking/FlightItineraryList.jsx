@@ -144,15 +144,7 @@ const SectionHeader = ({ title, onAction }) => (
                     <ActionButton icon={ArrowFatLinesUp} label="Upgrade Class" action="upgrade" onAction={onAction} />
 
                 </div>
-                <div className='hidden md:block'>
-                    <ActionButton
-                        icon={XCircle}
-                        label="Cancel booking"
-                        action="upgrade"
-                        color="text-alert text-[13px] whitespace-nowrap "
-                        onAction={onAction}
-                    />
-                </div>
+     
 
             </div>
 
@@ -164,9 +156,9 @@ const SectionHeader = ({ title, onAction }) => (
 /* =========================
    Main Card
 ========================= */
-const FlightCard = ({ leg, onAction, dashedLength, isMobile, handleClickCancel, handleClickDetails }) => (
+const FlightCard = ({ leg, dashedLength, isMobile, handleClickDetails }) => (
     <section className="w-full ">
-        <SectionHeader title={leg.sectionTitle} onAction={handleClickCancel} />
+        <SectionHeader title={leg.sectionTitle}  />
 
         <div className=" overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-[#EAEAE8]">
             <CardBanner
@@ -188,16 +180,7 @@ const FlightCard = ({ leg, onAction, dashedLength, isMobile, handleClickCancel, 
                 onClick={() => handleClickDetails(leg)}
                 className="flex items-center justify-between bg-[#F5F5F4]  px-4 py-3">
                 <FlightDetailsLink />
-                <div className='block md:hidden my-4'>
-
-                    <ActionButton
-                        icon={XCircle}
-                        label="Cancel booking"
-                        action="upgrade"
-                        color="text-alert text-[13px]"
-                        onAction={handleClickCancel}
-                    />
-                </div>
+     
             </div>
 
         </div>
@@ -208,7 +191,7 @@ const FlightCard = ({ leg, onAction, dashedLength, isMobile, handleClickCancel, 
 /* =========================
    List Wrapper
 ========================= */
-export default function FlightItineraryList({ onAction, firstSegment, secoundSegment, handleClickCancel, handleClickDetails }) {
+export default function FlightItineraryList({ onAction, firstSegment, secoundSegment,  handleClickDetails }) {
     const isMobile = useIsMobile()
     const segmentData = (segment) => ({
         fromCity: segment?.departureCity,
@@ -307,7 +290,6 @@ export default function FlightItineraryList({ onAction, firstSegment, secoundSeg
                     key={leg.id} leg={leg} onAction={onAction}
                     dashedLength={dashedLength}
                     isMobile={isMobile}
-                    handleClickCancel={handleClickCancel}
                     handleClickDetails={handleClickDetails}
                 />
             ))}

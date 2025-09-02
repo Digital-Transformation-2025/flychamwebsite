@@ -14,7 +14,6 @@ const StepThree = ({ setFieldValue, values }) => {
                 : { id, label: reason.trim(), value: reason.trim() }; // fallback for "Other"
         });
 
-    console.log('cancellationOptions', cancellationOptions);
 
     const handleRadioChange = (e) => {
         setFieldValue('cancelReason', Number(e.target.value));

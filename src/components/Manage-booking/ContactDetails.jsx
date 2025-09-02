@@ -29,9 +29,9 @@ export default function ContactDetailsCard({
         {
             label: 'Mobile number',
             value: (
-                <a href={`tel:${countryCodeTele} ${mobile}`} className="hover:underline">
-                    +{countryCodeTele} {mobile}
-                </a>
+                <p  className="hover:underline">
+                    +{countryCodeTele} {telephone}
+                </p>
             ),
         },
     ];

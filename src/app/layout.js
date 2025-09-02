@@ -43,6 +43,7 @@ export default function RootLayout({ children }) {
   return (
     <html dir="ltr">
       <head>
+        
         {/* ✅ Prevent screen zoom on input focus (especially iOS Safari) */}
         <meta
           name="viewport"

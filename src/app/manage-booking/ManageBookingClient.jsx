@@ -46,9 +46,10 @@ const ManageBookingClient = ({ rules, reasons }) => {
     const containerRef = useRef(null);
     const router = useRouter()
     const dispatch = useDispatch()
+    const [isAlternativeInfo, setIsAlternativeInfo] = useState(false)
 
     const { isLoading, bookInfo, pnrParams } = useSelector((s) => s.manageBook)
-    const { isTraveleAgent, mainImage, segments, bookingReference: pnr, contactInfo, passengers, sessionId } = bookInfo || {}
+    const { isTraveleAgent, mainImage, segments, bookingReference: pnr, contactInfo, passengers, sessionId, isAlternativePhone } = bookInfo || {}
     const { title, firstName, lastName, email, countryCodeMobile, countryCodeTele, mobile, telephone } = contactInfo || {}
     const [isFirstRender, setIsFirstRender] = useState(true)
     useEffect(() => {
@@ -118,17 +119,18 @@ const ManageBookingClient = ({ rules, reasons }) => {
             phoneCountryCode: countryCodeTele || '',
             phone: telephone || '',
             email: email || '',
-            altPhoneCountryCode: countryCodeTele,
-            altPhone: mobile || '',
+            altPhoneCountryCode: isAlternativePhone ? countryCodeMobile : '',
+            altPhone: isAlternativePhone ? mobile : '',
             type: 'Primary',
+            IsDelete: false
         },
 
         validationSchema: contactSchemaInManage,
         onSubmit: async (values) => {
-            const { email, phone, altPhone, phoneCountryCode, altPhoneCountryCode } = values || {}
+            const { email, phone, altPhone, phoneCountryCode, altPhoneCountryCode, IsDelete } = values || {}
             const data = {
                 SessionId: sessionId,
-                IsDelete: false,
+                IsDelete,
                 contact: {
                     Email: email,
                     Mobile: {
@@ -150,7 +152,7 @@ const ManageBookingClient = ({ rules, reasons }) => {
 
         },
     });
-    console.log('values', formik.values);
+
 
 
     const flight = {
@@ -175,6 +177,10 @@ const ManageBookingClient = ({ rules, reasons }) => {
     const getPnrData = () => {
         const data = { lastName: pnrParams.lastName, PNR: pnrParams.pnr };
         dispatch(searchBookService(data)).then((action) => {
+            if (searchBookService.fulfilled.match(action)) {
+                console.log('action', action.payload);
+
+            }
             if (searchBookService.rejected.match(action)) {
                 router.push("/")
             }
@@ -191,6 +197,10 @@ const ManageBookingClient = ({ rules, reasons }) => {
         dispatch(setRules(rules))
         dispatch(setReasons(reasons))
     }, [rules, reasons])
+
+    useEffect(() => {
+        setIsAlternativeInfo(isAlternativePhone)
+    }, [isAlternativePhone])
 
 
 
@@ -227,11 +237,11 @@ const ManageBookingClient = ({ rules, reasons }) => {
                     <div id="section-0" style={{ scrollMarginTop: stickyH }}>
 
                         <FlightDetailsHeader isTraveleAgent={isTraveleAgent}
-                            contactEmail={contactInfo.email}
+                            contactEmail={contact?.email}
+                            handleClickCancel={handleClickCancel}
                         />
                         <FlightItineraryList
                             firstSegment={firstSegment} secoundSegment={secoundSegment}
-                            handleClickCancel={handleClickCancel}
                             handleClickDetails={handleClickDetails}
 
                         />
@@ -255,22 +265,29 @@ const ManageBookingClient = ({ rules, reasons }) => {
                 <div className="py-20 text-center text-gray-500">Additional services</div>
             </div> */}
                 </div>
-                <ContactEditModal
-                    isOpen={showContactModal}
-                    onClose={() => setShowContactModal(false)}
-                    contact={contact}
-                    errors={formik.errors}
-                    touched={formik.touched}
-                    handleSubmit={formik.handleSubmit}
-                    values={formik.values}
-                    handleChange={formik.handleChange}
-                    setFieldValue={formik.setFieldValue}
-                />
+                {!isTraveleAgent && contact &&
+
+                    <ContactEditModal
+                        isOpen={showContactModal}
+                        onClose={() => setShowContactModal(false)}
+                        contact={contact}
+                        errors={formik.errors}
+                        touched={formik.touched}
+                        handleSubmit={formik.handleSubmit}
+                        values={formik.values}
+                        handleChange={formik.handleChange}
+                        setFieldValue={formik.setFieldValue}
+                        isAlternativePhone={isAlternativePhone}
+                        isAlternativeInfo={isAlternativeInfo}
+                        setIsAlternativeInfo={setIsAlternativeInfo}
+                    />
+                }
                 <ExtraBaggageModal open={openExtra} onClose={() => setOpenExtra(false)} />
                 <CancelBookingModal
                     open={openCancelBook}
                     onClose={() => setOpenCancelBook(false)}
                     email={contactInfo?.email}
+                    sessionId={sessionId}
                 />
                 <FlightDetailsModal
                     isOpen={isShowDetailsModalOpen}

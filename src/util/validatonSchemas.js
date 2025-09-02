@@ -243,27 +243,140 @@ export const contactSchema = Yup.object().shape({
     countryCode: Yup.string().required('Country code is required'),
     passengerIndex: Yup.number().nullable().required('Please select a contact passenger'),
 });
+
 const emptyToNull = (v, orig) => (orig === '' ? null : v);
 
 export const contactSchemaInManage = Yup.object({
     phoneCountryCode: Yup.string().required('Country code is required').trim(),
-    phone: Yup.string().required('Mobile number is required').trim().matches(/^\d{6,15}$/, 'Enter a valid mobile number'),
+    phone: Yup.string()
+        .required('Phone number is required')
+        .test('country-code-required-before-phone', 'Please select a country code first.', function (value) {
+            const { phoneCountryCode } = this.parent;
+            if (value && !phoneCountryCode) {
+                return this.createError({ message: 'Please select a country code first.' });
+            }
+            return true;
+        })
+        .test('min-length-phone', 'Phone number must be at least 7 digits.', function (value) {
+            if (!value) return true;
+            const numericOnly = value.replace(/\D/g, '');
+            return numericOnly.length >= 7;
+        })
+        .test('validate-phone-via-api', 'This phone number is invalid.', async function (value) {
+            const { phoneCountryCode } = this.parent;
+            if (!value || !phoneCountryCode) return false;
+
+            const numericOnly = value.replace(/\D/g, '');
+            if (numericOnly.length < 7) return true;
+
+            const fullNumber = phoneCountryCode + numericOnly;
+
+            // ✅ SKIP API if value hasn't changed
+            if (lastValidatedPhone === fullNumber && lastPhoneValidationResult !== null) {
+                return lastPhoneValidationResult;
+            }
+
+            try {
+                const result = await store.dispatch(validatePhoneNumberService(fullNumber));
+                const isValid = result.payload === true;
+                lastValidatedPhone = fullNumber;
+                lastPhoneValidationResult = isValid;
+                return isValid;
+            } catch {
+                return this.createError({
+                    message: 'Unable to validate phone number. Try again later.',
+                });
+            }
+        }),
+
+
+
+
+
+
+
+
     email: Yup.string()
-        .required('Email is required'),
+        .required('Email is required')
+        .test('is-valid-format', 'Invalid email format', function (value) {
+            if (!value) return false;
+            const strictEmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+            return strictEmailRegex.test(value);
+        })
+        .test('validate-email-via-api', 'This email address is invalid.', async function (value) {
+            if (!value) return false;
+
+            if (lastValidatedEmail === value && lastEmailValidationResult !== null) {
+                return lastEmailValidationResult;
+            }
+
+            const strictEmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+            if (!strictEmailRegex.test(value)) return true;
+
+            try {
+                const result = await store.dispatch(validateEmailService(value));
+                const isValid = result.payload === true;
+                lastValidatedEmail = value;
+                lastEmailValidationResult = isValid;
+                return isValid;
+            } catch {
+                return this.createError({
+                    message: 'Unable to validate email. Try again later.',
+                });
+            }
+        }),
 
     altPhoneCountryCode: Yup.string().transform(emptyToNull).nullable(),
-    altPhone: Yup.string().transform(emptyToNull).nullable()
-        .matches(/^\d{6,15}$/, { message: 'Enter a valid mobile number', excludeEmptyString: true }),
-})
-    .test('alt-pair', function (v) {
-        if (v.altPhone && !v.altPhoneCountryCode) return this.createError({ path: 'altCountryCode', message: 'Country code is required for alternative phone' });
-        if (v.altPhoneCountryCode && !v.altPhone) return this.createError({ path: 'altMobile', message: 'Alternative phone is required' });
-        return true;
-    })
-    .test('primary-alt-different', function (v) {
-        if ((v.altPhone || v.altPhoneCountryCode) && `${v.phoneCountryCode}|${v.phone}` === `${v.altPhoneCountryCode}|${v.altPhone}`) {
-            return this.createError({ path: 'altPhone', message: 'Alternative phone must be different from primary' });
-        }
-        return true;
-    });
+
+
+    
+    altPhone: Yup.string()
+        .test('country-code-required-before-phone', 'Please select a country code first.', function (value) {
+            const { altPhoneCountryCode } = this.parent;
+            if (value && !altPhoneCountryCode) {
+                return this.createError({ message: 'Please select a country code first.' });
+            }
+            return true;
+        })
+        .test('alt-min-length', 'Alternative number must be at least 7 digits.', function (value) {
+            if (!value) return true;
+            const numericOnly = value.replace(/\D/g, '');
+            return numericOnly.length >= 7;
+        })
+        .test('alt-different-from-primary', 'Alternative number must be different from the primary.', function (value) {
+            const { phoneCountryCode, phone, altPhoneCountryCode } = this.parent;
+            if (!value || !altPhoneCountryCode) return true;
+
+            const primary = `${phoneCountryCode}${phone}`.replace(/\D/g, '');
+            const alternative = `${altPhoneCountryCode}${value}`.replace(/\D/g, '');
+            return primary !== alternative;
+        })
+        .test('alt-validate-via-api', 'This alternative number is invalid.', async function (value) {
+            const { altPhoneCountryCode } = this.parent;
+            if (!value || !altPhoneCountryCode) return true;
+
+            const numericOnly = value.replace(/\D/g, '');
+            if (numericOnly.length < 7) return true;
+
+            const fullAltNumber = altPhoneCountryCode + numericOnly;
+
+            if (lastValidatedPhone === fullAltNumber && lastPhoneValidationResult !== null) {
+                return lastPhoneValidationResult;
+            }
+
+            try {
+                const result = await store.dispatch(validatePhoneNumberService(fullAltNumber));
+                const isValid = result.payload === true;
+                lastValidatedPhone = fullAltNumber;
+                lastPhoneValidationResult = isValid;
+                return isValid;
+            } catch {
+                return this.createError({
+                    message: 'Unable to validate alternative number. Try again later.',
+                });
+            }
+        }),
+        })
+
+
 

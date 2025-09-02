@@ -1,6 +1,6 @@
 // ContactEditModal.jsx
 'use client';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import ErrorMessage from '../Ui/ErrorMessage';
 import CustomDropdown from '../Ui/TitleDropdown';
@@ -20,31 +20,36 @@ export function ContactEditModal({
     handleChange,
     values,
     setFieldValue,
+    isAlternativePhone,
+    isAlternativeInfo,setIsAlternativeInfo
 }) {
+    
     const { isLoadingEditContact } = useSelector((s) => s.manageBook)
 
 
     const v = (path, fallback = '') => getIn(values, path) ?? fallback;
-    const [isAlternativeInfo, setIsAlternativeInfo] = useState(false)
-    const onClickAlternative = () => {
+
+
+    const getErr = (name) => touched && touched[name] && errors && errors[name];
+    const Divider = () => <span className="hidden sm:block h-5 w-px bg-[#DADAD7]" />;
+
+    const hanldeDelete = () => {
         setIsAlternativeInfo((prev) => {
             // If toggling off (user hides alt phone field), reset the form values
             if (prev === true) {
                 setFieldValue('altPhoneCountryCode', '');
                 setFieldValue('altPhone', '');
+                setFieldValue('IsDelete', true);
             }
             if (!prev) {
                 setFieldValue('altPhoneCountryCode', values.altPhoneCountryCode);
                 setFieldValue('altPhone', values.altPhone);
+                setFieldValue('IsDelete', false);
+
             }
             return !prev;
         });
-    };
-
-    const getErr = (name) => touched && touched[name] && errors && errors[name];
-    console.log('errors', errors);
-
-    const Divider = () => <span className="hidden sm:block h-5 w-px bg-[#DADAD7]" />;
+    }
 
     return (
         <Transition appear show={isOpen} as={Fragment}>
@@ -114,7 +119,19 @@ export function ContactEditModal({
                                         />
                                         <ErrorMessage error={getErr('email')} />
                                     </div>
-                                    <AddAltNumber onClickAlternative={onClickAlternative} isAlternativeInfo={isAlternativeInfo} />
+                                    <div className='flex items-center gap-1'>
+                                        {/* <AddAltNumber onClickAlternative={onClickAlternative} isAlternativeInfo={isAlternativeInfo} /> */}
+                                        <span className="text-primary-1 text-sm font-medium">
+                                            Alternative Mobile Number
+                                        </span>
+                                        <span className="text-gray-400 text-sm">(Optional)</span> |
+                                        {isAlternativeInfo ?
+
+                                            <span className="cursor-pointer text-sm text-alert font-medium underline" onClick={hanldeDelete}>  Delete</span> :
+                                            <span className="cursor-pointer text-sm text-primary-1 font-medium underline" onClick={hanldeDelete}>  Add</span>
+                                        }
+                                    </div>
+
                                     {/* <div className="flex gap-2 text-start text-sm">
                                         <span className="text-primary-1 font-medium  cursor-pointer"> Alternative Mobile Number </span>
                                         <Divider />
@@ -160,9 +177,9 @@ export function ContactEditModal({
                                                  rounded-lg
                                                    text-sm md:text-[16px] font-semibold px-16 py-3
                                                   ${isLoadingEditContact ?
-                                                     'w-full md:w-auto px-6 py-3 bg-gray-300 text-gray-500 cursor-not-allowed  '
-                                                    :'bg-secondary-1 text-white'
-                                                    }
+                                                    'w-full md:w-auto px-6 py-3 bg-gray-300 text-gray-500 cursor-not-allowed  '
+                                                    : 'bg-secondary-1 text-white'
+                                                }
                                                   `}
                                         >
                                             {isLoadingEditContact ? 'Processing' : "Save"}

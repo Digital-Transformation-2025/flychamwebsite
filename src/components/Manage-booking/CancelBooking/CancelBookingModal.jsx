@@ -16,16 +16,19 @@ import ConfirmCancelBookingModal from './ConfirmCancelBookingModal';
 import CancellationConfirmed from './Confirmed/Confirmed';
 import RefundStatus from './RefundStatus/RefundStatus';
 import PolicyCard from './Info/PolicyCard';
+import { useDispatch } from 'react-redux';
+import { verifyCardService } from '@/store/Services/manageBookingServices';
 
 /* =========================
    Full-page Modal (responsive)
 ========================= */
 export default function CancelBookingModal({
     open,
-    onClose
+    onClose, sessionId
 }) {
     if (!open) return null;
 
+    const dispatch = useDispatch()
     const [currentStep, setcurrentStep] = useState(0)
     const [isOpen, setIsOpen] = useState(false);
 
@@ -62,19 +65,30 @@ export default function CancelBookingModal({
                 return onClose();
         }
     }
-
+    const [isSubmitted, setIsSubmitted] = useState(false)
     const formik = useFormik({
         initialValues: {
-            selectedFlights: [],
-            selectedpassengers: [],
             cancelReason: '',
             underStandCheck: false,
-            isVerified: true,
+            isVerified: null,
             code: '',
             last4: ''
         },
         onSubmit: (values) => {
-            // Handle form submission (e.g., cancel booking)
+            const { last4 } = values
+            const data = {
+                // SessionId: sessionId,
+                SessionId: 'Ng9V9g2WHfJtQxQPt28Es+eVGdft1h1DAqkRjM5ncoyhduR61AIro24A37Yaram6',
+                last4
+            }
+
+            dispatch(verifyCardService(data))
+                .then((action) => {
+                    if (verifyCardService.fulfilled.match(action)) {
+                        formik.setFieldValue('isVerified', action.payload.result)
+                        setIsSubmitted(true)
+                    }
+                })
         },
     });
 
@@ -131,6 +145,9 @@ export default function CancelBookingModal({
                     errors={formik.errors}
                     touched={formik.touched}
                     values={formik.values}
+                    handleSubmit={formik.handleSubmit}
+                    isSubmitted={isSubmitted}
+
                 />
             }
             {currentStep === 2 &&

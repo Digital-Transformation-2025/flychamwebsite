@@ -157,15 +157,16 @@ const BookingConfirm = () => {
         dispatch(downloadTickeyService({
             SessionId: sessionId,
             PNR: sessionInfo?.pnr
-        })).then((action) => {
-            if (downloadTickeyService.fulfilled.match(action)) {
-                const { fileUrl } = action.payload;
+        }))
+            .then((action) => {
+                if (downloadTickeyService.fulfilled.match(action)) {
+                    const { fileUrl } = action.payload;
 
-                if (fileUrl) {
-                    window.open(fileUrl, '_self');
+                    if (fileUrl) {
+                        window.open(fileUrl, '_self');
+                    }
                 }
-            }
-        })
+            })
     }
 
     return (
@@ -186,7 +187,7 @@ const BookingConfirm = () => {
                     <Image src={logoEn} alt="Logo" />
                     <div className="flex justify-end items-center gap-2 p-[12px_15px] bg-primary-1 rounded-[8px]">
                         <span className="text-white text-xs font-semibold px-3 py-1">
-                            { sessionInfo?.segments?.[0]?.cabinClass ==='Y' ? 'Economy' : 'Busniess'}
+                            {sessionInfo?.segments?.[0]?.cabinClass === 'Y' ? 'Economy' : 'Busniess'}
                         </span>
                     </div>
                 </div>

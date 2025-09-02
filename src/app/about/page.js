@@ -2,6 +2,8 @@ import AboutClient from './AboutClient';
 export const metadata = {
     title: "About Us - FlyCham",
     description: "Discover the story behind FlyCham mission, values, and commitment to delivering a comfortable, safe, and reliable flying experience to destinations across the region.",
+    robots: { index: true, follow: true },
+
     icons: {
         icon: [
 

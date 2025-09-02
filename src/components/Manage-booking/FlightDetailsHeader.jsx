@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { EnvelopeSimple, Printer } from "@phosphor-icons/react/dist/ssr";
+import { EnvelopeSimple, Printer, XCircle } from "@phosphor-icons/react/dist/ssr";
 import SectionTitle from "./SectionTitle";
 import { useDispatch } from "react-redux";
 import { printBookService } from "@/store/Services/manageBookingServices";
 
-const FlightDetailsHeader = ({ isTraveleAgent, onSendEmail, contactEmail }) => {
+const FlightDetailsHeader = ({ isTraveleAgent, onSendEmail, contactEmail, handleClickCancel }) => {
     const EMAIL_RE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
 
     // Remove dangerous/control chars, spaces, angle brackets, quotes, backticks, etc.
@@ -137,47 +137,67 @@ const FlightDetailsHeader = ({ isTraveleAgent, onSendEmail, contactEmail }) => {
 
     return (
         <div className={`w-full py-2 mt-[30px] md:mt-8 mb-[40px] ${isTraveleAgent && "!mt-10"}`}>
-            <div className="flex flex-wrap items-center justify-between md:justify-start gap-3">
-                {/* Title */}
-                <div className="flex items-center gap-3">
-                    <SectionTitle>Flight details</SectionTitle>
-                    <span className="hidden md:block h-6 w-px bg-black" />
-                </div>
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-0 justify-between md:justify-between">
+                <div className="flex flex-wrap items-center justify-between md:justify-start gap-3">
 
-                {/* Actions */}
-                <div className="flex items-center gap-3 text-sm">
-                    <button
-                        disabled
-                        ref={btnRef}
-                        type="button"
-                        onClick={() => setOpenEmailBox((v) => !v)}
-                        aria-expanded={openEmailBox}
-                        aria-controls="email-popover"
-                        // 3) Input focus handlers (add to the email <input>)
-                        onFocus={() => setEmailFocused(true)}
-                        onBlur={() => setEmailFocused(false)}
-                        className={`flex items-center gap-1 transition px-2 py-1 rounded-sm underline  cursor-not-allowed
+
+                    {/* Title */}
+                    <div className="flex items-center gap-3">
+                        <SectionTitle>Flight details</SectionTitle>
+                        {!isTraveleAgent &&
+                            <span className="hidden md:block h-6 w-px bg-black" />
+                        }
+                    </div>
+
+                    {/* Actions */}
+                    {!isTraveleAgent &&
+
+
+
+                        <div className="flex items-center gap-3 text-sm">
+                            <button
+                                disabled
+                                ref={btnRef}
+                                type="button"
+                                onClick={() => setOpenEmailBox((v) => !v)}
+                                aria-expanded={openEmailBox}
+                                aria-controls="email-popover"
+                                // 3) Input focus handlers (add to the email <input>)
+                                onFocus={() => setEmailFocused(true)}
+                                onBlur={() => setEmailFocused(false)}
+                                className={`flex items-center gap-1 transition px-2 py-1 rounded-sm underline  cursor-not-allowed
                       ${openEmailBox || emailFocused
-                                ? 'bg-[#A6CFE0]/20 text-primary-1   '
-                                : 'text-primary-500 hover:bg-[#A6CFE0]/20 hover:text-primary-1 hover:underline'}`}
+                                        ? 'bg-[#A6CFE0]/20 text-primary-1   '
+                                        : 'text-primary-500 hover:bg-[#A6CFE0]/20 hover:text-primary-1 hover:underline'}`}
 
-                    >
-                        <EnvelopeSimple size={20} weight="regular" />
-                        Email
-                    </button>
+                            >
+                                <EnvelopeSimple size={20} weight="regular" />
+                                Email
+                            </button>
 
-                    <span className="h-5 w-px bg-primary-1" />
+                            <span className="h-5 w-px bg-primary-1" />
 
-                    <button
+                            <button
 
-                        onClick={handlePrint}
-                        disabled
-                        className="!cursor-not-allowed flex items-center gap-1 text-primary-500"
-                    >
-                        <Printer size={20} weight="regular" />
-                        Print
-                    </button>
+                                onClick={handlePrint}
+                                disabled
+                                className="!cursor-not-allowed flex items-center gap-1 text-primary-500"
+                            >
+                                <Printer size={20} weight="regular" />
+                                Print
+                            </button>
+                        </div>
+                    }
                 </div>
+                <button
+                    type="button"
+                    disabled
+                    onClick={handleClickCancel}
+                    className={`
+            !cursor-not-allowed  flex items-center font-semibold gap-2 hover:opacity-90 text-alert text-xs md:text-sm `}
+                >
+                    <XCircle size={18} />Cancel booking
+                </button>
             </div>
 
             {/* Popover (fixed to avoid clipping). Mobile: full width; Desktop: left-aligned to Email */}

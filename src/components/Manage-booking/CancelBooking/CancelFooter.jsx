@@ -30,7 +30,7 @@ const CancelFooter = ({ handleClickBack, currentStep, handleClickButton, values 
             case 1:
                 return false;
             case 2:
-                return (isVerified && !underStandCheck);
+                return (!isVerified || !underStandCheck);
             default:
                 return null;
         }

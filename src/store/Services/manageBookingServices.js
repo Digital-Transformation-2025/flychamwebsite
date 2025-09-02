@@ -62,3 +62,18 @@ export const editContactService = createAsyncThunk(
         }
     }
 );
+// ===================================== VERIFY CARD ==============================================
+export const verifyCardService = createAsyncThunk(
+    `${sliceName}/verifyCardService`,
+    async (data, thunkAPI) => {
+        try {
+
+            const response = await apiClient.post(`/api/managebooking/VerifyCard/VerifyCard`, data)
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(
+                error.response?.data?.message || error.message || 'Something went wrong'
+            );
+        }
+    }
+);

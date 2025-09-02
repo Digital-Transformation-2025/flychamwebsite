@@ -9,19 +9,17 @@ import SummaryTable from './SummaryTable';
 import useModal from '@/hooks/useModal';
 import Modal from '@/components/Ui/Modal';
 
-const StepFour = ({  setFieldValue, values }) => {
+const StepFour = ({ setFieldValue, values, handleSubmit ,isSubmitted}) => {
     const { open, show, hide } = useModal();
 
-    const { underStandCheck, last4 } = values
+    const { underStandCheck, last4, isVerified } = values
     const inputRef = useRef(null);
     const handleChange = (e) => {
         // Allow only numbers, max 4 digits
         const value = e.target.value.replace(/\D/g, "").slice(0, 4);
         setFieldValue('last4', value)
     };
-    const handleSendCode = () => {
-        setTimeout(() => alert('Verification code sent!'), 2000);
-    };
+
     const focusInput = () => {
         if (inputRef.current) {
             inputRef.current.focus();
@@ -41,7 +39,12 @@ const StepFour = ({  setFieldValue, values }) => {
                 <div className=" mb-8 "><SummaryTable /></div>
 
                 {/* Verification Section */}
-                <VerificationCard last4={last4} focusInput={focusInput} handleChange={handleChange} inputRef={inputRef} />
+                <VerificationCard last4={last4} focusInput={focusInput}
+                    handleChange={handleChange} inputRef={inputRef}
+                    handleSubmit={handleSubmit}
+                    isVerified={isVerified}
+                    isSubmitted={isSubmitted}
+                />
                 {/* <VerificationSms setFieldValue={setFieldValue} /> */}
             </div>
 
