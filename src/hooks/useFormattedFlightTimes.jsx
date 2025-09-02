@@ -8,7 +8,7 @@ const useFormattedFlightTimes = (flight) => {
 
     const originCode = flight?.common_info?.origin_code;
     const destinationCode = flight?.common_info?.destination_code;
-    const duration = flight?.common_info?.duration;
+    const duration = flight?.common_info?.flight === 'OneWay' && flight?.common_info?.segments[0]?.Duration;
     const stops = flight?.common_info?.stops;
     const flightNumber = flight?.common_info?.flight_number;
 
@@ -50,7 +50,7 @@ const useFormattedFlightTimes = (flight) => {
         // hours,minutes,
         originCode, destinationCode, duration, stops, flightNumber, ecoID, ecoFare,
         busID, busFare, segments, departureAirport, arrivalAirport, segments,
-        currency: currency,flightType
+        currency: currency, flightType
     };
 };
 
