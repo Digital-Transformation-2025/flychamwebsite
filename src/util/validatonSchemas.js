@@ -243,9 +243,27 @@ export const contactSchema = Yup.object().shape({
     countryCode: Yup.string().required('Country code is required'),
     passengerIndex: Yup.number().nullable().required('Please select a contact passenger'),
 });
+const emptyToNull = (v, orig) => (orig === '' ? null : v);
+
 export const contactSchemaInManage = Yup.object({
-    countryCode: Yup.string().required('Country code is required'),
-    mobile: Yup.string().required('Mobile number is required'),
-    email: Yup.string().email('Invalid email').required('Email is required'),
+    phoneCountryCode: Yup.string().required('Country code is required').trim(),
+    phone: Yup.string().required('Mobile number is required').trim().matches(/^\d{6,15}$/, 'Enter a valid mobile number'),
+    email: Yup.string()
+        .required('Email is required'),
+
+    altPhoneCountryCode: Yup.string().transform(emptyToNull).nullable(),
+    altPhone: Yup.string().transform(emptyToNull).nullable()
+        .matches(/^\d{6,15}$/, { message: 'Enter a valid mobile number', excludeEmptyString: true }),
 })
+    .test('alt-pair', function (v) {
+        if (v.altPhone && !v.altPhoneCountryCode) return this.createError({ path: 'altCountryCode', message: 'Country code is required for alternative phone' });
+        if (v.altPhoneCountryCode && !v.altPhone) return this.createError({ path: 'altMobile', message: 'Alternative phone is required' });
+        return true;
+    })
+    .test('primary-alt-different', function (v) {
+        if ((v.altPhone || v.altPhoneCountryCode) && `${v.phoneCountryCode}|${v.phone}` === `${v.altPhoneCountryCode}|${v.altPhone}`) {
+            return this.createError({ path: 'altPhone', message: 'Alternative phone must be different from primary' });
+        }
+        return true;
+    });
 

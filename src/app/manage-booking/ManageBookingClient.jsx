@@ -113,10 +113,19 @@ const ManageBookingClient = ({ rules, reasons }) => {
     }
     const formik = useFormik({
         enableReinitialize: true,
-        initialValues: { contact },
-        // validationSchema: contactSchemaInManage,
+        initialValues: {
+            name: `${title}. ${firstName}${lastName}` || '',
+            phoneCountryCode: countryCodeTele || '',
+            phone: telephone || '',
+            email: email || '',
+            altPhoneCountryCode: countryCodeTele,
+            altPhone: mobile || '',
+            type: 'Primary',
+        },
+
+        validationSchema: contactSchemaInManage,
         onSubmit: async (values) => {
-            const { email, phone, altPhone, phoneCountryCode, altPhoneCountryCode } = values.contact || {}
+            const { email, phone, altPhone, phoneCountryCode, altPhoneCountryCode } = values || {}
             const data = {
                 SessionId: sessionId,
                 IsDelete: false,
@@ -141,7 +150,7 @@ const ManageBookingClient = ({ rules, reasons }) => {
 
         },
     });
-
+    console.log('values', formik.values);
 
 
     const flight = {
@@ -250,11 +259,10 @@ const ManageBookingClient = ({ rules, reasons }) => {
                     isOpen={showContactModal}
                     onClose={() => setShowContactModal(false)}
                     contact={contact}
-                    onSave={(payload) => console.log('✅ Save payload:', payload)}
                     errors={formik.errors}
                     touched={formik.touched}
                     handleSubmit={formik.handleSubmit}
-                    formikValues={formik.values}
+                    values={formik.values}
                     handleChange={formik.handleChange}
                     setFieldValue={formik.setFieldValue}
                 />

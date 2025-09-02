@@ -19,7 +19,7 @@ export default function CustomDateInput({ value, onChange, error }) {
                     <div
                         onClick={handlePlaceholderClick}
                         className={
-                            `             absolute  gap-4 inset-0 bg-100 ${error ? 'text-alert' : 'text-600'} text-[16px] px-4 py-3 rounded-lg cursor-text z-10 flex items-center justify-between
+                            `             absolute  gap-4 inset-0 bg-100 ${error ? 'text-alert' : 'text-600'} text-[14px]  px-4 py-3 rounded-lg cursor-text z-10 flex items-center justify-between
                          ${error ? ' border border-alert' : 'border-gray-300'}`
                         }
                     >
@@ -39,7 +39,7 @@ export default function CustomDateInput({ value, onChange, error }) {
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => !value && setIsFocused(false)}
                 className={
-                    ` h-14 w-full bg-100 text-600  text-[16px] px-4 py-3 pr-10 rounded-xl  focus:outline-none 
+                    ` h-14 w-full bg-100 text-600  text-[14px]  px-4 py-3 pr-10 rounded-xl  focus:outline-none 
 
                      appearance-none
     [-webkit-appearance:none]  

@@ -18,30 +18,32 @@ export function ContactEditModal({
     touched,
     handleSubmit,
     handleChange,
-    formikValues,
+    values,
     setFieldValue,
 }) {
     const { isLoadingEditContact } = useSelector((s) => s.manageBook)
-    const values = formikValues.contact || {}
-    console.log('values', values);
-    const v = (path, fallback = '') => getIn(formikValues, path) ?? fallback;
+
+
+    const v = (path, fallback = '') => getIn(values, path) ?? fallback;
     const [isAlternativeInfo, setIsAlternativeInfo] = useState(false)
     const onClickAlternative = () => {
         setIsAlternativeInfo((prev) => {
             // If toggling off (user hides alt phone field), reset the form values
             if (prev === true) {
-                setFieldValue('contact.altPhoneCountryCode', '');
-                setFieldValue('contact.altPhone', '');
+                setFieldValue('altPhoneCountryCode', '');
+                setFieldValue('altPhone', '');
             }
             if (!prev) {
-                setFieldValue('contact.altPhoneCountryCode', values.altPhoneCountryCode);
-                setFieldValue('contact.altPhone', values.altPhone);
+                setFieldValue('altPhoneCountryCode', values.altPhoneCountryCode);
+                setFieldValue('altPhone', values.altPhone);
             }
             return !prev;
         });
     };
 
     const getErr = (name) => touched && touched[name] && errors && errors[name];
+    console.log('errors', errors);
+
     const Divider = () => <span className="hidden sm:block h-5 w-px bg-[#DADAD7]" />;
 
     return (
@@ -65,7 +67,7 @@ export function ContactEditModal({
 
                                 {/* Name */}
                                 <div className="px-6 pt-4 text-start text-sm">
-                                    <span className="text-primary-1 font-medium  cursor-pointer">{contact?.name || 'Passenger'}</span>
+                                    <span className="text-800 font-semibold  cursor-pointer">{contact?.name || 'Passenger'}</span>
                                     <span className="mx-2  text-500">(Adult)</span>
                                 </div>
 
@@ -76,41 +78,41 @@ export function ContactEditModal({
                                         <div>
                                             <CustomDropdown
                                                 type="countries"
-                                                selected={v('contact.phoneCountryCode')}
-                                                onChange={(val) => setFieldValue('contact.phoneCountryCode', val)}
+                                                selected={v('phoneCountryCode')}
+                                                onChange={(val) => setFieldValue('phoneCountryCode', val)}
                                                 options={countries}
                                                 placeholder="Country code"
-                                                error={Boolean(getErr('contact.phoneCountryCode'))}
+                                                error={Boolean(getErr('phoneCountryCode'))}
                                             />
-                                            <ErrorMessage error={getErr('contact.phoneCountryCode')} />
+                                            <ErrorMessage error={getErr('phoneCountryCode')} />
                                         </div>
 
                                         <div>
                                             <Input
-                                                id="contact.phone"
-                                                name="contact.phone"
+                                                id="phone"
+                                                name="phone"
                                                 type="tel"
                                                 label="Phone number"
-                                                value={v('contact.phone')}
+                                                value={v('phone')}
                                                 onChange={handleChange}
-                                                error={getErr('contact.phone')}
+                                                error={getErr('phone')}
                                             />
-                                            <ErrorMessage error={getErr('contact.phone')} />
+                                            <ErrorMessage error={getErr('phone')} />
                                         </div>
                                     </div>
 
                                     {/* Email */}
                                     <div>
                                         <Input
-                                            id="contact.email"
-                                            name="contact.email"
+                                            id="email"
+                                            name="email"
                                             type="email"
                                             label="Email address"
-                                            value={v('contact.email')}
+                                            value={v('email')}
                                             onChange={handleChange}
-                                            error={getErr('contact.email')}
+                                            error={getErr('email')}
                                         />
-                                        <ErrorMessage error={getErr('contact.email')} />
+                                        <ErrorMessage error={getErr('email')} />
                                     </div>
                                     <AddAltNumber onClickAlternative={onClickAlternative} isAlternativeInfo={isAlternativeInfo} />
                                     {/* <div className="flex gap-2 text-start text-sm">
@@ -126,26 +128,26 @@ export function ContactEditModal({
                                             <div>
                                                 <CustomDropdown
                                                     type="countries"
-                                                    selected={v('contact.altPhoneCountryCode')}
-                                                    onChange={(val) => setFieldValue('contact.altPhoneCountryCode', val)}
+                                                    selected={v('altPhoneCountryCode')}
+                                                    onChange={(val) => setFieldValue('altPhoneCountryCode', val)}
                                                     options={countries}
                                                     placeholder="Country code"
-                                                    error={Boolean(getErr('contact.altPhoneCountryCode'))}
+                                                    error={Boolean(getErr('altPhoneCountryCode'))}
                                                 />
-                                                <ErrorMessage error={getErr('contact.altPhoneCountryCode')} />
+                                                <ErrorMessage error={getErr('altPhoneCountryCode')} />
                                             </div>
 
                                             <div>
                                                 <Input
-                                                    id="contact.altPhone"
-                                                    name="contact.altPhone"
+                                                    id="altPhone"
+                                                    name="altPhone"
                                                     type="tel"
                                                     label="Mobile number"
-                                                    value={v('contact.altPhone')}
+                                                    value={v('altPhone')}
                                                     onChange={handleChange}
-                                                    error={getErr('contact.altPhone')}
+                                                    error={getErr('altPhone')}
                                                 />
-                                                <ErrorMessage error={getErr('contact.altPhone')} />
+                                                <ErrorMessage error={getErr('altPhone')} />
                                             </div>
                                         </div>
                                     }
@@ -154,11 +156,16 @@ export function ContactEditModal({
                                             disabled={isLoadingEditContact}
                                             // onClick={handleSubmit}
                                             type='submit'
-                                            className={`min-w-[160px] rounded-lg
-                                                 bg-secondary-1 
-                                                  text-white text-sm md:text-[16px] font-semibold px-6 py-2.5`}
+                                            className={`
+                                                 rounded-lg
+                                                   text-sm md:text-[16px] font-semibold px-16 py-3
+                                                  ${isLoadingEditContact ?
+                                                     'w-full md:w-auto px-6 py-3 bg-gray-300 text-gray-500 cursor-not-allowed  '
+                                                    :'bg-secondary-1 text-white'
+                                                    }
+                                                  `}
                                         >
-                                            Save
+                                            {isLoadingEditContact ? 'Processing' : "Save"}
                                         </button>
                                     </div>
                                 </form>

@@ -32,7 +32,7 @@ const StepBtns = ({ activeStep, setActiveStep, handleSubmit }) => {
                 disabled={isLoading}
                 onClick={handleSubmit}
                 className={`transition font-medium rounded-md
-    ${isLoading
+                        ${isLoading
                         ? 'w-full md:w-auto px-6 py-3 bg-gray-300 text-gray-500 cursor-not-allowed font-bold text-base sm:text-[16px] font-montserrat flex items-center justify-center gap-2'
                         : 'group w-full md:w-auto px-6 py-3 bg-[var(--secondary-1)] hover:bg-[#C2B48B] text-white font-bold text-base sm:text-[16px] font-montserrat flex items-center justify-center gap-2'
                     }`}

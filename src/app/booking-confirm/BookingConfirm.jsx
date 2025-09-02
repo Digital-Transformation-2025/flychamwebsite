@@ -186,7 +186,7 @@ const BookingConfirm = () => {
                     <Image src={logoEn} alt="Logo" />
                     <div className="flex justify-end items-center gap-2 p-[12px_15px] bg-primary-1 rounded-[8px]">
                         <span className="text-white text-xs font-semibold px-3 py-1">
-                            {selectedPlan?.title}
+                            { sessionInfo?.segments?.[0]?.cabinClass ==='Y' ? 'Economy' : 'Busniess'}
                         </span>
                     </div>
                 </div>

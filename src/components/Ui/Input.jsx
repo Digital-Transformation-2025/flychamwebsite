@@ -25,7 +25,7 @@ const Input = ({
         value={value}
         onChange={onChange}
         aria-invalid={hasError}
-        className={`  h-14 md:h-auto peer block w-full bg-100 rounded-md   px-4 pt-6 pb-2 text-[16px] placeholder-transparent focus:outline-none focus:ring-0
+        className={`  h-14 md:h-auto peer block w-full bg-100 rounded-md   px-4 pt-6 pb-2 text-sm  placeholder-transparent focus:outline-none focus:ring-0
           ${hasError
             ? 'border border-alert text-alert focus:!border-alert'
             : 'border-gray-300 text-gray-600 focus:!border-[var(--primary-1)]'}
@@ -34,12 +34,14 @@ const Input = ({
       />
       <label
         htmlFor={id}
-        className={`absolute top-0 start-0 px-4 pt-[18px] text-sm truncate pointer-events-none transition duration-100 ease-in-out origin-[0_0] h-full
+        className={`absolute top-0 start-0 px-4 pt-[18px] text-sm    truncate pointer-events-none transition duration-100 ease-in-out origin-[0_0] h-full
           peer-disabled:opacity-50 peer-disabled:pointer-events-none
           peer-focus:scale-90 peer-focus:-translate-y-2
           peer-not-placeholder-shown:scale-90 peer-not-placeholder-shown:-translate-y-2
           ${hasError ? 'text-alert' : 'text-gray-600'}
-          peer-focus:text-[var(--primary-1)] peer-not-placeholder-shown:text-[var(--primary-1)]`}
+          peer-focus:text-[var(--primary-1)]
+    peer-focus:text-xs peer-not-placeholder-shown:text-xs
+           peer-not-placeholder-shown:text-[var(--primary-1)]`}
       >
         {label}
       </label>
