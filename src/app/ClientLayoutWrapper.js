@@ -42,7 +42,7 @@ export default function ClientLayoutWrapper({ children }) {
   const [isOpen, setIsOpen] = useState(true)
   // const { isModifySearch } = useSelector((state) => state.flights)
   // ====================== INSPECTOR ====================== 
-  // useBlockInspect()
+  useBlockInspect()
   // ====================== INSPECTOR ====================== 
 
   const pathname = usePathname()

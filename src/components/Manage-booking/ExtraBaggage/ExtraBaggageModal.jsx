@@ -127,31 +127,35 @@ const ExtraBaggageModal = ({
                 <div className="mx-auto w-full">
                     <div className=" bg-white md:shadow-[0_14px_40px_rgba(0,0,0,0.20)] h-[100vh] md:h-[100vh] flex flex-col justify-between">
                         {/* Header */}
-                        <ModalHeader
-                            onClose={onClose}
-                            legs={legs}
-                            activeLeg={activeLeg}
-                            setActiveLeg={setActiveLeg}
-                        />
-                        <div className='w-full max-w-6xl mx-auto overflow-auto'>
+                        <div>
 
 
-
-
-                            {/* Body */}
-                            {/* <Divider /> */}
-                            {/* Inside ExtraBaggageModal return */}
-                            <ModalBody
-                                passengers={passengers}
-                                setMobileSheetOpen={setMobileSheetOpen}
-                                activePassenger={activePassenger}
-                                setActivePassenger={setActivePassenger}
-                                clearForPassenger={clearForPassenger}
-                                selectedKg={selectedKg}
-                                selectedOption={selectedOption}
-                                setSelectedOption={setSelectedOption}
-                                options={options}
+                            <ModalHeader
+                                onClose={onClose}
+                                legs={legs}
+                                activeLeg={activeLeg}
+                                setActiveLeg={setActiveLeg}
                             />
+                            <div className='w-full max-w-7xl mx-auto overflow-auto'>
+
+
+
+
+                                {/* Body */}
+                                {/* <Divider /> */}
+                                {/* Inside ExtraBaggageModal return */}
+                                <ModalBody
+                                    passengers={passengers}
+                                    setMobileSheetOpen={setMobileSheetOpen}
+                                    activePassenger={activePassenger}
+                                    setActivePassenger={setActivePassenger}
+                                    clearForPassenger={clearForPassenger}
+                                    selectedKg={selectedKg}
+                                    selectedOption={selectedOption}
+                                    setSelectedOption={setSelectedOption}
+                                    options={options}
+                                />
+                            </div>
                         </div>
                         {/* Footer */}
                         {/* Desktop footer (inside modal card) */}

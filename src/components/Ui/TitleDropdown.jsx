@@ -47,7 +47,7 @@ export default function CustomDropdown({
       <button
         type="button"
         onClick={toggleDropdown}
-        className={`h-14 md:h-auto w-full px-4 py-3  text-left  hover:cursor-pointer  relative ${error ? 'border border-alert' : 'border-gray-300'}`}
+        className={`h-14 md:h-auto w-full px-4 py-3  text-left  hover:cursor-pointer rounded-md   relative ${error ? 'border border-alert' : 'border-gray-300'}`}
       >
         <span className={`text-[14px]  ${error ? 'text-alert' : 'text-600'}`}>
           {selected

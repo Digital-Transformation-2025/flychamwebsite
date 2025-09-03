@@ -8,7 +8,7 @@ const ModalHeader = ({ onClose, legs, activeLeg, setActiveLeg }) => {
             {/* Desktop header */}
             <div className="hidden md:block p-6  ">
                 <div className="flex items-start justify-between">
-                    <div className='w-full max-w-6xl mx-auto'>
+                    <div className='w-full max-w-7xl mx-auto'>
                         <h2 className="text-[28px] font-semibold text-800">
                             Select additional baggage
                         </h2>

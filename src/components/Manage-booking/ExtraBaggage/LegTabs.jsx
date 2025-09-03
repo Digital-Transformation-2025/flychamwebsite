@@ -23,7 +23,7 @@ const LegTabs = ({ legs, activeId, onChange }) => {
         <div className="mt-3 border-b border-[#EAEAE8]  ">
             <div
                 ref={containerRef}
-                className="relative flex gap-8 justify-center md:justify-start w-full max-w-6xl mx-auto"
+                className="relative flex gap-8 justify-center md:justify-start w-full max-w-7xl mx-auto"
             >
                 {legs.map((leg) => {
                     const active = leg.id === activeId;

@@ -86,7 +86,12 @@ const ContactDetailsSection = ({ passengers, values, setFieldValue, handleChange
                     <ErrorMessage error={isTouched('phoneNumber') && getError('phoneNumber')} />
                 </div>
             </div>
-            <AddAltNumber onClickAlternative={onClickAlternative} isAlternativeInfo={isAlternativeInfo} onClickDelete={onClickDelete} />
+            <AddAltNumber
+                onClickAlternative={onClickAlternative}
+                isAlternativeInfo={isAlternativeInfo}
+                onClickDelete={onClickDelete}
+                isValue={Boolean(values.MobileNumber || values.CountryCodeMobileNumber)}
+            />
             {isAlternativeInfo
                 &&
                 <div className="flex flex-col lg:flex-row items-center md:pr-8 gap-4 my-4">
@@ -120,7 +125,7 @@ const ContactDetailsSection = ({ passengers, values, setFieldValue, handleChange
                 </div>
             }
 
-            <div className="flex flex-col gap-4 mb-4 md:pr-8">
+            <div className="flex flex-col  mb-4 md:pr-8">
                 <Input
                     name="contact.email"
                     value={values.email}
