@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Ticket, User, Info } from "@phosphor-icons/react";
@@ -45,7 +45,7 @@ const ManageTap = () => {
                         router.push("/manage-booking");
 
                     } else {
-                        const { title, description } =  result.alert  || {};
+                        const { title, description } = result.alert || {};
                         setAlert({ title: title || "Server Error", description: description || "Something went wrong on our side. Please try again later." })
                         setModalOpen(true);
                     }
@@ -69,17 +69,26 @@ const ManageTap = () => {
             .trimStart()
             .toUpperCase();
         formik.setFieldValue('lastName', englishOnly);
-        dispatch(setPnrParams({ pnr, lastName :englishOnly}))
+        dispatch(setPnrParams({ pnr, lastName: englishOnly }))
 
     };
 
+    useEffect(() => {
+        if (pnr && lastName) {
+            const timer = setTimeout(() => {
+                dispatch(setPnrParams({ pnr: "", lastName: "" }));
+            }, 24 * 60 * 60 * 1000); // 24 hours
+
+            return () => clearTimeout(timer);
+        }
+    }, [pnr, lastName, dispatch]);
 
     const canSearch = (!!formik.values.pnr && !!formik.values.lastName)
 
     return (
         <div className="h-auto  md:h-[180px]">
-            <div className="h-[30px]"></div>
-            <form onSubmit={formik.handleSubmit} className="w-full max-w-5xl mx-auto">
+            {/* <div className="h-[30px]"></div> */}
+            <form onSubmit={formik.handleSubmit} className="w-full max-w-7xl mx-auto">
                 {/* inputs row */}
                 <div className="flex flex-col md:flex-row gap-6 items-stretch">
                     <FloatingInput

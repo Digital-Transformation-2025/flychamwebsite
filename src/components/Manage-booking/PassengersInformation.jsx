@@ -174,7 +174,7 @@ const PassengerCard = ({ passenger, isTraveleAgent, isReturnFlightExists, tab, s
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 px-6 py-5 bg-white">
                 {infoData.map(({ title, value, icon: Icon, btn }, i) => (
                     <div key={i}>
-                        <InfoLabel title={title} value={value} icon={<Icon size={18} className="text-primary-1" />} />
+                        <InfoLabel title={title} value={value} icon={<Icon size={24} className="text-primary-1" />} />
                         {btn && !isTraveleAgent && <SmallButton handleClickBtn={handleClickBtn}>{btn}</SmallButton>}
                     </div>
                 ))}
