@@ -33,6 +33,10 @@ const ContactDetailsSection = ({ passengers, values, setFieldValue, handleChange
             return !prev;
         });
     };
+    const onClickDelete = () => {
+        setFieldValue('contact.MobileNumber', '');
+        setFieldValue('contact.CountryCodeMobileNumber', '');
+    }
 
     return (
         <div className="mt-4 ">
@@ -82,7 +86,7 @@ const ContactDetailsSection = ({ passengers, values, setFieldValue, handleChange
                     <ErrorMessage error={isTouched('phoneNumber') && getError('phoneNumber')} />
                 </div>
             </div>
-            <AddAltNumber onClickAlternative={onClickAlternative} isAlternativeInfo={isAlternativeInfo} />
+            <AddAltNumber onClickAlternative={onClickAlternative} isAlternativeInfo={isAlternativeInfo} onClickDelete={onClickDelete} />
             {isAlternativeInfo
                 &&
                 <div className="flex flex-col lg:flex-row items-center md:pr-8 gap-4 my-4">

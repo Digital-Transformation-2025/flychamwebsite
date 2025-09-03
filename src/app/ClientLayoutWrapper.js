@@ -42,7 +42,7 @@ export default function ClientLayoutWrapper({ children }) {
   const [isOpen, setIsOpen] = useState(true)
   // const { isModifySearch } = useSelector((state) => state.flights)
   // ====================== INSPECTOR ====================== 
-  useBlockInspect()
+  // useBlockInspect()
   // ====================== INSPECTOR ====================== 
 
   const pathname = usePathname()
@@ -120,7 +120,9 @@ export default function ClientLayoutWrapper({ children }) {
 
   const isDynamicHomePage = pathname.startsWith('/c/');
 
-
+  const isExcluded = excludedPaths.some((p) =>
+    pathname === p || pathname.startsWith(`${p}/`)
+  );
 
   return (
     <ReduxProvider>
@@ -145,7 +147,7 @@ export default function ClientLayoutWrapper({ children }) {
         <div className="flex h-screen overflow-hidden">
           {/* Sidebar */}
           <aside className="hidden xl:block h-screen shadow-xl z-50">
-            {!excludedPaths.includes(pathname) && (
+            {!isExcluded && (
               <SideBar navItems={navItems} isOpen={isOpen} setIsOpen={setIsOpen} />
             )}
           </aside>

@@ -26,14 +26,17 @@ export const metadata = {
         other: [{ rel: 'mask-icon', url: '/safari-pinned-tab.svg', color: '#0B4572' }],
     },
 };
-export default async function FlightResults() {
+export default async function FlightResults({ params }) {
     const airPorts = await getAirports()
     const pos = await getPos()
+    const id = await params.id
 
-
+    console.log('id', id);
 
     return (
-        <FlightResultsClient pos={pos} airPorts={airPorts}>
+        <FlightResultsClient pos={pos}
+            airPorts={airPorts}
+            cId={id}>
         </FlightResultsClient>
 
     );

@@ -21,7 +21,7 @@ import BookingBox from '@/components/Home/BookingBox'
 import { useDispatch, useSelector } from 'react-redux'
 import { setFormikData, setSearchParams } from '@/store/flightSlice'
 import { setBookInfo } from '@/store/manageSlice'
-const HomeClient = ({ flights, pos }) => {
+const HomeClient = ({ flights, pos, cId }) => {
   const dispatch = useDispatch()
   const isMobile = useIsMobile(1024);
   const isMob = useIsMobile();
@@ -62,7 +62,9 @@ const HomeClient = ({ flights, pos }) => {
         {/* <FlightSearch isHome /> */}
 
         <BookingBox setShowMobileModal={setShowMobileModal} showMobileModal={showMobileModal} pos={pos}
-          flights={flights} />
+          flights={flights}
+          cId={cId}
+          />
       </div>
 
 

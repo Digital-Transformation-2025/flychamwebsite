@@ -126,16 +126,17 @@ const ExtraBaggageModal = ({
             <div className="absolute inset-0 ">
                 <div className="mx-auto w-full">
                     <div className=" bg-white md:shadow-[0_14px_40px_rgba(0,0,0,0.20)] h-[100vh] md:h-[100vh] flex flex-col justify-between">
+                        {/* Header */}
+                        <ModalHeader
+                            onClose={onClose}
+                            legs={legs}
+                            activeLeg={activeLeg}
+                            setActiveLeg={setActiveLeg}
+                        />
                         <div className='w-full max-w-6xl mx-auto overflow-auto'>
 
 
-                            {/* Header */}
-                            <ModalHeader
-                                onClose={onClose}
-                                legs={legs}
-                                activeLeg={activeLeg}
-                                setActiveLeg={setActiveLeg}
-                            />
+
 
                             {/* Body */}
                             {/* <Divider /> */}

@@ -8,7 +8,7 @@ import FromToSelector from '../Home/FromToSelector';
 import BookingBox from '../Home/BookingBox';
 import useIsMobile from '@/hooks/useIsMobile';
 
-const ModifySearchModal = ({ isOpen, onClose, pos, airPorts, handleResetToFirstStep, setSelectedFlight }) => {
+const ModifySearchModal = ({ isOpen, onClose, pos, airPorts, handleResetToFirstStep, setSelectedFlight,cId }) => {
     const router = useRouter();
     const isMobile = useIsMobile()
 
@@ -45,6 +45,7 @@ const ModifySearchModal = ({ isOpen, onClose, pos, airPorts, handleResetToFirstS
                                 <BookingBox pos={pos} flights={airPorts} isResultsPage handleResetToFirstStep={handleResetToFirstStep}
                                     onCloseMidifySearch={onClose}
                                     setSelectedFlight={setSelectedFlight}
+                                    cId={cId}
                                 />
 
                             </div>

@@ -32,7 +32,8 @@ import Summary from '@/components/FlightResults/PassengerDetails/Summary'
 import SkeletonFlightCard from '@/components/FlightResults/FlighSelectStep/SkeletonFlightCard'
 import { useRouter } from 'next/navigation'
 import useNextDisabled from '@/hooks/useNextDisabled'
-const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
+const FlightResultsClient = ({ pos = [], airPorts = [] ,cId}) => {
+
     const router = useRouter()
 
     const scrollRef = useRef(null)
@@ -546,6 +547,7 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
                 pos={pos}
                 handleResetToFirstStep={handleResetToFirstStep}
                 setSelectedFlight={setSelectedFlight}
+                cId={cId}
 
             />
             <PosSelectorModal handleSelectPos={handleSelectPos} isOpen={showPosModal} setIsOpen={setShowPosModal} />

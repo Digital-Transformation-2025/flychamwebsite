@@ -56,6 +56,9 @@ export async function getPos() {
 export default async function DynamicPage({ params }) {
   const flights = await getAirports()
   const pos = await getPos()
-  return <HomeClient flights={flights} pos={pos} />;
+  const id = await params.id
+  console.log("id:", id);
+
+  return <HomeClient flights={flights} pos={pos} cId={id} />;
 };
 

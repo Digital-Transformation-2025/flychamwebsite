@@ -8,7 +8,7 @@ const ModalHeader = ({ onClose, legs, activeLeg, setActiveLeg }) => {
             {/* Desktop header */}
             <div className="hidden md:block p-6  ">
                 <div className="flex items-start justify-between">
-                    <div>
+                    <div className='w-full max-w-6xl mx-auto'>
                         <h2 className="text-[28px] font-semibold text-800">
                             Select additional baggage
                         </h2>
@@ -17,13 +17,13 @@ const ModalHeader = ({ onClose, legs, activeLeg, setActiveLeg }) => {
                             online in just a few clicks.
                         </p>
                     </div>
-                    <button
+                    {/* <button
                         onClick={onClose}
                         className="p-2 rounded hover:bg-gray-100"
                         aria-label="Close"
                     >
                         <X size={16} />
-                    </button>
+                    </button> */}
                 </div>
                 <LegTabs legs={legs} activeId={activeLeg} onChange={setActiveLeg} />
             </div>

@@ -31,8 +31,9 @@ import ManageTap from "./widget/Manage/ManageTap";
 const tabs = ["book", "manage", "flight status"];
 const BookingBox = ({ flights, pos, isResultsPage = false, handleResetToFirstStep = () => { }, onCloseMidifySearch = () => { },
     setSelectedFlight = () => { },
-    setShowMobileModal = () => { }, showMobileModal = false
+    setShowMobileModal = () => { }, showMobileModal = false, cId
 }) => {
+
     const isMobile = useIsMobile()
     const dispatch = useDispatch()
     const router = useRouter()
@@ -125,7 +126,6 @@ const BookingBox = ({ flights, pos, isResultsPage = false, handleResetToFirstSte
         onSubmit: (values) => {
             setSubmitted(true);
 
-
             const {
                 cabinClass,
                 source,
@@ -169,8 +169,9 @@ const BookingBox = ({ flights, pos, isResultsPage = false, handleResetToFirstSte
                 return
             }
             startTransition(() => {
-                router.push('/search-results');   // ← navigation wrapped in a transition
-            }); handleResetToFirstStep()
+                router.push(`/${cId ? `search-results/c/${cId}` : 'search-results'}`);
+            });
+            handleResetToFirstStep()
             onCloseMidifySearch()
         }
 
@@ -505,7 +506,7 @@ const BookingBox = ({ flights, pos, isResultsPage = false, handleResetToFirstSte
                 <ManageTap />
             }
             {activeTab === "book" &&
-                <div className={`${!isResultsPage &&'h-[180px]'}`}>
+                <div className={`${!isResultsPage && 'h-[180px]'}`}>
 
                     {isResultsPage && (
                         <ModalTitle onCloseMidifySearch={onCloseMidifySearch} />
@@ -612,6 +613,7 @@ const BookingBox = ({ flights, pos, isResultsPage = false, handleResetToFirstSte
                                 setFieldValue={formik.setFieldValue}
                                 values={formik.values}
                                 handleSubmit={formik.handleSubmit}
+                                cId={cId}
                             />
                         </form>
 
