@@ -35,13 +35,13 @@ const BookingNotFoundModal = ({ open, onClose, title, description, isBtn }) => {
                         >
                             <Dialog.Panel className="relative w-[620px] max-w-[92vw] rounded-xl bg-white shadow-[0_14px_40px_rgba(0,0,0,0.20)]">
                                 {/* Close */}
-                                <button
+                                {/* <button
                                     aria-label="Close"
                                     onClick={onClose}
                                     className="absolute right-4 top-4 text-800 hover:text-[#5F5F5C] transition"
                                 >
                                     <X size={16} weight="bold" />
-                                </button>
+                                </button> */}
 
                                 {/* Content spacing matches reference: p-6 md:p-7 */}
                                 <div className="p-6 md:p-7 md:pb-10">
@@ -75,7 +75,7 @@ const BookingNotFoundModal = ({ open, onClose, title, description, isBtn }) => {
                                                 onClick={onClose}
                                                 className="flex items-end justify-end rounded-lg bg-primary-1 px-12 py-3 text-[16px] font-semibold text-[#FDFDFC] hover:opacity-90"
                                             >
-                                                Back to home
+                                                Cancel
                                             </button>
                                         </div>
                                     }

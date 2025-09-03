@@ -53,7 +53,7 @@ export const editContactService = createAsyncThunk(
     async (data, thunkAPI) => {
         try {
 
-            const response = await apiClient.post(`/api/managebooking/EditContactInfo/EditContactInfo`, data)
+            const response = await apiClient.post(`/api/managebooking/EditContactInfo/EditContactInfo?language=en`, data)
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(

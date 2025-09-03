@@ -1,5 +1,6 @@
 'use client'
 import FlightDetailsModal from '@/components/FlightResults/FlighSelectStep/FlightDetailsModal';
+import SessionExpiredModal from '@/components/FlightResults/SessionExpiredModal';
 import CancelBookingModal from '@/components/Manage-booking/CancelBooking/CancelBookingModal';
 import ContactDetailsCardSkeleton from '@/components/Manage-booking/Contact/ContactDetailsCardSkeleton';
 import ContactDetails from '@/components/Manage-booking/ContactDetails';
@@ -47,6 +48,13 @@ const ManageBookingClient = ({ rules, reasons }) => {
     const router = useRouter()
     const dispatch = useDispatch()
     const [isAlternativeInfo, setIsAlternativeInfo] = useState(false)
+    const [isSessionModalOpen, setSessionModalOpen] = useState(false);
+    const [expiredInfo, setExpiredInfo] = useState({
+        title: '',
+        description: '',
+        isSecBtnExsist: false
+
+    });
 
     const { isLoading, bookInfo, pnrParams } = useSelector((s) => s.manageBook)
     const { isTraveleAgent, mainImage, segments, bookingReference: pnr, contactInfo, passengers, sessionId, isAlternativePhone } = bookInfo || {}
@@ -129,6 +137,7 @@ const ManageBookingClient = ({ rules, reasons }) => {
         onSubmit: async (values) => {
             const { email, phone, altPhone, phoneCountryCode, altPhoneCountryCode, IsDelete } = values || {}
             const data = {
+                // SessionId: 'H71iWtLXuZXqqORfUayNHGUxRPyvH6E9GW1dmUISyF4h2QfGLcYRC1pA60TTzzIi',
                 SessionId: sessionId,
                 IsDelete,
                 contact: {
@@ -145,8 +154,19 @@ const ManageBookingClient = ({ rules, reasons }) => {
             }
             dispatch(editContactService(data)).then((action) => {
                 if (editContactService.fulfilled.match(action)) {
-                    getPnrData()
-                    setShowContactModal(false);
+                    if (Boolean(action.payload.result.alert)) {
+                        setSessionModalOpen(true)
+                        const { title, description } = action.payload.result.alert
+                        if (title === 'Session expierd') {
+                            setExpiredInfo({ title, description, isSecBtnExsist: true })
+
+                        } else {
+                            setExpiredInfo({ title, description })
+                        }
+                    } else {
+                        getPnrData()
+                        setShowContactModal(false);
+                    }
                 }
             });
 
@@ -178,8 +198,9 @@ const ManageBookingClient = ({ rules, reasons }) => {
         const data = { lastName: pnrParams.lastName, PNR: pnrParams.pnr };
         dispatch(searchBookService(data)).then((action) => {
             if (searchBookService.fulfilled.match(action)) {
-                console.log('action', action.payload);
-
+                if(isSessionModalOpen){
+                    setSessionModalOpen(false)
+                }
             }
             if (searchBookService.rejected.match(action)) {
                 router.push("/")
@@ -293,6 +314,15 @@ const ManageBookingClient = ({ rules, reasons }) => {
                     isOpen={isShowDetailsModalOpen}
                     onClose={() => setFlightDetailsOpen(false)}
                     flight={flight}
+                />
+                <SessionExpiredModal
+                    isOpen={isSessionModalOpen}
+                    onClose={() => setSessionModalOpen(false)}
+                    handleClickCta={getPnrData}
+                    title={expiredInfo?.title || ''}
+                    description={expiredInfo?.description || ''}
+                    isSecBtnExsist={expiredInfo?.isSecBtnExsist || ''}
+                    loading={isLoading}
                 />
 
             </div>)

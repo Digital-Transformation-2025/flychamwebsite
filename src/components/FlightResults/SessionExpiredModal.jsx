@@ -6,10 +6,8 @@ import { useRouter } from 'next/navigation';
 import { Warning } from '@phosphor-icons/react';
 import { useSelector } from 'react-redux';
 
-const SessionExpiredModal = ({ isOpen, handleSearchAgain }) => {
+const SessionExpiredModal = ({ isOpen, handleClickCta, title, description, isSecBtnExsist,loading }) => {
   const router = useRouter();
-  const { isLoadingFlights } = useSelector((s) => s.flights);
-
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={() => { }}>
@@ -46,12 +44,11 @@ const SessionExpiredModal = ({ isOpen, handleSearchAgain }) => {
                 as="h3"
                 className="text-xl sm:text-[26px] font-semibold text-primary-1"
               >
-                Your Session Has Expired
+                {title}
               </Dialog.Title>
 
               <p className="mt-3 sm:mt-4 text-sm sm:text-[16px] text-600 font-medium">
-                Oops! Looks like your session timed out. Please search again or return to the
-                homepage
+                {description}
               </p>
 
               <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
@@ -61,18 +58,21 @@ const SessionExpiredModal = ({ isOpen, handleSearchAgain }) => {
                 >
                   Back to home page
                 </button>
+                {isSecBtnExsist
+                  &&
+                  <button
+                    onClick={handleClickCta}
+                    disabled={loading}
+                    className={`flex items-center justify-center gap-2 text-sm sm:text-[16px] font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-md transition 
+                    ${loading
+                        ? 'bg-gray-300 cursor-not-allowed text-white'
+                        : 'bg-primary-1 text-white hover:bg-white hover:text-primary-1 hover:border hover:border-primary-1 hover:shadow-lg'
+                      }`}
+                  >
+                    {loading ? 'Loading...' : 'Search again'}
+                  </button>
+                }
 
-                <button
-                  onClick={handleSearchAgain}
-                  disabled={isLoadingFlights}
-                  className={`flex items-center justify-center gap-2 text-sm sm:text-[16px] font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-md transition 
-                    ${isLoadingFlights
-                      ? 'bg-gray-300 cursor-not-allowed text-white'
-                      : 'bg-primary-1 text-white hover:bg-white hover:text-primary-1 hover:border hover:border-primary-1 hover:shadow-lg'
-                    }`}
-                >
-                  {isLoadingFlights ? 'Loading...' : 'Search again'}
-                </button>
               </div>
             </Dialog.Panel>
           </Transition.Child>

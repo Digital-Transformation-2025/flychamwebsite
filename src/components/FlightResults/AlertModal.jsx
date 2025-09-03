@@ -5,7 +5,7 @@ import { Fragment } from 'react';
 import { useRouter } from 'next/navigation';
 import { Warning } from '@phosphor-icons/react';
 
-const AlertModal = ({ isOpen, handleSearchAgain, message }) => {
+const AlertModal = ({ isOpen, handleSearchAgain, message, title ,description}) => {
   const router = useRouter();
 
   return (
@@ -41,7 +41,7 @@ const AlertModal = ({ isOpen, handleSearchAgain, message }) => {
               </div>
 
               <Dialog.Title as="h3" className="text-[26px] font-semibold text-primary-1">
-                Alert Message
+                {title}
               </Dialog.Title>
 
               <p className="mt-4 text-[16px] text-600 font-medium">

@@ -525,12 +525,18 @@ const FlightResultsClient = ({ pos = [], airPorts = [] }) => {
             <SessionExpiredModal
                 isOpen={isSessionModalOpen}
                 onClose={() => setSessionModalOpen(false)}
-                handleSearchAgain={handleSearchAgain}
+                handleClickCta={handleSearchAgain}
+                title="Your Session Has Expired"
+                description='Oops! Looks like your session timed out. Please search again or return to the homepage'
+                isSecBtnExsist
+                loading={isLoadingFlights}
+
             />
             <AlertModal
                 isOpen={isAlertOpen}
                 onClose={() => setIsAlertOpen(false)}
                 message={alertMessage}
+                title='Alert Message'
 
             />
             <ModifySearchModal
